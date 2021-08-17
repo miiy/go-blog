@@ -1,0 +1,88 @@
+syntax="proto3";
+
+package tag_service.v1;
+
+option go_package = "github.com/miiy/go-blog/pkg/tag/proto/v1;v1";
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+
+message Tag {
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  int64 status = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
+}
+
+message TagId {
+  int64 id = 1;
+}
+
+message RowsAffected {
+  int64 rows_affected = 1;
+}
+
+message CreateTag {
+  string name = 1;
+  string description = 2;
+  int64 status = 3;
+}
+
+message UpdateTag {
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  int64 status = 4;
+}
+
+message ListRequest {
+  int64 page = 1;
+  int64 per_page = 2;
+  string keyword = 3;
+}
+
+message ListResponse {
+  int64 total = 1;
+  int64 per_page = 2;
+  int64 current_page = 3;
+  int64 last_page = 4;
+  int64 from = 5;
+  int64 to = 6;
+  repeated Tag data = 7;
+}
+
+service TagService {
+  rpc Create(CreateTag) returns (TagId) {
+    option (google.api.http) = {
+      post: "/v1/tags"
+      body: "*"
+    };
+  }
+
+  rpc Get(TagId) returns (Tag) {
+    option (google.api.http) = {
+      get: "/v1/tags/{id}"
+    };
+  }
+
+  rpc Update(UpdateTag) returns (RowsAffected) {
+    option (google.api.http) = {
+      put: "/v1/tags/{id}"
+      body: "*"
+    };
+  }
+
+  rpc Delete(TagId) returns (RowsAffected) {
+    option (google.api.http) = {
+      delete: "/v1/tags/{id}"
+    };
+  }
+
+  rpc List(ListRequest) returns (ListResponse) {
+    option (google.api.http) = {
+      get: "/v1/tags"
+    };
+  }
+}
