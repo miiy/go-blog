@@ -2,10 +2,10 @@ package main
 
 import (
 	"flag"
-	"github.com/miiy/go-blog/pkg/api"
 	"github.com/miiy/go-blog/pkg/config"
 	"github.com/miiy/go-blog/pkg/database"
 	"github.com/miiy/go-blog/pkg/migrate"
+	"github.com/miiy/go-blog/service"
 	"log"
 	"os"
 )
@@ -26,7 +26,7 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	api.MigrationFiles()
+	service.MigrationFiles()
 
 	os.Exit(1)
 	if err := migrate.Run(db.DB, "file:///migrations"); err != nil {
