@@ -2,7 +2,7 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/miiy/go-blog/gateway/middleware"
+	"github.com/miiy/go-blog/pkg/gin/middleware"
 )
 
 func registerRouter(r *gin.Engine) {
