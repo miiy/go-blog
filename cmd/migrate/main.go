@@ -2,62 +2,72 @@ package main
 
 import (
 	"flag"
-	m_mysql "github.com/golang-migrate/migrate/v4/database/mysql"
+	migrateMysql "github.com/golang-migrate/migrate/v4/database/mysql"
 	"github.com/golang-migrate/migrate/v4/source/iofs"
-	go_blog "github.com/miiy/go-blog"
+	goBlog "github.com/miiy/go-blog"
 	"github.com/miiy/go-blog/pkg/config"
 	"github.com/miiy/go-blog/pkg/database"
 	"github.com/miiy/go-blog/pkg/migrate"
 	"log"
+	"strings"
 )
 
 func main() {
 	cFile := flag.String("c", "./config/default.yaml", "config path")
-
+	cmd := flag.String("cmd", "up", "up, down")
 	flag.Parse()
-	if err := execute(*cFile); err != nil {
+	if err := run(*cFile, *cmd); err != nil {
 		log.Fatalln(err)
 	}
-
 }
 
-func execute(conf string) error {
+func run(conf, cmd string) error {
 	// config
 	c, err := config.NewConfig(conf)
 	if err != nil {
-		log.Fatalln(err)
+		return err
 	}
 
 	// db
 	db, err := database.NewDatabase(&c.Database)
 	if err != nil {
-		log.Fatalln(err)
+		return err
 	}
 
-	d, err := iofs.New(go_blog.MigrationFS, "migrations")
+	d, err := iofs.New(goBlog.MigrationFS, "migrations")
 	if err != nil {
-		log.Fatalln(err)
+		return err
 	}
 
 	sqlDB, err := db.Gorm.DB()
 	if err != nil {
-		log.Fatalln(err)
+		return err
 	}
 
-	mDriver, err := m_mysql.WithInstance(sqlDB, &m_mysql.Config{})
+	mDriver, err := migrateMysql.WithInstance(sqlDB, &migrateMysql.Config{})
 	if err != nil {
-		log.Fatalln(err)
+		return err
 	}
 
 	m, err := migrate.NewMigrate("s", d, c.Database.Database, mDriver)
 	if err != nil {
-		log.Fatalf("failed to migrate: %v\n", err)
+		return err
 	}
 
+	if "up" == strings.ToLower(cmd) {
+		err = m.Up()
+		if err != nil {
+			return err
+		}
+		log.Println("success")
+	}
 
-	err = m.Up()
-	if err != nil {
-		return err
+	if "down" == strings.ToLower(cmd) {
+		err = m.Up()
+		if err != nil {
+			return err
+		}
+		log.Println("success")
 	}
 
 	return nil

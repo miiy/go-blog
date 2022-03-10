@@ -1,19 +1,19 @@
 package migrate
 
 import (
-	pkg_migrate"github.com/golang-migrate/migrate/v4"
+	pkgMigrate "github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database"
 	"github.com/golang-migrate/migrate/v4/source"
 )
 
 type migrate struct {
-	migrate *pkg_migrate.Migrate
+	migrate *pkgMigrate.Migrate
 }
 
 // NewMigrate
-// set mysql dsn parameters multiStatements=true
+// mysql dsn parameters multiStatements=true
 func NewMigrate(sourceName string, sourceInstance source.Driver, databaseName string, databaseInstance database.Driver) (*migrate, error) {
-	m, err := pkg_migrate.NewWithInstance(sourceName, sourceInstance, databaseName, databaseInstance)
+	m, err := pkgMigrate.NewWithInstance(sourceName, sourceInstance, databaseName, databaseInstance)
 	if err != nil {
 		return nil, err
 	}
