@@ -1,0 +1,13 @@
+START TRANSACTION;
+
+DROP TABLE IF EXISTS `articles`;
+DROP TABLE IF EXISTS `books`;
+DROP TABLE IF EXISTS `attachments`;
+DROP TABLE IF EXISTS `tags`;
+DROP TABLE IF EXISTS `feedbacks`;
+DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `user_posts`;
+DROP TABLE IF EXISTS `user_tags`;
+DROP TABLE IF EXISTS `user_tags_posts`;
+
+COMMIT;

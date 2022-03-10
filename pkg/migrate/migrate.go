@@ -1,23 +1,32 @@
 package migrate
 
 import (
-	"database/sql"
-	"github.com/golang-migrate/migrate/v4"
-	"github.com/golang-migrate/migrate/v4/database/mysql"
-	_ "github.com/golang-migrate/migrate/v4/source/file"
+	pkg_migrate"github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database"
+	"github.com/golang-migrate/migrate/v4/source"
 )
 
-func Run(db *sql.DB, sourceURL string) error {
-	driver, err := mysql.WithInstance(db, &mysql.Config{})
+type migrate struct {
+	migrate *pkg_migrate.Migrate
+}
+
+// NewMigrate
+// set mysql dsn parameters multiStatements=true
+func NewMigrate(sourceName string, sourceInstance source.Driver, databaseName string, databaseInstance database.Driver) (*migrate, error) {
+	m, err := pkg_migrate.NewWithInstance(sourceName, sourceInstance, databaseName, databaseInstance)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	m, err := migrate.NewWithDatabaseInstance(sourceURL, "mysql", driver)
-	if err != nil {
-		return err
-	}
-	if err = m.Steps(1); err != nil {
-		return err
-	}
-	return nil
+
+	return &migrate{
+		migrate: m,
+	}, nil
+}
+
+func (m *migrate) Up() error {
+	return m.migrate.Up()
+}
+
+func (m *migrate) Down() error {
+	return m.migrate.Down()
 }
