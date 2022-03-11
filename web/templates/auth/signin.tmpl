@@ -1,0 +1,21 @@
+{{ define "auth/signin.tmpl" }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ .PageTitle }}</title>
+</head>
+<body>
+    <form action="/signin" enctype="multipart/form-data" method="POST">
+        <p>Username: <input type="text" name="username" /></p>
+        <p>Password: <input type="text" name="password" /></p>
+        <input type="submit" value="Submit" />
+    </form>
+    <div>
+        {{ range $key, $value := .flashes }}
+           <p>{{$key}}: {{ $value }}</p>
+        {{ end }}
+    </div>
+</body>
+</html>
+{{ end }}

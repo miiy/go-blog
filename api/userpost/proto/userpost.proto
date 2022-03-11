@@ -1,0 +1,133 @@
+syntax="proto3";
+
+package userpost_service.proto;
+
+option go_package = "github.com/miiy/go-blog/api/userpost/proto";
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+message UserPost {
+  int64 id = 1;
+  int64 user_id = 2;
+  string title = 3;
+  string content = 4;
+  int64 status = 5;
+  google.protobuf.Timestamp published_time = 6;
+  google.protobuf.Timestamp updated_time = 7;
+  int64 sort = 8;
+  google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp updated_at = 10;
+}
+
+enum UserPostStatus {
+  DEFAULT = 0;
+  ACTIVE = 1;
+  DISABLE = 2;
+}
+
+message UserPostId {
+  int64 id = 1;
+}
+
+message UserIdWithUserPostId {
+  int64 user_id = 1;
+  int64 id = 2;
+}
+
+message RowsAffected {
+  int64 rows_affected = 1;
+}
+
+message CreateUserPost {
+  int64 user_id = 1;
+  string title = 2                              [(validate.rules).string.max_len = 255];
+  string content = 3                            [(validate.rules).string = {min_len: 1, max_len: 255}];
+  UserPostStatus status = 4                     [(validate.rules).enum.defined_only = true];
+  google.protobuf.Timestamp published_time = 5;
+  google.protobuf.Timestamp updated_time = 6;
+  int64 sort = 7                                [(validate.rules).int64.gte = 0];
+}
+
+message UpdateUserPost {
+  int64 id = 1;
+  int64 user_id = 2;
+  string title = 3;
+  string content = 4;
+  int64 status = 5;
+  google.protobuf.Timestamp published_time = 6;
+  google.protobuf.Timestamp updated_time = 7;
+  int64 sort = 8;
+}
+
+message UpdateSortRequest {
+  int64 id = 1;
+  int64 user_id = 2;
+  enum SortTypes {
+    DEFAULT = 0;
+    TOP = 1;
+    BOTTOM = 2;
+    CUSTOM = 3;
+  }
+  SortTypes sort_type = 3;
+  int64 sort = 4;
+}
+
+message ListRequest {
+  int64 user_id = 1;
+  int64 page = 2;
+  int64 per_page = 3;
+  string keyword = 4;
+}
+
+message ListResponse {
+  int64 total = 1;
+  int64 per_page = 2;
+  int64 current_page = 3;
+  int64 last_page = 4;
+  int64 from = 5;
+  int64 to = 6;
+  repeated UserPost data = 7;
+}
+
+service UserPostService {
+  rpc Create(CreateUserPost) returns (UserPostId) {
+    option (google.api.http) = {
+      post: "/v1/users/{user_id}/posts"
+      body: "*"
+    };
+  }
+
+  rpc Get(UserIdWithUserPostId) returns (UserPost) {
+    option (google.api.http) = {
+      get: "/v1/users/{user_id}/posts/{id}"
+    };
+  }
+
+  rpc Update(UpdateUserPost) returns (RowsAffected) {
+    option (google.api.http) = {
+      put: "/v1/users/{user_id}/posts/{id}"
+      body: "*"
+    };
+  }
+
+  rpc UpdateSort(UpdateSortRequest) returns (RowsAffected) {
+    option (google.api.http) = {
+      put: "/v1/users/{user_id}/posts/{id}/sort"
+      body: "*"
+    };
+  }
+
+  rpc Delete(UserIdWithUserPostId) returns (RowsAffected) {
+    option (google.api.http) = {
+      delete: "/v1/users/{user_id}/posts/{id}"
+    };
+  }
+
+  rpc List(ListRequest) returns (ListResponse) {
+    option (google.api.http) = {
+      get: "/v1/users/{user_id}/posts"
+    };
+  }
+}

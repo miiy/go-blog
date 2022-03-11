@@ -2,7 +2,7 @@ package grpc
 
 import (
 	"context"
-	"github.com/miiy/go-blog/service/tag/proto/v1"
+	"github.com/miiy/go-blog/api/tag/proto/v1"
 	"google.golang.org/grpc"
 	"net"
 )

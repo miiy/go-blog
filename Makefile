@@ -55,3 +55,19 @@ protoc -I ./pkg/api/feedback/proto \
        --grpc-gateway_out ./pkg/api/feedback/proto --grpc-gateway_opt paths=source_relative \
        --validate_out="lang=go:./pkg/api/feedback/proto" --validate_opt  paths=source_relative \
        ./pkg/api/feedback/proto/feedback.proto
+
+
+BINARY="go-web"
+
+.PHONY: default
+default:
+	@go build -o ${BINARY} ./cmd/server
+
+.PHONY: clean
+clean:
+	@rm -rf ${BINARY}
+
+.PHONY: help
+help:
+	@echo "make:       build app"
+	@echo "make clean: clean binary file"

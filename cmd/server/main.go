@@ -7,29 +7,29 @@ import (
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
 	"github.com/grpc-ecosystem/go-grpc-middleware/validator"
-	"github.com/miiy/go-blog/service/auth/repository"
-	v1Example "github.com/miiy/go-blog/service/example/proto/v1"
-	v1ExampleSrv "github.com/miiy/go-blog/service/example/service/v1"
 	"github.com/miiy/go-blog/pkg/config"
 	"github.com/miiy/go-blog/pkg/jwtauth"
 	"github.com/miiy/go-blog/pkg/protocol/gateway"
 	zap2 "github.com/miiy/go-blog/pkg/zap"
+	"github.com/miiy/go-blog/api/auth/repository"
+	v1Example "github.com/miiy/go-blog/api/example/proto/v1"
+	v1ExampleSrv "github.com/miiy/go-blog/api/example/service/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
 	"github.com/grpc-ecosystem/go-grpc-middleware"
 	"github.com/grpc-ecosystem/go-grpc-middleware/recovery"
-	auth "github.com/miiy/go-blog/service/auth/proto"
-	authSrv "github.com/miiy/go-blog/service/auth/service"
-	feedback "github.com/miiy/go-blog/service/feedback/proto"
-	feedbackSrv "github.com/miiy/go-blog/service/feedback/service"
-	v1Tag "github.com/miiy/go-blog/service/tag/proto/v1"
-	v1TagSrv "github.com/miiy/go-blog/service/tag/service/v1"
-	userPost "github.com/miiy/go-blog/service/userpost/proto"
-	userPostSrv "github.com/miiy/go-blog/service/userpost/service"
-	userTag "github.com/miiy/go-blog/service/usertag/proto"
-	userTagSrv "github.com/miiy/go-blog/service/usertag/service"
 	"github.com/miiy/go-blog/pkg/database"
+	auth "github.com/miiy/go-blog/api/auth/proto"
+	authSrv "github.com/miiy/go-blog/api/auth/service"
+	feedback "github.com/miiy/go-blog/api/feedback/proto"
+	feedbackSrv "github.com/miiy/go-blog/api/feedback/service"
+	v1Tag "github.com/miiy/go-blog/api/tag/proto/v1"
+	v1TagSrv "github.com/miiy/go-blog/api/tag/service/v1"
+	userPost "github.com/miiy/go-blog/api/userpost/proto"
+	userPostSrv "github.com/miiy/go-blog/api/userpost/service"
+	userTag "github.com/miiy/go-blog/api/usertag/proto"
+	userTagSrv "github.com/miiy/go-blog/api/usertag/service"
 	"google.golang.org/grpc"
 	"log"
 	"net"
@@ -37,7 +37,7 @@ import (
 
 func main() {
 	// flag
-	configFile := flag.String("-f", "./configs/default.yaml", "config file")
+	configFile := flag.String("-f", "./config/default.yaml", "config file")
 	var addr = flag.String("addr", "localhost:50051", "the address to connect to")
 	flag.Parse()
 
