@@ -9,7 +9,7 @@ database:
   port: 3306
   database: up
   username: root
-  password: Asdf123!
+  password: 123456
   charset: utf8mb4
   collation: utf8mb4_unicode_ci
 
