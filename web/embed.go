@@ -1,8 +1,6 @@
 package web
 
-import (
-	"embed"
-)
+import "embed"
 
-//go:embed templates
-var TemplateFS embed.FS
+//go:embed resources/*
+var FS embed.FS
