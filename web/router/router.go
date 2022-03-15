@@ -21,7 +21,7 @@ func RegisterRouter(r *gin.Engine) {
 	r.SetHTMLTemplate(t)
 
 	// statics
-	staticsFs, _ := fs.Sub(resourcesFS, "statics")
+	staticsFs, _ := fs.Sub(resourcesFS, "resources/statics")
 	r.StaticFS("/statics", http.FS(staticsFs))
 
 	// favicon
@@ -39,6 +39,7 @@ func RegisterRouter(r *gin.Engine) {
 		c.HTML(200, "home/index.tmpl",  gin.H{
 			"PageTitle": "Home",
 			"Content": "Hello, world.",
+			"Header": "header.",
 		})
 	})
 

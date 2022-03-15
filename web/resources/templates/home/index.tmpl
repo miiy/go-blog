@@ -1,15 +1,12 @@
 {{ define "home/index.tmpl" }}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ .PageTitle }}</title>
-</head>
-<body>
-    <p>{{ .Content }}</p>
-    <p><a href="/signup">signUp</a></p>
-    <p><a href="/signin">signIn</a></p>
-    <p><a href="/auth/profile">profile</a></p>
-</body>
-</html>
+{{ template "layout.tmpl" . }}
 {{ end }}
+
+{{ define "content" }}
+index
+{{ end}}
+
+{{ define "head" }}
+    <link type="text/css" rel="stylesheet" href="/statics/css/index.css" />
+    <script src="/statics/js/index.js"></script>
+{{ end}}
