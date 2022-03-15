@@ -3,8 +3,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ .PageTitle }}</title>
+    <meta name="keywords" content="{{ .Keywords }}"/>
+    <meta name="description" content="{{ .Description }}"/>
+    <link type="text/css" rel="stylesheet" href="/statics/css/bootstrap.min.css" />
     <link type="text/css" rel="stylesheet" href="/statics/css/common.css" />
+    <script src="/statics/js/bootstrap.min.js"></script>
     <script src="/statics/js/common.js"></script>
     {{ block "head" . }}
     {{end}}
