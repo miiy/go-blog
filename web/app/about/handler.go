@@ -6,7 +6,7 @@ import (
 )
 
 func indexHandler(c *gin.Context) {
-	c.HTML(http.StatusOK, "about/index.tmpl", gin.H{
+	c.HTML(http.StatusOK, "about/index.html", gin.H{
 		"PageTitle": "About",
 		"Content": "about us.",
 	})

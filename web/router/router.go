@@ -4,31 +4,27 @@ import (
 	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
 	"github.com/miiy/go-blog/pkg/gin/middleware"
-	"github.com/miiy/go-blog/web"
+	"github.com/miiy/go-blog/web/resources/assets"
+	"github.com/miiy/go-blog/web/resources/templates"
 	"html/template"
-	"io/fs"
 	"net/http"
 )
 
 func RegisterRouter(r *gin.Engine) {
-	// fs
-	resourcesFS := web.FS
 
 	// template
-	//t, err := template.ParseFS(resourcesFS, "resources/templates/*/*.html")
-	//if err != nil {
-	//	panic(err)
-	//}
-	//r.SetHTMLTemplate(t)
-	r.HTMLRender = createMyRender()
+	tr, err := createTemplateRender()
+	if err != nil {
+		panic(err)
+	}
+	r.HTMLRender = tr
 
-	// statics
-	staticsFs, _ := fs.Sub(resourcesFS, "resources/statics")
-	r.StaticFS("/statics", http.FS(staticsFs))
+	// assets
+	r.StaticFS("/assets", http.FS(assets.FS))
 
 	// favicon
 	r.GET("/favicon.ico", func(c *gin.Context) {
-		file, _ := resourcesFS.ReadFile("resources/statics/favicon.ico")
+		file, _ := assets.FS.ReadFile("favicon.ico")
 		c.Data(http.StatusOK, "image/x-icon", file)
 	})
 
@@ -37,16 +33,16 @@ func RegisterRouter(r *gin.Engine) {
 
 	// pages
 	r.GET("/pages/list", func(c *gin.Context) {
-		c.HTML(200, "pages/list.html",  gin.H{})
+		c.HTML(200, "pages/list",  gin.H{})
 
 	})
 	r.GET("/pages/detail", func(c *gin.Context) {
-		c.HTML(200, "pages/detail.html",  gin.H{})
+		c.HTML(200, "pages/detail",  gin.H{})
 	})
 
 	// index
 	r.GET("/", func(c *gin.Context) {
-		c.HTML(200, "index",  gin.H{
+		c.HTML(200, "home/index",  gin.H{
 			"PageTitle": "Home",
 			"Content": "Hello, world.",
 			"Header": "header.",
@@ -71,15 +67,24 @@ func RegisterRouter(r *gin.Engine) {
 
 }
 
-
-func createMyRender() multitemplate.Renderer {
+func createTemplateRender() (multitemplate.Renderer, error) {
 	r := multitemplate.NewRenderer()
 
-	resourcesFS := web.FS
-	t, err := template.ParseFS(resourcesFS, "resources/templates/layout/*.html", "resources/templates/home/index.html")
-	if err != nil {
-		panic(err)
+	layouts := []string{"layout/layout.html", "layout/header.html", "layout/footer.html"}
+	templatesMap := map[string][]string{
+		"home/index": {"home/index.html"},
+		"pages/list": {"pages/list.html"},
+		"pages/detail": {"pages/detail.html"},
 	}
-	r.Add("index", t)
-	return r
+
+	for name, tps := range templatesMap {
+		s :=  append(layouts, tps...)
+		t, err := template.ParseFS(templates.FS, s...)
+		if err != nil {
+			return nil, err
+		}
+		r.Add(name, t)
+	}
+
+	return r, nil
 }
