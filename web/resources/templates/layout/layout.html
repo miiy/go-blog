@@ -1,4 +1,4 @@
-{{ define "layout.tmpl" }}
+{{ define "layout.html" }}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +9,8 @@
     <meta name="description" content="{{ .Description }}"/>
     <link type="text/css" rel="stylesheet" href="/statics/css/bootstrap.min.css" />
     <link type="text/css" rel="stylesheet" href="/statics/css/common.css" />
-    <script src="/statics/js/bootstrap.min.js"></script>
+    <script src="/statics/js/jquery-3.6.0.min.js"></script>
+    <script src="/statics/js/bootstrap.bundle.min.js"></script>
     <script src="/statics/js/common.js"></script>
     {{ block "head" . }}
     {{end}}

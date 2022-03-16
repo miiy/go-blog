@@ -14,7 +14,7 @@ func RegisterRouter(r *gin.Engine) {
 	resourcesFS := web.FS
 
 	// template
-	t, err := template.ParseFS(resourcesFS, "resources/templates/*/*.tmpl")
+	t, err := template.ParseFS(resourcesFS, "resources/templates/*/*.html")
 	if err != nil {
 		panic(err)
 	}
@@ -36,7 +36,7 @@ func RegisterRouter(r *gin.Engine) {
 
 	// index
 	r.GET("/", func(c *gin.Context) {
-		c.HTML(200, "home/index.tmpl",  gin.H{
+		c.HTML(200, "home/index.html",  gin.H{
 			"PageTitle": "Home",
 			"Content": "Hello, world.",
 			"Header": "header.",

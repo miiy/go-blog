@@ -1,1 +1,8 @@
 @charset "UTF-8";
+.bg-gray {
+    background-color: #343a40;
+}
+.footer-long {
+    font-size: .875rem;
+    padding: 4.5rem 0 7.5rem 0;
+}
