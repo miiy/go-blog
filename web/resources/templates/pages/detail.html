@@ -1,0 +1,33 @@
+{{ define "pages/detail.html" }}{{ end }}
+{{ template "layout.html" . }}
+
+
+{{ define "content" }}
+<div class="main-container">
+    <section class="space-sm">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-9 mb-1 order-md-2">
+
+                    <div class="card">
+                        <div class="card-body">
+                            This is some text within a card body.
+                        </div>
+                    </div>
+
+
+                </div>
+                <!--end of col-->
+            </div>
+            <!--end of row-->
+        </div>
+        <!--end of container-->
+    </section>
+    <!--end of section-->
+</div>
+{{ end}}
+
+{{ define "head" }}
+<link type="text/css" rel="stylesheet" href="/statics/css/detail.css"/>
+<script src="/statics/js/detail.js"></script>
+{{ end}}
