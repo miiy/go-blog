@@ -1,0 +1,114 @@
+syntax = "proto3";
+
+option go_package = "./;proto";
+option java_package = "com.github.miiy.rpc";
+
+message Empty {
+}
+
+message Id {
+  int64 Id = 1;
+}
+
+message UserId {
+  int64 UserId = 1;
+}
+
+message IdWithUserId {
+  int64 Id = 1;
+  int64 UserId = 2;
+}
+
+message Result {
+  sint32 Code = 1; // code: 0 success
+  string Msg = 2;
+  map<string, string> Data = 3;
+}
+
+message String {
+  string Value =  1;
+}
+message Int64 {
+  sint64 Value =  1;
+}
+message Int32 {
+  sint32 Value =  1;
+}
+message Bool {
+  bool Value =  1;
+}
+message StringMap {
+  map<string, string> Value =  1;
+}
+message StringArray {
+  repeated string Value =  1;
+}
+
+
+// 键值对
+message Pair {
+  string key = 1;
+  string Value =  2;
+}
+
+
+/** 状态 */
+enum EStatus {
+  _12 = 0;
+  /** 未设置 */
+  NotSet = 1;
+  /** 按金额 */
+  Amount = 2;
+  /** 按百分比 */
+  Percent = 3;
+}
+
+/** 分页参数 */
+message SPagingParams {
+  // 开始记录数
+  sint64 Begin = 1;
+  // 结束记录数
+  sint64 End = 2;
+  // 条件
+  string Where = 3;
+  // 排序字段
+  string SortBy = 4;
+  // 是否统计总数
+  bool CountTotal = 5;
+  // 参数
+  map<string, string> Parameters = 6;
+}
+
+/** 分页结果 */
+message SPagingResult {
+  /** 代码 */
+  sint32 ErrCode = 1;
+  /** 消息 */
+  string ErrMsg = 2;
+  /** 总数 */
+  sint32 Count = 3;
+  /** 数据 */
+  string Data = 4;
+  /** 额外的数据 */
+  map<string, string> Extras = 5;
+}
+
+// 树形节点
+message STreeNode {
+  // 值
+  int64 Id =  1;
+  // 文本
+  string Label = 2;
+  // 图标,icon与JS树形控件冲突
+  string Icon = 3;
+  // 是否展开
+  bool Expand = 4;
+  // 延迟加载
+  bool Lazy = 5;
+  // 其他数据
+  map<string, string> Data = 6;
+  // 子节点
+  repeated STreeNode Children = 7;
+  // 是否为叶子节点(下级无节点)
+  bool IsLeaf = 8;
+}
