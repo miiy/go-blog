@@ -1,5 +1,68 @@
 {{ define "content" }}
-<div class="main-container">
-    article list
+<div class="main-container container">
+    <div class="row">
+        <div class="col-12 col-md-9 mb-1">
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    Featured
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item list-group-item-action"><a href="/articles/1">文章1</a></li>
+                    <li class="list-group-item list-group-item-action"><a href="/articles/2">文章2</a></li>
+                </ul>
+            </div>
+
+
+            <div class="d-flex justify-content-center">
+
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item"><a class="page-link" href="#">上一页</a></li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">下一页</a></li>
+                    </ul>
+                </nav>
+
+            </div>
+        </div>
+        <!--end of col-->
+        <div class="col-12 col-md-3 mb-1">
+            <div class="card">
+                <div class="card-header">
+                    分类
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item list-group-item-action">
+                        <div>
+                            <a href="#">分类1</a>
+                        </div>
+                        <div>
+                            <i class="icon-chevron-right"></i>
+                        </div>
+                    </li>
+                    <li class="list-group-item list-group-item-action">
+                        <div>
+                            <a href="#">分类2</a>
+                        </div>
+                        <div>
+                            <i class="icon-chevron-right"></i>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+        <!--end of col-->
+    </div>
+    <!--end of row-->
 </div>
+<!--end of container-->
+{{ end}}
+
+{{ define "head" }}
+<link type="text/css" rel="stylesheet" href="/statics/css/list.css"/>
+<script src="/statics/js/list.js"></script>
 {{ end}}

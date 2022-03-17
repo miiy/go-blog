@@ -1,11 +1,41 @@
 {{ define "content" }}
-<div class="main-container">
-
-    index
+<div class="main-container container">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        <div class="col">
+            <div class="card shadow-sm">
+                <a href="https://www.elastic.co/guide/cn/elasticsearch/guide/current/index.html" target="_blank">
+                    <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
+                         xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
+                         preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
+                        <rect width="100%" height="100%" fill="#55595c"></rect>
+                        <text x="50%" y="50%" fill="#eceeef" dy=".3em">Elasticsearch: 权威指南</text>
+                    </svg>
+                </a>
+                <div class="card-body">
+                    <p class="card-text">Elasticsearch: 权威指南</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card shadow-sm">
+                <a href="https://kubernetes.io/" target="_blank">
+                    <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
+                         xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
+                         preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
+                        <rect width="100%" height="100%" fill="#55595c"></rect>
+                        <text x="50%" y="50%" fill="#eceeef" dy=".3em">Kubernetes</text>
+                    </svg>
+                </a>
+                <div class="card-body">
+                    <p class="card-text">Kubernetes</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {{ end}}
 
 {{ define "head" }}
-    <link type="text/css" rel="stylesheet" href="/statics/css/index.css" />
-    <script src="/statics/js/index.js"></script>
+<link type="text/css" rel="stylesheet" href="/statics/css/index.css"/>
+<script src="/statics/js/index.js"></script>
 {{ end}}
