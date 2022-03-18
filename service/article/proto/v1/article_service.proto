@@ -2,7 +2,7 @@ syntax="proto3";
 
 package article_service.proto;
 
-option go_package = "github.com/miiy/go-blog/api/article/proto";
+option go_package = "github.com/miiy/go-blog/service/article/proto";
 
 import "google/protobuf/timestamp.proto";
 import "google/api/annotations.proto";
@@ -21,7 +21,7 @@ message Article {
   string from_url = 9;
   string summary = 10;
   string content = 11;
-  int32 status = 12;
+  ArticleStatus status = 12;
   google.protobuf.Timestamp created_at = 13;
   google.protobuf.Timestamp updated_at = 14;
 }
@@ -41,7 +41,7 @@ message UserIdWithArticleId {
   int64 id = 2;
 }
 
-message CreateArticle {
+message CreateRequest {
   int64 user_id = 1;
   string title = 2                              [(validate.rules).string.max_len = 255];
   string content = 3                            [(validate.rules).string = {min_len: 1, max_len: 255}];
@@ -51,7 +51,7 @@ message CreateArticle {
   int64 sort = 7                                [(validate.rules).int64.gte = 0];
 }
 
-message UpdateArticle {
+message UpdateRequest {
   int64 id = 1;
   int64 user_id = 2;
   string title = 3;
@@ -87,7 +87,7 @@ message ListResponse {
 }
 
 service UserPostService {
-  rpc Create(CreateArticle) returns (Result) {
+  rpc Create(CreateRequest) returns (Result) {
     option (google.api.http) = {
       post: "/v1/articles"
       body: "*"
@@ -100,7 +100,7 @@ service UserPostService {
     };
   }
 
-  rpc Update(UpdateArticle) returns (Result) {
+  rpc Update(UpdateRequest) returns (Result) {
     option (google.api.http) = {
       put: "/v1/articles/{id}"
       body: "*"
