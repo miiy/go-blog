@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"flag"
-	userPost "github.com/miiy/go-blog/api/userpost/proto"
+	userPost "goblog.com/service/userpost/proto"
 	"google.golang.org/grpc"
 	"log"
 	"time"

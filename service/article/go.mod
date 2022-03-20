@@ -1,9 +1,9 @@
-module github.com/miiy/go-blog/service/article
+module goblog.com/service/article
 
 go 1.17
 
 replace (
-	github.com/miiy/go-blog/pkg => ../pkg
+	goblog.com/pkg => ../../pkg
 )
 require (
 	github.com/envoyproxy/protoc-gen-validate v0.6.7 // indirect

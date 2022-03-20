@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ .PageTitle }}</title>
+</head>
+<body>
+    <form action="/signup" enctype="multipart/form-data" method="POST">
+        <p>Email: <input type="text" name="email" /></p>
+        <p>Username: <input type="text" name="username" /></p>
+        <p>Password: <input type="text" name="password" /></p>
+        <p>Password Confirmation: <input type="text" name="password_confirmation" /></p>
+        <input type="submit" value="Submit" />
+    </form>
+    <div>
+        {{ range $key, $value := .flashes }}
+           <p>{{$key}}: {{ $value }}</p>
+        {{ end }}
+    </div>
+</body>
+</html>

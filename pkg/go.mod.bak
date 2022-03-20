@@ -1,4 +1,4 @@
-module github.com/miiy/go-blog/pkg
+module goblog.com/pkg
 
 go 1.17
 

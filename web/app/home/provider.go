@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 	"github.com/google/wire"
-	"github.com/miiy/go-web/pkg/application"
+	//"goblog.com/pkg/application"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )

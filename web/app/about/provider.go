@@ -3,7 +3,7 @@ package about
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
-	"github.com/miiy/go-web/pkg/application"
+	//"goblog.com/pkg/application"
 	"github.com/go-redis/redis/v8"
 	"go.uber.org/zap"
 	"gorm.io/gorm"

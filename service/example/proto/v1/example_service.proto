@@ -1,0 +1,53 @@
+syntax="proto3";
+
+package example_service.v1;
+
+option go_package = "goblog.com/pkg/example/proto/v1;v1";
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+message ExampleRequest {
+}
+
+message ExampleResponse {
+}
+
+message ExampleValidateRequest {
+  string name = 1 [(validate.rules).string.min_len = 2];
+  int64 age = 2 [(validate.rules).int64 = {gt: 0}];
+}
+
+service ExampleService {
+  rpc ExampleLog(ExampleRequest) returns (ExampleResponse) {
+    option (google.api.http) = {
+      get: "/v1/example/example-log",
+    };
+  }
+  rpc ExamplePanic(ExampleRequest) returns (ExampleResponse) {
+    option (google.api.http) = {
+      get: "/v1/example/example-panic",
+    };
+  }
+  rpc ExampleReturnError1(ExampleRequest) returns (ExampleResponse) {
+    option (google.api.http) = {
+      get: "/v1/example/example-error1",
+    };
+  }
+  rpc ExampleReturnError2(ExampleRequest) returns (ExampleResponse) {
+    option (google.api.http) = {
+      get: "/v1/example/example-error2",
+    };
+  }
+  rpc ExampleReturnError3(ExampleRequest) returns (ExampleResponse) {
+    option (google.api.http) = {
+      get: "/v1/example/example-error3",
+    };
+  }
+
+  rpc ExampleValidate(ExampleValidateRequest) returns (ExampleResponse) {
+    option (google.api.http) = {
+      post: "/v1/example/example-validate",
+    };
+  }
+}

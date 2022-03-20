@@ -2,7 +2,7 @@ package auth
 
 import (
 	"encoding/gob"
-	"github.com/miiy/go-web/pkg/database"
+	"goblog.com/pkg/database"
 	"gorm.io/gorm"
 )
 

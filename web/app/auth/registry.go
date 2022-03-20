@@ -6,9 +6,9 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/go-redis/redis/v8"
 	"github.com/google/wire"
-	"github.com/miiy/go-web/pkg/application"
-	"github.com/miiy/go-web/pkg/jwtauth"
-	"github.com/miiy/go-web/pkg/session"
+	//"goblog.com/pkg/application"
+	"goblog.com/pkg/jwtauth"
+	//"goblog.com/pkg/session"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )

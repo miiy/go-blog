@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	iValidator "github.com/miiy/go-blog/pkg/gin/validator"
+	iValidator "goblog.com/pkg/gin/validator"
 	"net/http"
 )
 

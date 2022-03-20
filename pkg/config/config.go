@@ -1,8 +1,8 @@
 package config
 
 import (
-	"github.com/miiy/go-blog/pkg/database"
-	"github.com/miiy/go-blog/pkg/jwtauth"
+	"goblog.com/pkg/database"
+	"goblog.com/pkg/jwtauth"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 )

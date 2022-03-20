@@ -3,9 +3,9 @@ package router
 import (
 	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
-	"github.com/miiy/go-blog/pkg/gin/middleware"
-	"github.com/miiy/go-blog/web/resources/assets"
-	"github.com/miiy/go-blog/web/resources/templates"
+	"goblog.com/pkg/gin/middleware"
+	"goblog.com/web/resources/assets"
+	"goblog.com/web/resources/templates"
 	"html/template"
 	"net/http"
 )

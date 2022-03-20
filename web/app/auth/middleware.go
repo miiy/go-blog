@@ -2,9 +2,9 @@ package auth
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/miiy/go-web/pkg/jwtauth"
-	"github.com/miiy/go-web/pkg/session"
-	pkgValidator "github.com/miiy/go-web/pkg/validator"
+	"goblog.com/pkg/jwtauth"
+	//"goblog.com/pkg/session"
+	//pkgValidator "goblog.com/pkg/validator"
 	"log"
 	"net/http"
 )

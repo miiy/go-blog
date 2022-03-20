@@ -3,8 +3,8 @@ package auth
 import (
 	"encoding/gob"
 	"github.com/gin-gonic/gin"
-	"github.com/miiy/go-web/pkg/session"
-	iValidator "github.com/miiy/go-web/pkg/validator"
+	//"goblog.com/pkg/session"
+	//iValidator "goblog.com/pkg/validator"
 	"log"
 	"net/http"
 )
@@ -30,7 +30,7 @@ func (h *webHandler) signUpForm(c *gin.Context) {
 	if flashes, exists := c.Get("flashes"); exists {
 		rst["flashes"] = flashes
 	}
-	c.HTML(http.StatusOK, "auth/signup.tmpl", rst)
+	c.HTML(http.StatusOK, "auth/signup.html", rst)
 }
 
 func (h *webHandler) signUp(c *gin.Context) {
@@ -60,7 +60,7 @@ func (h *webHandler) signInForm(c *gin.Context) {
 	if flashes, exists := c.Get("flashes"); exists {
 		rst["flashes"] = flashes
 	}
-	c.HTML(http.StatusOK, "auth/signin.tmpl", rst)
+	c.HTML(http.StatusOK, "auth/signin.html", rst)
 }
 
 func (h *webHandler) signIn(c *gin.Context) {
@@ -122,7 +122,7 @@ func (h *webHandler) profile(c *gin.Context) {
 		return
 	}
 
-	c.HTML(http.StatusOK, "auth/profile.tmpl", gin.H{
+	c.HTML(http.StatusOK, "auth/profile.html", gin.H{
 		"PageTitle": "Profile",
 		"Username": user.Username,
 	})

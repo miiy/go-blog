@@ -1,6 +1,7 @@
 package auth
 
-import "github.com/miiy/go-web/pkg/response"
+
+import "goblog.com/pkg/gin/response"
 
 func SuccessResponse(v interface{}) *response.Response {
 	resp := &response.Response{
