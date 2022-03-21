@@ -23,9 +23,9 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ArticleServiceClient interface {
-	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*Article, error)
+	Create(ctx context.Context, in *Article, opts ...grpc.CallOption) (*Article, error)
 	Retrieve(ctx context.Context, in *ArticleId, opts ...grpc.CallOption) (*Article, error)
-	Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*Article, error)
+	Update(ctx context.Context, in *Article, opts ...grpc.CallOption) (*Article, error)
 	Delete(ctx context.Context, in *UserIdWithArticleId, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
 }
@@ -38,7 +38,7 @@ func NewArticleServiceClient(cc grpc.ClientConnInterface) ArticleServiceClient {
 	return &articleServiceClient{cc}
 }
 
-func (c *articleServiceClient) Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*Article, error) {
+func (c *articleServiceClient) Create(ctx context.Context, in *Article, opts ...grpc.CallOption) (*Article, error) {
 	out := new(Article)
 	err := c.cc.Invoke(ctx, "/article_service.proto.ArticleService/Create", in, out, opts...)
 	if err != nil {
@@ -56,7 +56,7 @@ func (c *articleServiceClient) Retrieve(ctx context.Context, in *ArticleId, opts
 	return out, nil
 }
 
-func (c *articleServiceClient) Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*Article, error) {
+func (c *articleServiceClient) Update(ctx context.Context, in *Article, opts ...grpc.CallOption) (*Article, error) {
 	out := new(Article)
 	err := c.cc.Invoke(ctx, "/article_service.proto.ArticleService/Update", in, out, opts...)
 	if err != nil {
@@ -87,9 +87,9 @@ func (c *articleServiceClient) List(ctx context.Context, in *ListRequest, opts .
 // All implementations must embed UnimplementedArticleServiceServer
 // for forward compatibility
 type ArticleServiceServer interface {
-	Create(context.Context, *CreateRequest) (*Article, error)
+	Create(context.Context, *Article) (*Article, error)
 	Retrieve(context.Context, *ArticleId) (*Article, error)
-	Update(context.Context, *UpdateRequest) (*Article, error)
+	Update(context.Context, *Article) (*Article, error)
 	Delete(context.Context, *UserIdWithArticleId) (*emptypb.Empty, error)
 	List(context.Context, *ListRequest) (*ListResponse, error)
 	mustEmbedUnimplementedArticleServiceServer()
@@ -99,13 +99,13 @@ type ArticleServiceServer interface {
 type UnimplementedArticleServiceServer struct {
 }
 
-func (UnimplementedArticleServiceServer) Create(context.Context, *CreateRequest) (*Article, error) {
+func (UnimplementedArticleServiceServer) Create(context.Context, *Article) (*Article, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
 func (UnimplementedArticleServiceServer) Retrieve(context.Context, *ArticleId) (*Article, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Retrieve not implemented")
 }
-func (UnimplementedArticleServiceServer) Update(context.Context, *UpdateRequest) (*Article, error) {
+func (UnimplementedArticleServiceServer) Update(context.Context, *Article) (*Article, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
 func (UnimplementedArticleServiceServer) Delete(context.Context, *UserIdWithArticleId) (*emptypb.Empty, error) {
@@ -128,7 +128,7 @@ func RegisterArticleServiceServer(s grpc.ServiceRegistrar, srv ArticleServiceSer
 }
 
 func _ArticleService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateRequest)
+	in := new(Article)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -140,7 +140,7 @@ func _ArticleService_Create_Handler(srv interface{}, ctx context.Context, dec fu
 		FullMethod: "/article_service.proto.ArticleService/Create",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleServiceServer).Create(ctx, req.(*CreateRequest))
+		return srv.(ArticleServiceServer).Create(ctx, req.(*Article))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -164,7 +164,7 @@ func _ArticleService_Retrieve_Handler(srv interface{}, ctx context.Context, dec 
 }
 
 func _ArticleService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateRequest)
+	in := new(Article)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -176,7 +176,7 @@ func _ArticleService_Update_Handler(srv interface{}, ctx context.Context, dec fu
 		FullMethod: "/article_service.proto.ArticleService/Update",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleServiceServer).Update(ctx, req.(*UpdateRequest))
+		return srv.(ArticleServiceServer).Update(ctx, req.(*Article))
 	}
 	return interceptor(ctx, in, info, handler)
 }

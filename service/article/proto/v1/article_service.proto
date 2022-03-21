@@ -32,7 +32,7 @@ message Article {
 }
 
 
-message ArticleId {
+message ArticleRequest {
   int64 id = 1;
 }
 
@@ -79,7 +79,7 @@ message ListResponse {
 }
 
 service ArticleService {
-  rpc Create(CreateRequest) returns (Article) {
+  rpc Create(Article) returns (Article) {
     option (google.api.http) = {
       post: "/v1/articles"
       body: "*"
@@ -89,10 +89,11 @@ service ArticleService {
   rpc Retrieve(ArticleId) returns (Article) {
     option (google.api.http) = {
       get: "/v1/articles/{id}"
+      body: "*"
     };
   }
 
-  rpc Update(UpdateRequest) returns (Article) {
+  rpc Update(Article) returns (Article) {
     option (google.api.http) = {
       put: "/v1/articles/{id}"
       body: "*"
@@ -102,6 +103,7 @@ service ArticleService {
   rpc Delete(UserIdWithArticleId) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/articles/{id}"
+      body: "*"
     };
   }
 

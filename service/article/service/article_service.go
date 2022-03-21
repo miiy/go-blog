@@ -28,7 +28,7 @@ func NewArticleServiceServer(db *gorm.DB) pb.ArticleServiceServer {
 	}
 }
 
-func (s *ArticleServiceServer) Create(ctx context.Context, request *pb.CreateRequest) (*pb.Article, error) {
+func (s *ArticleServiceServer) Create(ctx context.Context, request *pb.Article) (*pb.Article, error) {
 	//user, err := authUser(ctx, request.UserId)
 	//if err != nil {
 	//	return nil, err
@@ -41,23 +41,27 @@ func (s *ArticleServiceServer) Create(ctx context.Context, request *pb.CreateReq
 		request.UpdatedTime = timestamppb.Now()
 	}
 
-	p := &repository.InsertParam{
-		UserId:        0,
-		Title:         request.Title,
-		Content:       request.Content,
-		Status:        int64(request.Status),
-		PublishedTime: request.UpdatedTime.AsTime(),
-		UpdatedTime:   request.UpdatedTime.AsTime(),
-		Sort:          request.Sort,
+	p := &repository.Article{
+		UserId:          0,
+		Title:           request.Title,
+		MetaTitle:       request.MetaTitle,
+		MetaDescription: request.MetaDescription,
+		PublishedTime:   request.PublishedTime.AsTime(),
+		UpdatedTime:     request.UpdatedTime.AsTime(),
+		FromTest:        request.FromText,
+		FromUrl:         request.FromUrl,
+		Summary:         request.Summary,
+		Content:         request.Content,
+		Status:          int(request.Status),
+		CreatedAt:       time.Now(),
+		UpdatedAt:       time.Now(),
 	}
 
-	id, err := s.Repository.Create(ctx, p)
+	_, err := s.Repository.Create(ctx, p)
 	if err != nil {
 		return nil, err
 	}
-	return &pb.UserPostId{
-		Id: id,
-	}, nil
+	return p, nil
 }
 
 func (s *ArticleServiceServer) Get(ctx context.Context, request *pb.ArticleId) (*pb.Article, error) {
