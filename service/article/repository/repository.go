@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	"errors"
+	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
 	"strconv"
@@ -58,9 +58,9 @@ type UpdateParam struct {
 	Sort int64
 }
 
-var ErrNotFound = errors.New("not found")
+var ErrRecordNotFound = gorm.ErrRecordNotFound
 
-func (r *Repository) Create(ctx context.Context, p *InsertParam) (int64, error) {
+func (r *Repository) Create(ctx context.Context, p *InsertParam) (*Article, error) {
 	article := &Article{
 		Id:            0,
 		UserId:        p.UserId,
@@ -73,11 +73,11 @@ func (r *Repository) Create(ctx context.Context, p *InsertParam) (int64, error) 
 		UpdatedAt:     time.Now(),
 	}
 	err := r.db.Create(&article).Error
-	return article.Id, err
+	return article, err
 }
 
-func (r *Repository) Update(ctx context.Context, id, userId int64, p *UpdateParam) (int64, error) {
-	article := Article{
+func (r *Repository) Update(ctx context.Context, id, userId int64, p *UpdateParam) (*Article, error) {
+	article := &Article{
 		Title:         p.Title,
 		Content:       p.Content,
 		Status:        p.Status,
@@ -85,7 +85,7 @@ func (r *Repository) Update(ctx context.Context, id, userId int64, p *UpdatePara
 		UpdatedTime:   p.UpdatedTime,
 	}
 	result := r.db.Model(&Article{}).Where("id = ?", id).Updates(article)
-	return result.RowsAffected, result.Error
+	return article, result.Error
 }
 
 func (r *Repository) Delete(ctx context.Context, id, userId int64) (int64, error) {
@@ -120,7 +120,8 @@ func (r *Repository) FindCount(ctx context.Context, userId int64, keyword string
 	return count, nil
 }
 
-func Paginate(r *http.Request) func(db *gorm.DB) *gorm.DB {
+func Paginate(r *gin.Context) func(db *gorm.DB) *gorm.DB {
+
 	return func (db *gorm.DB) *gorm.DB {
 		page, _ := strconv.Atoi(r.Query("page"))
 		if page == 0 {
@@ -140,7 +141,7 @@ func Paginate(r *http.Request) func(db *gorm.DB) *gorm.DB {
 	}
 }
 
-func (r *Repository) Find(ctx context.Context, userId, limit, offset int64, keyword string) ([]*UserPost, error) {
+func (r *Repository) Find(ctx context.Context, userId, limit, offset int64, keyword string) ([]*Article, error) {
 	var articles []APIArticle
 	r.db.Model(&Article{}).Scopes(Paginate(r)).Find(&articles)
 

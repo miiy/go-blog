@@ -2,48 +2,37 @@ package service
 
 import (
 	"context"
-	"database/sql"
 	"github.com/grpc-ecosystem/go-grpc-middleware/logging/zap/ctxzap"
 	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
-	pb "goblog.com/service/article/proto/v1"
-	"goblog.com/service/article/repository"
 	"goblog.com/pkg/jwtauth"
 	"goblog.com/pkg/pagination"
+	pb "goblog.com/service/article/proto/v1"
+	"goblog.com/service/article/repository"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"gorm.io/gorm"
 	"time"
 )
 
 type ArticleServiceServer struct {
 	Repository *repository.Repository
-	db *sql.DB
-	pb.UnimplementedUserPostServiceServer
+	db *gorm.DB
+	pb.UnimplementedArticleServiceServer
 }
 
-func NewUserPostServiceServer(db *sql.DB) pb.ArticleServiceServer {
+func NewArticleServiceServer(db *gorm.DB) pb.ArticleServiceServer {
 	return &ArticleServiceServer{
 		db: db,
 		Repository: repository.NewRepository(db),
 	}
 }
 
-func authUser(ctx context.Context, requestUserId int64) (*jwtauth.AuthUser, error) {
-	user, err := jwtauth.AuthUserFromContext(ctx)
-	if err != nil {
-		return nil, err
-	}
-	if requestUserId != user.Id {
-		return nil, status.New(codes.InvalidArgument, "invalid argument").Err()
-	}
-	return user, nil
-}
-
-func (s *ArticleServiceServer) Create(ctx context.Context, request *pb.CreateUserPost) (*pb.UserPostId, error) {
-	user, err := authUser(ctx, request.UserId)
-	if err != nil {
-		return nil, err
-	}
+func (s *ArticleServiceServer) Create(ctx context.Context, request *pb.CreateRequest) (*pb.Article, error) {
+	//user, err := authUser(ctx, request.UserId)
+	//if err != nil {
+	//	return nil, err
+	//}
 
 	if request.PublishedTime == nil {
 		request.PublishedTime = timestamppb.Now()
@@ -53,7 +42,7 @@ func (s *ArticleServiceServer) Create(ctx context.Context, request *pb.CreateUse
 	}
 
 	p := &repository.InsertParam{
-		UserId:        user.Id,
+		UserId:        0,
 		Title:         request.Title,
 		Content:       request.Content,
 		Status:        int64(request.Status),
@@ -62,7 +51,7 @@ func (s *ArticleServiceServer) Create(ctx context.Context, request *pb.CreateUse
 		Sort:          request.Sort,
 	}
 
-	id, err := s.Repository.Insert(ctx, p)
+	id, err := s.Repository.Create(ctx, p)
 	if err != nil {
 		return nil, err
 	}
@@ -71,11 +60,11 @@ func (s *ArticleServiceServer) Create(ctx context.Context, request *pb.CreateUse
 	}, nil
 }
 
-func (s *ArticleServiceServer) Get(ctx context.Context, request *pb.UserIdWithUserPostId) (*pb.UserPost, error) {
-	user, err := authUser(ctx, request.UserId)
-	if err != nil {
-		return nil, err
-	}
+func (s *ArticleServiceServer) Get(ctx context.Context, request *pb.ArticleId) (*pb.Article, error) {
+	//user, err := authUser(ctx, request.UserId)
+	//if err != nil {
+	//	return nil, err
+	//}
 
 	i, err := s.Repository.Get(ctx, user.Id, request.Id)
 	if err != nil {
@@ -86,7 +75,7 @@ func (s *ArticleServiceServer) Get(ctx context.Context, request *pb.UserIdWithUs
 		return nil, err
 	}
 
-	return &pb.UserPost{
+	return &pb.Article{
 		Id:            i.Id,
 		UserId:        i.UserId,
 		Title:         i.Title,
@@ -101,7 +90,7 @@ func (s *ArticleServiceServer) Get(ctx context.Context, request *pb.UserIdWithUs
 }
 
 
-func (s *ArticleServiceServer) Update(ctx context.Context, request *pb.UpdateUserPost) (*pb.RowsAffected, error) {
+func (s *ArticleServiceServer) Update(ctx context.Context, request *pb.Article) (*pb.RowsAffected, error) {
 	user, err := authUser(ctx, request.UserId)
 	if err != nil {
 		return nil, err
@@ -120,39 +109,12 @@ func (s *ArticleServiceServer) Update(ctx context.Context, request *pb.UpdateUse
 		return nil, err
 	}
 
-	return &pb.RowsAffected{
+	return &pb.Article{
 		RowsAffected: ra,
 	}, nil
 }
 
-func (s *ArticleServiceServer) UpdateSort(ctx context.Context, request *pb.UpdateSortRequest) (*pb.RowsAffected, error) {
-	user, err := authUser(ctx, request.UserId)
-	if err != nil {
-		return nil, err
-	}
-
-	var sort int64
-	if request.SortType == pb.UpdateSortRequest_TOP {
-		sort = time.Now().Unix()
-	}
-	if request.SortType == pb.UpdateSortRequest_BOTTOM {
-		sort = 0
-	}
-	if request.SortType == pb.UpdateSortRequest_BOTTOM {
-		sort = request.Sort
-	}
-
-	ra, err := s.Repository.UpdateSort(ctx, request.Id, user.Id, sort)
-	if err != nil {
-		return nil, err
-	}
-
-	return &pb.RowsAffected{
-		RowsAffected: ra,
-	}, nil
-}
-
-func (s *ArticleServiceServer) Delete(ctx context.Context, request *pb.UserIdWithUserPostId) (*pb.RowsAffected, error) {
+func (s *ArticleServiceServer) Delete(ctx context.Context, request *pb.DeleteRequest) (*pb.Article, error) {
 	user, err := authUser(ctx, request.UserId)
 	if err != nil {
 		return nil, err

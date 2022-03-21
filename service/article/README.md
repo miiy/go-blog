@@ -1,4 +1,4 @@
-protoc -I ./proto/v1 -I ../../pkg/proto \
+protoc -I ./proto/v1 \
 -I ../../third_party/googleapis \
 -I ../../third_party/protoc-gen-validate \
 --go_out ./proto/v1 --go_opt paths=source_relative \

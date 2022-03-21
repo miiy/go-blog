@@ -2,6 +2,8 @@ module goblog.com/pkg
 
 go 1.17
 
+replace goblog.com/pkg => ../pkg
+
 require (
 	github.com/elastic/go-elasticsearch/v8 v8.0.0-20210608143047-aa1301e7ba9d
 	github.com/gin-contrib/cors v1.3.1

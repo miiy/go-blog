@@ -13,7 +13,6 @@ import (
 	"io"
 	"net/http"
 
-	proto_0 "./"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/utilities"
 	"google.golang.org/grpc"
@@ -32,7 +31,7 @@ var _ = runtime.String
 var _ = utilities.NewDoubleArray
 var _ = metadata.Join
 
-func request_UserPostService_Create_0(ctx context.Context, marshaler runtime.Marshaler, client UserPostServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_ArticleService_Create_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq CreateRequest
 	var metadata runtime.ServerMetadata
 
@@ -49,7 +48,7 @@ func request_UserPostService_Create_0(ctx context.Context, marshaler runtime.Mar
 
 }
 
-func local_request_UserPostService_Create_0(ctx context.Context, marshaler runtime.Marshaler, server UserPostServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_ArticleService_Create_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq CreateRequest
 	var metadata runtime.ServerMetadata
 
@@ -66,8 +65,8 @@ func local_request_UserPostService_Create_0(ctx context.Context, marshaler runti
 
 }
 
-func request_UserPostService_Get_0(ctx context.Context, marshaler runtime.Marshaler, client UserPostServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq proto_0.Id
+func request_ArticleService_Retrieve_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq ArticleId
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -87,13 +86,13 @@ func request_UserPostService_Get_0(ctx context.Context, marshaler runtime.Marsha
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
 
-	msg, err := client.Get(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.Retrieve(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
 
-func local_request_UserPostService_Get_0(ctx context.Context, marshaler runtime.Marshaler, server UserPostServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq proto_0.Id
+func local_request_ArticleService_Retrieve_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq ArticleId
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -113,12 +112,12 @@ func local_request_UserPostService_Get_0(ctx context.Context, marshaler runtime.
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
 
-	msg, err := server.Get(ctx, &protoReq)
+	msg, err := server.Retrieve(ctx, &protoReq)
 	return msg, metadata, err
 
 }
 
-func request_UserPostService_Update_0(ctx context.Context, marshaler runtime.Marshaler, client UserPostServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_ArticleService_Update_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq UpdateRequest
 	var metadata runtime.ServerMetadata
 
@@ -152,7 +151,7 @@ func request_UserPostService_Update_0(ctx context.Context, marshaler runtime.Mar
 
 }
 
-func local_request_UserPostService_Update_0(ctx context.Context, marshaler runtime.Marshaler, server UserPostServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_ArticleService_Update_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq UpdateRequest
 	var metadata runtime.ServerMetadata
 
@@ -187,10 +186,10 @@ func local_request_UserPostService_Update_0(ctx context.Context, marshaler runti
 }
 
 var (
-	filter_UserPostService_Delete_0 = &utilities.DoubleArray{Encoding: map[string]int{"id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+	filter_ArticleService_Delete_0 = &utilities.DoubleArray{Encoding: map[string]int{"id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
 )
 
-func request_UserPostService_Delete_0(ctx context.Context, marshaler runtime.Marshaler, client UserPostServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_ArticleService_Delete_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq UserIdWithArticleId
 	var metadata runtime.ServerMetadata
 
@@ -214,7 +213,7 @@ func request_UserPostService_Delete_0(ctx context.Context, marshaler runtime.Mar
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_UserPostService_Delete_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ArticleService_Delete_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -223,7 +222,7 @@ func request_UserPostService_Delete_0(ctx context.Context, marshaler runtime.Mar
 
 }
 
-func local_request_UserPostService_Delete_0(ctx context.Context, marshaler runtime.Marshaler, server UserPostServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_ArticleService_Delete_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq UserIdWithArticleId
 	var metadata runtime.ServerMetadata
 
@@ -247,7 +246,7 @@ func local_request_UserPostService_Delete_0(ctx context.Context, marshaler runti
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_UserPostService_Delete_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ArticleService_Delete_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -257,17 +256,17 @@ func local_request_UserPostService_Delete_0(ctx context.Context, marshaler runti
 }
 
 var (
-	filter_UserPostService_List_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+	filter_ArticleService_List_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
 )
 
-func request_UserPostService_List_0(ctx context.Context, marshaler runtime.Marshaler, client UserPostServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_ArticleService_List_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq ListRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_UserPostService_List_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ArticleService_List_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -276,14 +275,14 @@ func request_UserPostService_List_0(ctx context.Context, marshaler runtime.Marsh
 
 }
 
-func local_request_UserPostService_List_0(ctx context.Context, marshaler runtime.Marshaler, server UserPostServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_ArticleService_List_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq ListRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_UserPostService_List_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ArticleService_List_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -292,25 +291,25 @@ func local_request_UserPostService_List_0(ctx context.Context, marshaler runtime
 
 }
 
-// RegisterUserPostServiceHandlerServer registers the http handlers for service UserPostService to "mux".
-// UnaryRPC     :call UserPostServiceServer directly.
+// RegisterArticleServiceHandlerServer registers the http handlers for service ArticleService to "mux".
+// UnaryRPC     :call ArticleServiceServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
-// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterUserPostServiceHandlerFromEndpoint instead.
-func RegisterUserPostServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server UserPostServiceServer) error {
+// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterArticleServiceHandlerFromEndpoint instead.
+func RegisterArticleServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server ArticleServiceServer) error {
 
-	mux.Handle("POST", pattern_UserPostService_Create_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_ArticleService_Create_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article_service.proto.UserPostService/Create", runtime.WithHTTPPathPattern("/v1/articles"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article_service.proto.ArticleService/Create", runtime.WithHTTPPathPattern("/v1/articles"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_UserPostService_Create_0(ctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_ArticleService_Create_0(ctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -318,23 +317,23 @@ func RegisterUserPostServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 			return
 		}
 
-		forward_UserPostService_Create_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_Create_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_UserPostService_Get_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_ArticleService_Retrieve_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article_service.proto.UserPostService/Get", runtime.WithHTTPPathPattern("/v1/articles/{id}"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article_service.proto.ArticleService/Retrieve", runtime.WithHTTPPathPattern("/v1/articles/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_UserPostService_Get_0(ctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_ArticleService_Retrieve_0(ctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -342,23 +341,23 @@ func RegisterUserPostServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 			return
 		}
 
-		forward_UserPostService_Get_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_Retrieve_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("PUT", pattern_UserPostService_Update_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("PUT", pattern_ArticleService_Update_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article_service.proto.UserPostService/Update", runtime.WithHTTPPathPattern("/v1/articles/{id}"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article_service.proto.ArticleService/Update", runtime.WithHTTPPathPattern("/v1/articles/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_UserPostService_Update_0(ctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_ArticleService_Update_0(ctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -366,23 +365,23 @@ func RegisterUserPostServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 			return
 		}
 
-		forward_UserPostService_Update_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_Update_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("DELETE", pattern_UserPostService_Delete_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("DELETE", pattern_ArticleService_Delete_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article_service.proto.UserPostService/Delete", runtime.WithHTTPPathPattern("/v1/articles/{id}"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article_service.proto.ArticleService/Delete", runtime.WithHTTPPathPattern("/v1/articles/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_UserPostService_Delete_0(ctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_ArticleService_Delete_0(ctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -390,23 +389,23 @@ func RegisterUserPostServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 			return
 		}
 
-		forward_UserPostService_Delete_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_Delete_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_UserPostService_List_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_ArticleService_List_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article_service.proto.UserPostService/List", runtime.WithHTTPPathPattern("/v1/articles"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article_service.proto.ArticleService/List", runtime.WithHTTPPathPattern("/v1/articles"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_UserPostService_List_0(ctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_ArticleService_List_0(ctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -414,16 +413,16 @@ func RegisterUserPostServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 			return
 		}
 
-		forward_UserPostService_List_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_List_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
 	return nil
 }
 
-// RegisterUserPostServiceHandlerFromEndpoint is same as RegisterUserPostServiceHandler but
+// RegisterArticleServiceHandlerFromEndpoint is same as RegisterArticleServiceHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
-func RegisterUserPostServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
+func RegisterArticleServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
 	conn, err := grpc.Dial(endpoint, opts...)
 	if err != nil {
 		return err
@@ -443,124 +442,124 @@ func RegisterUserPostServiceHandlerFromEndpoint(ctx context.Context, mux *runtim
 		}()
 	}()
 
-	return RegisterUserPostServiceHandler(ctx, mux, conn)
+	return RegisterArticleServiceHandler(ctx, mux, conn)
 }
 
-// RegisterUserPostServiceHandler registers the http handlers for service UserPostService to "mux".
+// RegisterArticleServiceHandler registers the http handlers for service ArticleService to "mux".
 // The handlers forward requests to the grpc endpoint over "conn".
-func RegisterUserPostServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
-	return RegisterUserPostServiceHandlerClient(ctx, mux, NewUserPostServiceClient(conn))
+func RegisterArticleServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+	return RegisterArticleServiceHandlerClient(ctx, mux, NewArticleServiceClient(conn))
 }
 
-// RegisterUserPostServiceHandlerClient registers the http handlers for service UserPostService
-// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "UserPostServiceClient".
-// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "UserPostServiceClient"
+// RegisterArticleServiceHandlerClient registers the http handlers for service ArticleService
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "ArticleServiceClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "ArticleServiceClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "UserPostServiceClient" to call the correct interceptors.
-func RegisterUserPostServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client UserPostServiceClient) error {
+// "ArticleServiceClient" to call the correct interceptors.
+func RegisterArticleServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client ArticleServiceClient) error {
 
-	mux.Handle("POST", pattern_UserPostService_Create_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_ArticleService_Create_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article_service.proto.UserPostService/Create", runtime.WithHTTPPathPattern("/v1/articles"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article_service.proto.ArticleService/Create", runtime.WithHTTPPathPattern("/v1/articles"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_UserPostService_Create_0(ctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_ArticleService_Create_0(ctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_UserPostService_Create_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_Create_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_UserPostService_Get_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_ArticleService_Retrieve_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article_service.proto.UserPostService/Get", runtime.WithHTTPPathPattern("/v1/articles/{id}"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article_service.proto.ArticleService/Retrieve", runtime.WithHTTPPathPattern("/v1/articles/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_UserPostService_Get_0(ctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_ArticleService_Retrieve_0(ctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_UserPostService_Get_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_Retrieve_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("PUT", pattern_UserPostService_Update_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("PUT", pattern_ArticleService_Update_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article_service.proto.UserPostService/Update", runtime.WithHTTPPathPattern("/v1/articles/{id}"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article_service.proto.ArticleService/Update", runtime.WithHTTPPathPattern("/v1/articles/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_UserPostService_Update_0(ctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_ArticleService_Update_0(ctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_UserPostService_Update_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_Update_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("DELETE", pattern_UserPostService_Delete_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("DELETE", pattern_ArticleService_Delete_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article_service.proto.UserPostService/Delete", runtime.WithHTTPPathPattern("/v1/articles/{id}"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article_service.proto.ArticleService/Delete", runtime.WithHTTPPathPattern("/v1/articles/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_UserPostService_Delete_0(ctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_ArticleService_Delete_0(ctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_UserPostService_Delete_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_Delete_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_UserPostService_List_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_ArticleService_List_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article_service.proto.UserPostService/List", runtime.WithHTTPPathPattern("/v1/articles"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article_service.proto.ArticleService/List", runtime.WithHTTPPathPattern("/v1/articles"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_UserPostService_List_0(ctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_ArticleService_List_0(ctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_UserPostService_List_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_List_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -568,25 +567,25 @@ func RegisterUserPostServiceHandlerClient(ctx context.Context, mux *runtime.Serv
 }
 
 var (
-	pattern_UserPostService_Create_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "articles"}, ""))
+	pattern_ArticleService_Create_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "articles"}, ""))
 
-	pattern_UserPostService_Get_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "articles", "id"}, ""))
+	pattern_ArticleService_Retrieve_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "articles", "id"}, ""))
 
-	pattern_UserPostService_Update_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "articles", "id"}, ""))
+	pattern_ArticleService_Update_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "articles", "id"}, ""))
 
-	pattern_UserPostService_Delete_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "articles", "id"}, ""))
+	pattern_ArticleService_Delete_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "articles", "id"}, ""))
 
-	pattern_UserPostService_List_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "articles"}, ""))
+	pattern_ArticleService_List_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "articles"}, ""))
 )
 
 var (
-	forward_UserPostService_Create_0 = runtime.ForwardResponseMessage
+	forward_ArticleService_Create_0 = runtime.ForwardResponseMessage
 
-	forward_UserPostService_Get_0 = runtime.ForwardResponseMessage
+	forward_ArticleService_Retrieve_0 = runtime.ForwardResponseMessage
 
-	forward_UserPostService_Update_0 = runtime.ForwardResponseMessage
+	forward_ArticleService_Update_0 = runtime.ForwardResponseMessage
 
-	forward_UserPostService_Delete_0 = runtime.ForwardResponseMessage
+	forward_ArticleService_Delete_0 = runtime.ForwardResponseMessage
 
-	forward_UserPostService_List_0 = runtime.ForwardResponseMessage
+	forward_ArticleService_List_0 = runtime.ForwardResponseMessage
 )
