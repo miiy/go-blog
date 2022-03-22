@@ -2,12 +2,13 @@ syntax="proto3";
 
 package article_service.proto;
 
-option go_package = "github.com/miiy/go-blog/service/article/proto";
+option go_package = "goblog.com/service/article/proto/v1;article";
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
 import "google/api/annotations.proto";
-import "validate/validate.proto";
+import "google/api/field_behavior.proto";
 
 message Article {
   enum ArticleStatus {
@@ -15,99 +16,118 @@ message Article {
     ACTIVE = 1;
     DISABLE = 2;
   }
-  int64 id = 1;
-  int64 user_id = 2;
-  string title = 3;
-  string meta_title = 4;
-  string meta_description = 5;
-  google.protobuf.Timestamp published_time = 6;
-  google.protobuf.Timestamp updated_time = 7;
-  string from_text = 8;
-  string from_url = 9;
-  string summary = 10;
-  string content = 11;
-  ArticleStatus status = 12;
-  google.protobuf.Timestamp created_at = 13;
-  google.protobuf.Timestamp updated_at = 14;
+  uint64 id = 1;
+  uint64 user_id = 2;
+  uint64 category_id = 3;
+  string title = 4;
+  string meta_title = 5;
+  string meta_description = 6;
+  google.protobuf.Timestamp published_time = 7;
+  google.protobuf.Timestamp updated_time = 8;
+  string from_text = 9;
+  string from_url = 10;
+  string summary = 11;
+  string content = 12;
+  ArticleStatus status = 13;
+  // Output only. Creation time of the article.
+  google.protobuf.Timestamp create_time = 14;
+  google.protobuf.Timestamp update_time = 15;
 }
 
+// Request to create a new article.
+message CreateArticleRequest {
+  // The parent resource where this article will be created.
+  //  // Format: publishers/{publisher}
+  string parent = 1;
 
-message ArticleRequest {
-  int64 id = 1;
+  // The article to create.
+  Article article = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // The ID to use for the article, which will become the final component of
+  // the article's resource name.
+  //
+  // This value should be 4-63 characters, and valid characters
+  // are /[a-z][0-9]-/.
+  string article_id = 3;
 }
 
-message UserIdWithArticleId {
-  int64 user_id = 1;
-  int64 id = 2;
+// Request to create articles in batch.
+message BatchCreateArticlesRequest {
+  map<string, Article> articles = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
-message CreateRequest {
-  int64 user_id = 1;
-  string title = 2                              [(validate.rules).string.max_len = 255];
-  string content = 3                            [(validate.rules).string = {min_len: 1, max_len: 255}];
-  Article.ArticleStatus status = 4              [(validate.rules).enum.defined_only = true];
-  google.protobuf.Timestamp published_time = 5;
-  google.protobuf.Timestamp updated_time = 6;
-  int64 sort = 7                                [(validate.rules).int64.gte = 0];
+// Response for creating articles in batch.
+message BatchCreateArticlesResponse {
+  repeated Article articles = 1;
 }
 
-message UpdateRequest {
-  int64 id = 1;
-  int64 user_id = 2;
-  string title = 3;
-  string content = 4;
-  int64 status = 5;
-  google.protobuf.Timestamp published_time = 6;
-  google.protobuf.Timestamp updated_time = 7;
-  int64 sort = 8;
+// Request to get a article.
+message GetArticleRequest {
+  uint64 id = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
-message ListRequest {
-  int64 page = 1;
-  int64 per_page = 2;
-  string keyword = 3;
+// Request to update a article.
+message UpdateArticleRequest {
+  uint64 id = 1 [(google.api.field_behavior) = REQUIRED];
+
+  Article article = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // The list of fields to be updated.
+  google.protobuf.FieldMask update_mask = 3;
 }
 
-message ListResponse {
+// Request to delete a article.
+message DeleteArticleRequest {
+  uint64 id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message ListArticlesRequest {
+  int32 page = 1;
+  int32 page_size = 2;
+}
+
+message ListArticlesResponse {
   int64 total = 1;
-  int64 per_page = 2;
-  int64 current_page = 3;
-  int64 last_page = 4;
-  int64 from = 5;
-  int64 to = 6;
-  repeated Article data = 7;
+  int32 page_size = 2;
+  int32 current_page = 3;
+  repeated Article articles = 7;
 }
 
 service ArticleService {
-  rpc Create(Article) returns (Article) {
+  rpc CreateArticle(CreateArticleRequest) returns (Article) {
     option (google.api.http) = {
       post: "/v1/articles"
+      body: "article"
+    };
+  }
+
+  rpc BatchCreateArticles(BatchCreateArticlesRequest) returns (BatchCreateArticlesResponse) {
+    option (google.api.http) = {
+      post: "/v1/articles:batchCreate"
       body: "*"
     };
   }
 
-  rpc Retrieve(ArticleId) returns (Article) {
+  rpc GetArticle(GetArticleRequest) returns (Article) {
     option (google.api.http) = {
       get: "/v1/articles/{id}"
-      body: "*"
     };
   }
 
-  rpc Update(Article) returns (Article) {
+  rpc UpdateArticle(UpdateArticleRequest) returns (Article) {
     option (google.api.http) = {
-      put: "/v1/articles/{id}"
-      body: "*"
+      put: "/v1/articles/{article.id}"
+      body: "article"
     };
   }
 
-  rpc Delete(UserIdWithArticleId) returns (google.protobuf.Empty) {
+  rpc DeleteArticle(DeleteArticleRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/articles/{id}"
-      body: "*"
     };
   }
 
-  rpc List(ListRequest) returns (ListResponse) {
+  rpc ListArticles(ListArticlesRequest) returns (ListArticlesResponse) {
     option (google.api.http) = {
       get: "/v1/articles"
     };

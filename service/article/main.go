@@ -4,6 +4,8 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"google.golang.org/grpc/credentials/insecure"
+
 	//grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
@@ -30,7 +32,7 @@ import (
 
 func main() {
 	// flag
-	configFile := flag.String("-f", "./config/default.yaml", "config file")
+	configFile := flag.String("f", "../../config/default.yaml", "config file")
 	var addr = flag.String("addr", "localhost:50051", "the address to connect to")
 	flag.Parse()
 
@@ -97,7 +99,7 @@ func main() {
 		)),
 	)
 
-	v1Article.RegisterArticleServiceServer(s, v1ArticleSvr.NewArticleServiceServer(db.Gorm))
+	v1Article.RegisterArticleServiceServer(s, v1ArticleSvr.NewArticleServiceServer(db.Gorm, zapLogger))
 
 	// run GRPC server
 	go func() {
@@ -116,7 +118,7 @@ func main() {
 func RunGateway(dialAddr, gatewayAddr string) error {
 	// Create a client connection to the gRPC Server we just started.
 	// This is where the gRPC-Gateway proxies the requests.
-	conn, err := grpc.DialContext(context.Background(), dialAddr, grpc.WithBlock())
+	conn, err := grpc.DialContext(context.Background(), dialAddr, grpc.WithBlock(), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return fmt.Errorf("failed to dial server: %w", err)
 	}

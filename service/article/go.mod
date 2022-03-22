@@ -7,6 +7,8 @@ replace goblog.com/pkg => ../../pkg
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0 // indirect
 	github.com/envoyproxy/protoc-gen-validate v0.6.7 // indirect
+	github.com/go-sql-driver/mysql v1.6.0 // indirect
+	github.com/golang-jwt/jwt/v4 v4.0.0 // indirect
 	github.com/golang/glog v1.0.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0 // indirect
@@ -32,6 +34,7 @@ require (
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.2.0 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
+	gorm.io/driver/mysql v1.3.2 // indirect
 	gorm.io/gorm v1.23.3 // indirect
 	sigs.k8s.io/yaml v1.3.0 // indirect
 )

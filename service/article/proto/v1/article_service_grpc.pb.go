@@ -4,7 +4,7 @@
 // - protoc             v3.19.4
 // source: article_service.proto
 
-package proto
+package article
 
 import (
 	context "context"
@@ -23,11 +23,12 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ArticleServiceClient interface {
-	Create(ctx context.Context, in *Article, opts ...grpc.CallOption) (*Article, error)
-	Retrieve(ctx context.Context, in *ArticleId, opts ...grpc.CallOption) (*Article, error)
-	Update(ctx context.Context, in *Article, opts ...grpc.CallOption) (*Article, error)
-	Delete(ctx context.Context, in *UserIdWithArticleId, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
+	CreateArticle(ctx context.Context, in *CreateArticleRequest, opts ...grpc.CallOption) (*Article, error)
+	BatchCreateArticles(ctx context.Context, in *BatchCreateArticlesRequest, opts ...grpc.CallOption) (*BatchCreateArticlesResponse, error)
+	GetArticle(ctx context.Context, in *GetArticleRequest, opts ...grpc.CallOption) (*Article, error)
+	UpdateArticle(ctx context.Context, in *UpdateArticleRequest, opts ...grpc.CallOption) (*Article, error)
+	DeleteArticle(ctx context.Context, in *DeleteArticleRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	ListArticles(ctx context.Context, in *ListArticlesRequest, opts ...grpc.CallOption) (*ListArticlesResponse, error)
 }
 
 type articleServiceClient struct {
@@ -38,45 +39,54 @@ func NewArticleServiceClient(cc grpc.ClientConnInterface) ArticleServiceClient {
 	return &articleServiceClient{cc}
 }
 
-func (c *articleServiceClient) Create(ctx context.Context, in *Article, opts ...grpc.CallOption) (*Article, error) {
+func (c *articleServiceClient) CreateArticle(ctx context.Context, in *CreateArticleRequest, opts ...grpc.CallOption) (*Article, error) {
 	out := new(Article)
-	err := c.cc.Invoke(ctx, "/article_service.proto.ArticleService/Create", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/article_service.proto.ArticleService/CreateArticle", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *articleServiceClient) Retrieve(ctx context.Context, in *ArticleId, opts ...grpc.CallOption) (*Article, error) {
-	out := new(Article)
-	err := c.cc.Invoke(ctx, "/article_service.proto.ArticleService/Retrieve", in, out, opts...)
+func (c *articleServiceClient) BatchCreateArticles(ctx context.Context, in *BatchCreateArticlesRequest, opts ...grpc.CallOption) (*BatchCreateArticlesResponse, error) {
+	out := new(BatchCreateArticlesResponse)
+	err := c.cc.Invoke(ctx, "/article_service.proto.ArticleService/BatchCreateArticles", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *articleServiceClient) Update(ctx context.Context, in *Article, opts ...grpc.CallOption) (*Article, error) {
+func (c *articleServiceClient) GetArticle(ctx context.Context, in *GetArticleRequest, opts ...grpc.CallOption) (*Article, error) {
 	out := new(Article)
-	err := c.cc.Invoke(ctx, "/article_service.proto.ArticleService/Update", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/article_service.proto.ArticleService/GetArticle", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *articleServiceClient) Delete(ctx context.Context, in *UserIdWithArticleId, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *articleServiceClient) UpdateArticle(ctx context.Context, in *UpdateArticleRequest, opts ...grpc.CallOption) (*Article, error) {
+	out := new(Article)
+	err := c.cc.Invoke(ctx, "/article_service.proto.ArticleService/UpdateArticle", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *articleServiceClient) DeleteArticle(ctx context.Context, in *DeleteArticleRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/article_service.proto.ArticleService/Delete", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/article_service.proto.ArticleService/DeleteArticle", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *articleServiceClient) List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
-	out := new(ListResponse)
-	err := c.cc.Invoke(ctx, "/article_service.proto.ArticleService/List", in, out, opts...)
+func (c *articleServiceClient) ListArticles(ctx context.Context, in *ListArticlesRequest, opts ...grpc.CallOption) (*ListArticlesResponse, error) {
+	out := new(ListArticlesResponse)
+	err := c.cc.Invoke(ctx, "/article_service.proto.ArticleService/ListArticles", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -87,11 +97,12 @@ func (c *articleServiceClient) List(ctx context.Context, in *ListRequest, opts .
 // All implementations must embed UnimplementedArticleServiceServer
 // for forward compatibility
 type ArticleServiceServer interface {
-	Create(context.Context, *Article) (*Article, error)
-	Retrieve(context.Context, *ArticleId) (*Article, error)
-	Update(context.Context, *Article) (*Article, error)
-	Delete(context.Context, *UserIdWithArticleId) (*emptypb.Empty, error)
-	List(context.Context, *ListRequest) (*ListResponse, error)
+	CreateArticle(context.Context, *CreateArticleRequest) (*Article, error)
+	BatchCreateArticles(context.Context, *BatchCreateArticlesRequest) (*BatchCreateArticlesResponse, error)
+	GetArticle(context.Context, *GetArticleRequest) (*Article, error)
+	UpdateArticle(context.Context, *UpdateArticleRequest) (*Article, error)
+	DeleteArticle(context.Context, *DeleteArticleRequest) (*emptypb.Empty, error)
+	ListArticles(context.Context, *ListArticlesRequest) (*ListArticlesResponse, error)
 	mustEmbedUnimplementedArticleServiceServer()
 }
 
@@ -99,20 +110,23 @@ type ArticleServiceServer interface {
 type UnimplementedArticleServiceServer struct {
 }
 
-func (UnimplementedArticleServiceServer) Create(context.Context, *Article) (*Article, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+func (UnimplementedArticleServiceServer) CreateArticle(context.Context, *CreateArticleRequest) (*Article, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateArticle not implemented")
 }
-func (UnimplementedArticleServiceServer) Retrieve(context.Context, *ArticleId) (*Article, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Retrieve not implemented")
+func (UnimplementedArticleServiceServer) BatchCreateArticles(context.Context, *BatchCreateArticlesRequest) (*BatchCreateArticlesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BatchCreateArticles not implemented")
 }
-func (UnimplementedArticleServiceServer) Update(context.Context, *Article) (*Article, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+func (UnimplementedArticleServiceServer) GetArticle(context.Context, *GetArticleRequest) (*Article, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetArticle not implemented")
 }
-func (UnimplementedArticleServiceServer) Delete(context.Context, *UserIdWithArticleId) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
+func (UnimplementedArticleServiceServer) UpdateArticle(context.Context, *UpdateArticleRequest) (*Article, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateArticle not implemented")
 }
-func (UnimplementedArticleServiceServer) List(context.Context, *ListRequest) (*ListResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
+func (UnimplementedArticleServiceServer) DeleteArticle(context.Context, *DeleteArticleRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteArticle not implemented")
+}
+func (UnimplementedArticleServiceServer) ListArticles(context.Context, *ListArticlesRequest) (*ListArticlesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListArticles not implemented")
 }
 func (UnimplementedArticleServiceServer) mustEmbedUnimplementedArticleServiceServer() {}
 
@@ -127,92 +141,110 @@ func RegisterArticleServiceServer(s grpc.ServiceRegistrar, srv ArticleServiceSer
 	s.RegisterService(&ArticleService_ServiceDesc, srv)
 }
 
-func _ArticleService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Article)
+func _ArticleService_CreateArticle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateArticleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleServiceServer).Create(ctx, in)
+		return srv.(ArticleServiceServer).CreateArticle(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/article_service.proto.ArticleService/Create",
+		FullMethod: "/article_service.proto.ArticleService/CreateArticle",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleServiceServer).Create(ctx, req.(*Article))
+		return srv.(ArticleServiceServer).CreateArticle(ctx, req.(*CreateArticleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ArticleService_Retrieve_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ArticleId)
+func _ArticleService_BatchCreateArticles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BatchCreateArticlesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleServiceServer).Retrieve(ctx, in)
+		return srv.(ArticleServiceServer).BatchCreateArticles(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/article_service.proto.ArticleService/Retrieve",
+		FullMethod: "/article_service.proto.ArticleService/BatchCreateArticles",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleServiceServer).Retrieve(ctx, req.(*ArticleId))
+		return srv.(ArticleServiceServer).BatchCreateArticles(ctx, req.(*BatchCreateArticlesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ArticleService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Article)
+func _ArticleService_GetArticle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetArticleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleServiceServer).Update(ctx, in)
+		return srv.(ArticleServiceServer).GetArticle(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/article_service.proto.ArticleService/Update",
+		FullMethod: "/article_service.proto.ArticleService/GetArticle",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleServiceServer).Update(ctx, req.(*Article))
+		return srv.(ArticleServiceServer).GetArticle(ctx, req.(*GetArticleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ArticleService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserIdWithArticleId)
+func _ArticleService_UpdateArticle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateArticleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleServiceServer).Delete(ctx, in)
+		return srv.(ArticleServiceServer).UpdateArticle(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/article_service.proto.ArticleService/Delete",
+		FullMethod: "/article_service.proto.ArticleService/UpdateArticle",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleServiceServer).Delete(ctx, req.(*UserIdWithArticleId))
+		return srv.(ArticleServiceServer).UpdateArticle(ctx, req.(*UpdateArticleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ArticleService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListRequest)
+func _ArticleService_DeleteArticle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteArticleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleServiceServer).List(ctx, in)
+		return srv.(ArticleServiceServer).DeleteArticle(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/article_service.proto.ArticleService/List",
+		FullMethod: "/article_service.proto.ArticleService/DeleteArticle",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleServiceServer).List(ctx, req.(*ListRequest))
+		return srv.(ArticleServiceServer).DeleteArticle(ctx, req.(*DeleteArticleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ArticleService_ListArticles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListArticlesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ArticleServiceServer).ListArticles(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/article_service.proto.ArticleService/ListArticles",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ArticleServiceServer).ListArticles(ctx, req.(*ListArticlesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -225,24 +257,28 @@ var ArticleService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ArticleServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Create",
-			Handler:    _ArticleService_Create_Handler,
+			MethodName: "CreateArticle",
+			Handler:    _ArticleService_CreateArticle_Handler,
 		},
 		{
-			MethodName: "Retrieve",
-			Handler:    _ArticleService_Retrieve_Handler,
+			MethodName: "BatchCreateArticles",
+			Handler:    _ArticleService_BatchCreateArticles_Handler,
 		},
 		{
-			MethodName: "Update",
-			Handler:    _ArticleService_Update_Handler,
+			MethodName: "GetArticle",
+			Handler:    _ArticleService_GetArticle_Handler,
 		},
 		{
-			MethodName: "Delete",
-			Handler:    _ArticleService_Delete_Handler,
+			MethodName: "UpdateArticle",
+			Handler:    _ArticleService_UpdateArticle_Handler,
 		},
 		{
-			MethodName: "List",
-			Handler:    _ArticleService_List_Handler,
+			MethodName: "DeleteArticle",
+			Handler:    _ArticleService_DeleteArticle_Handler,
+		},
+		{
+			MethodName: "ListArticles",
+			Handler:    _ArticleService_ListArticles_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
