@@ -1,0 +1,5 @@
+GET http://localhost:8051/v1/articles/1
+Accept: application/json
+Content-Type: application/json
+
+###

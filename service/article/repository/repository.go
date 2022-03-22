@@ -29,7 +29,7 @@ type Article struct {
 	MetaDescription string
 	PublishedTime   time.Time
 	UpdatedTime     time.Time
-	FromTest        string
+	FromText        string
 	FromUrl         string
 	Summary         string
 	Content         string

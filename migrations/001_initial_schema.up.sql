@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS `articles`
 (
     `id`               bigint unsigned NOT NULL AUTO_INCREMENT,
     `user_id`          bigint unsigned NOT NULL DEFAULT 0,
+    `category_id`      bigint unsigned NOT NULL DEFAULT 0,
     `title`            varchar(255)    NOT NULL DEFAULT '',
     `meta_title`       varchar(255)    NOT NULL DEFAULT '',
     `meta_description` varchar(255)    NOT NULL DEFAULT '',

@@ -10,6 +10,7 @@ import (
 	"goblog.com/service/article/repository"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"gorm.io/gorm"
 	"time"
@@ -28,7 +29,7 @@ func NewArticleServiceServer(db *gorm.DB, logger *zap.Logger) pb.ArticleServiceS
 	}
 }
 
-func (s *ArticleServiceServer) Create(ctx context.Context, request *pb.Article) (*pb.Article, error) {
+func (s *ArticleServiceServer) CreateArticle(ctx context.Context, request *pb.CreateArticleRequest) (*pb.Article, error) {
 	//user, err := authUser(ctx, request.UserId)
 	//if err != nil {
 	//	return nil, err
@@ -41,19 +42,20 @@ func (s *ArticleServiceServer) Create(ctx context.Context, request *pb.Article) 
 	//	request.UpdatedTime = timestamppb.Now()
 	//}
 
+	article := request.GetArticle()
 	a := &repository.Article{
 		UserId:          0,
-		CategoryId:      request.CategoryId,
-		Title:           request.Title,
-		MetaTitle:       request.MetaTitle,
-		MetaDescription: request.MetaDescription,
-		PublishedTime:   request.PublishedTime.AsTime(),
-		UpdatedTime:     request.UpdatedTime.AsTime(),
-		FromTest:        request.FromText,
-		FromUrl:         request.FromUrl,
-		Summary:         request.Summary,
-		Content:         request.Content,
-		Status:          int(request.Status),
+		CategoryId:      article.CategoryId,
+		Title:           article.Title,
+		MetaTitle:       article.MetaTitle,
+		MetaDescription: article.MetaDescription,
+		PublishedTime:   article.PublishedTime.AsTime(),
+		UpdatedTime:     article.UpdatedTime.AsTime(),
+		FromText:        article.FromText,
+		FromUrl:         article.FromUrl,
+		Summary:         article.Summary,
+		Content:         article.Content,
+		Status:          int(article.Status),
 		CreatedAt:       time.Now(),
 		UpdatedAt:       time.Now(),
 	}
@@ -69,7 +71,11 @@ func (s *ArticleServiceServer) Create(ctx context.Context, request *pb.Article) 
 	return articlePb, nil
 }
 
-func (s *ArticleServiceServer) Get(ctx context.Context, request *pb.GetArticleRequest) (*pb.Article, error) {
+func (s *ArticleServiceServer) BatchCreateArticles(ctx context.Context, request *pb.BatchCreateArticlesRequest) (*pb.BatchCreateArticlesResponse, error) {
+	return nil, nil
+}
+
+func (s *ArticleServiceServer) GetArticle(ctx context.Context, request *pb.GetArticleRequest) (*pb.Article, error) {
 	a, err := s.Repository.First(ctx, request.Id)
 	if err != nil {
 		if err == repository.ErrRecordNotFound {
@@ -87,20 +93,22 @@ func (s *ArticleServiceServer) Get(ctx context.Context, request *pb.GetArticleRe
 }
 
 
-func (s *ArticleServiceServer) Update(ctx context.Context, request *pb.Article) (*pb.Article, error) {
+func (s *ArticleServiceServer) UpdateArticle(ctx context.Context, request *pb.UpdateArticleRequest) (*pb.Article, error) {
+	article := request.GetArticle()
+
 	a := &repository.Article{
 		UserId:          0,
-		CategoryId:      request.CategoryId,
-		Title:           request.Title,
-		MetaTitle:       request.MetaTitle,
-		MetaDescription: request.MetaDescription,
-		PublishedTime:   request.PublishedTime.AsTime(),
-		UpdatedTime:     request.UpdatedTime.AsTime(),
-		FromTest:        request.FromText,
-		FromUrl:         request.FromUrl,
-		Summary:         request.Summary,
-		Content:         request.Content,
-		Status:          int(request.Status),
+		CategoryId:      article.CategoryId,
+		Title:           article.Title,
+		MetaTitle:       article.MetaTitle,
+		MetaDescription: article.MetaDescription,
+		PublishedTime:   article.PublishedTime.AsTime(),
+		UpdatedTime:     article.UpdatedTime.AsTime(),
+		FromText:        article.FromText,
+		FromUrl:         article.FromUrl,
+		Summary:         article.Summary,
+		Content:         article.Content,
+		Status:          int(article.Status),
 		CreatedAt:       time.Now(),
 		UpdatedAt:       time.Now(),
 	}
@@ -116,16 +124,16 @@ func (s *ArticleServiceServer) Update(ctx context.Context, request *pb.Article) 
 	return articlePb, nil
 }
 
-func (s *ArticleServiceServer) Delete(ctx context.Context, request *pb.DeleteArticleRequest) error {
+func (s *ArticleServiceServer) DeleteArticle(ctx context.Context, request *pb.DeleteArticleRequest) (*emptypb.Empty, error) {
 	err := s.Repository.Delete(ctx, request.Id)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return nil, nil
 }
 
-func (s *ArticleServiceServer) List(ctx context.Context, request *pb.ListArticlesRequest) (*pb.ListArticlesResponse, error) {
+func (s *ArticleServiceServer) ListArticles(ctx context.Context, request *pb.ListArticlesRequest) (*pb.ListArticlesResponse, error) {
 	l := ctxzap.Extract(ctx)
 	l.Info("222")
 	grpc_ctxtags.Extract(ctx).Set("request", request)
@@ -176,7 +184,7 @@ func articleToProto(a *repository.Article) (*pb.Article, error) {
 		MetaDescription: a.MetaDescription,
 		PublishedTime:   timestamppb.New(a.PublishedTime),
 		UpdatedTime:     timestamppb.New(a.UpdatedTime),
-		FromText:        a.FromTest,
+		FromText:        a.FromText,
 		FromUrl:         a.FromUrl,
 		Summary:         a.Summary,
 		Content:         a.Content,

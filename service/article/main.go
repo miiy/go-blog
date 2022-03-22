@@ -6,28 +6,26 @@ import (
 	"fmt"
 	"google.golang.org/grpc/credentials/insecure"
 
+	"github.com/grpc-ecosystem/go-grpc-middleware"
 	//grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
+	"github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
 	"github.com/grpc-ecosystem/go-grpc-middleware/validator"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"goblog.com/pkg/config"
+	"goblog.com/pkg/database"
 	//"goblog.com/pkg/jwtauth"
 	pkg_zap "goblog.com/pkg/zap"
+	articlepb "goblog.com/service/article/proto/v1"
+	v1ArticleSvr "goblog.com/service/article/service"
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/encoding/protojson"
-	"net/http"
-	"strings"
-
-	"github.com/grpc-ecosystem/go-grpc-middleware"
-	"github.com/grpc-ecosystem/go-grpc-middleware/recovery"
-	"goblog.com/pkg/database"
-	v1Article "goblog.com/service/article/proto/v1"
-	v1ArticleSvr "goblog.com/service/article/service"
-	"google.golang.org/grpc"
 	"log"
 	"net"
+	"net/http"
 )
 
 func main() {
@@ -99,7 +97,7 @@ func main() {
 		)),
 	)
 
-	v1Article.RegisterArticleServiceServer(s, v1ArticleSvr.NewArticleServiceServer(db.Gorm, zapLogger))
+	articlepb.RegisterArticleServiceServer(s, v1ArticleSvr.NewArticleServiceServer(db.Gorm, zapLogger))
 
 	// run GRPC server
 	go func() {
@@ -118,9 +116,14 @@ func main() {
 func RunGateway(dialAddr, gatewayAddr string) error {
 	// Create a client connection to the gRPC Server we just started.
 	// This is where the gRPC-Gateway proxies the requests.
-	conn, err := grpc.DialContext(context.Background(), dialAddr, grpc.WithBlock(), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.DialContext(
+		context.Background(),
+		dialAddr,
+		grpc.WithBlock(),
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	)
 	if err != nil {
-		return fmt.Errorf("failed to dial server: %w", err)
+		log.Fatalln("failed to dial server: %w", err)
 	}
 
 	// https://grpc-ecosystem.github.io/grpc-gateway/docs/mapping/customizing_your_gateway/
@@ -137,24 +140,18 @@ func RunGateway(dialAddr, gatewayAddr string) error {
 		}),
 	)
 
-	err = v1Article.RegisterArticleServiceHandler(context.Background(), gwMux, conn)
+	err = articlepb.RegisterArticleServiceHandler(context.Background(), gwMux, conn)
 	if err != nil {
-		return fmt.Errorf("failed to register gateway: %w", err)
+		log.Fatalln("Failed to register gateway:", err)
 	}
 
-	srv := &http.Server{
+	gwServer := &http.Server{
 		Addr: gatewayAddr,
-		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			if strings.HasPrefix(r.URL.Path, "/api") {
-				gwMux.ServeHTTP(w, r)
-				return
-			}
-			// open api
-		}),
+		Handler: gwMux,
 	}
 
-	log.Printf("Serving gRPC-Gateway on http://%s\n", gatewayAddr)
-	return srv.ListenAndServe()
+	log.Println("Serving gRPC-Gateway on http://", gatewayAddr)
+	return gwServer.ListenAndServe()
 }
 
 
