@@ -15,14 +15,27 @@ import (
 
 type RegisterServiceHandler func(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error
 
+type Options struct {
+	// Addr is the address to listen
+	Addr string
+	// GRPCServer defines an endpoint of a gRPC service
+	GRPCServerAddr string
+	// OpenAPIFS
+	OpenAPIFS fs.FS
+	// ServerMuxOption
+	ServerMuxOption []runtime.ServeMuxOption
+	// RegisterServiceHandlers
+	RegisterServiceHandlers []RegisterServiceHandler
+}
+
 // Run runs the gRPC-Gateway, dialling the provided address.
-func Run(dialAddr, gatewayAddr string, handlers []RegisterServiceHandler, openAPIFS fs.FS) error {
+func Run(ctx context.Context, opts Options) error {
 
 	// Create a client connection to the gRPC Server we just started.
 	// This is where the gRPC-Gateway proxies the requests.
 	conn, err := grpc.DialContext(
-		context.Background(),
-		dialAddr,
+		ctx,
+		opts.GRPCServerAddr,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithBlock(),
 	)
@@ -31,39 +44,37 @@ func Run(dialAddr, gatewayAddr string, handlers []RegisterServiceHandler, openAP
 	}
 
 	// https://grpc-ecosystem.github.io/grpc-gateway/docs/mapping/customizing_your_gateway/
-	gwMux := runtime.NewServeMux(
-		// runtime.WithForwardResponseOption(allowCORS),
-		runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{
-			MarshalOptions:   protojson.MarshalOptions{
-				UseProtoNames: true, // 使用proto中的大小写
-				EmitUnpopulated: true, // 显示未填充的字段
-			},
-			UnmarshalOptions: protojson.UnmarshalOptions{
-				DiscardUnknown: true,
-			},
-		}),
-	)
+	serverMuxOption := runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{
+		MarshalOptions:   protojson.MarshalOptions{
+			UseProtoNames: true,
+			EmitUnpopulated: true,
+		},
+		UnmarshalOptions: protojson.UnmarshalOptions{
+			DiscardUnknown: true,
+		},
+	})
+	opts.ServerMuxOption = append(opts.ServerMuxOption, serverMuxOption)
+	gwMux := runtime.NewServeMux(opts.ServerMuxOption...)
 
 	// err = pb.RegisterExampleServiceHandler(context.Background(), gwMux, conn)
-	for _, v := range handlers {
-		err = v(context.Background(), gwMux, conn)
-		if err != nil {
+	for _, f := range opts.RegisterServiceHandlers {
+		if err = f(ctx, gwMux, conn); err != nil {
 			log.Fatalln("Failed to register gateway:", err)
 		}
 	}
 
 	gwServer := &http.Server{
-		Addr: gatewayAddr,
+		Addr: opts.Addr,
 		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			if strings.HasPrefix(r.URL.Path, "/openapi") {
 				r.URL.Path = strings.TrimPrefix(r.URL.Path, "/openapi")
-				http.FileServer(http.FS(openAPIFS)).ServeHTTP(w, r)
+				http.FileServer(http.FS(opts.OpenAPIFS)).ServeHTTP(w, r)
 				return
 			}
 			gwMux.ServeHTTP(w, r)
 		}),
 	}
 
-	log.Printf("Serving gRPC-Gateway on http://%s", gatewayAddr)
+	log.Printf("Serving gRPC-Gateway on http://%s", opts.Addr)
 	return gwServer.ListenAndServe()
 }

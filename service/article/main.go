@@ -1,10 +1,13 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"github.com/grpc-ecosystem/go-grpc-middleware"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"goblog.com/pkg/grpc_gateway/gateway"
+	"google.golang.org/protobuf/encoding/protojson"
 	//grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	"github.com/grpc-ecosystem/go-grpc-middleware/recovery"
@@ -91,10 +94,24 @@ func main() {
 		}
 	}()
 
-	handlers := []gateway.RegisterServiceHandler{articlepb.RegisterArticleServiceHandler}
-
+	serverMuxOption := runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{
+		MarshalOptions:   protojson.MarshalOptions{
+			UseProtoNames: true,
+			EmitUnpopulated: true,
+		},
+		UnmarshalOptions: protojson.UnmarshalOptions{
+			DiscardUnknown: true,
+		},
+	})
+	gwOpts := gateway.Options{
+		Addr:                    "127.0.0.1:8051",
+		GRPCServerAddr:          "localhost:50051",
+		OpenAPIFS:               openapi.OpenAPIFS,
+		ServerMuxOption:         []runtime.ServeMuxOption{serverMuxOption},
+		RegisterServiceHandlers: []gateway.RegisterServiceHandler{articlepb.RegisterArticleServiceHandler},
+	}
 	// run HTTP gateway
-	err = gateway.Run("localhost:50051", "127.0.0.1:8051", handlers, openapi.OpenAPIFS)
+	err = gateway.Run(context.Background(), gwOpts)
 	if err != nil {
 		log.Fatalln(err)
 	}
