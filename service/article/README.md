@@ -12,4 +12,7 @@ protoc -I ./proto/v1 \
 --go_out ./proto/v1 --go_opt paths=source_relative \
 --go-grpc_out ./proto/v1 --go-grpc_opt paths=source_relative \
 --grpc-gateway_out ./proto/v1 --grpc-gateway_opt paths=source_relative \
+--openapiv2_out . \
+--openapiv2_opt logtostderr=true \
+--openapiv2_opt use_go_templates=true \
 ./proto/v1/article_service.proto
