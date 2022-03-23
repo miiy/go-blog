@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/grpc-ecosystem/go-grpc-middleware"
-	"goblog.com/service/article/gateway"
+	"goblog.com/pkg/grpc_gateway/gateway"
 	//grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	"github.com/grpc-ecosystem/go-grpc-middleware/recovery"
@@ -14,6 +14,7 @@ import (
 	"goblog.com/pkg/database"
 	//"goblog.com/pkg/jwtauth"
 	pkg_zap "goblog.com/pkg/zap"
+	"goblog.com/service/article/openapi"
 	articlepb "goblog.com/service/article/proto/v1"
 	v1ArticleSvr "goblog.com/service/article/service"
 	"google.golang.org/grpc"
@@ -93,7 +94,7 @@ func main() {
 	handlers := []gateway.RegisterServiceHandler{articlepb.RegisterArticleServiceHandler}
 
 	// run HTTP gateway
-	err = gateway.Run("localhost:50051", "127.0.0.1:8051", handlers)
+	err = gateway.Run("localhost:50051", "127.0.0.1:8051", handlers, openapi.OpenAPIFS)
 	if err != nil {
 		log.Fatalln(err)
 	}
