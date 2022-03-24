@@ -15,9 +15,9 @@
     {{ end }}
 </head>
 <body>
-    {{ template "header" }}
+    {{ template "header" . }}
     {{ block "content" . }}
     {{ end }}
-    {{ template "footer" }}
+    {{ template "footer" . }}
 </body>
 </html>

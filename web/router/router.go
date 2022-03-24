@@ -1,16 +1,20 @@
 package router
 
 import (
+	"fmt"
 	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
 	"goblog.com/pkg/gin/middleware"
+	"goblog.com/web/pkg/config"
 	"goblog.com/web/resources/assets"
 	"goblog.com/web/resources/templates"
 	"html/template"
 	"net/http"
+	"path"
 )
 
-func RegisterRouter(r *gin.Engine) {
+func RegisterRouter(r *gin.Engine, appOpts config.AppOptions) {
+
 
 	// template
 	tr, err := createTemplateRender()
@@ -39,6 +43,7 @@ func RegisterRouter(r *gin.Engine) {
 			"PageTitle": "Home",
 			"Content":   "Hello, world.",
 			"Header":    "header.",
+			"App": appOpts,
 		})
 	})
 
@@ -78,6 +83,7 @@ func RegisterRouter(r *gin.Engine) {
 	r.Use(middleware.RequestInfo())
 
 }
+func unescaped (x string) interface{} { return template.HTML(x) }
 
 func createTemplateRender() (multitemplate.Renderer, error) {
 	r := multitemplate.NewRenderer()
@@ -94,8 +100,12 @@ func createTemplateRender() (multitemplate.Renderer, error) {
 	}
 
 	for name, tps := range templatesMap {
-		s := append(layouts, tps...)
-		t, err := template.ParseFS(templates.FS, s...)
+		// template name see template.ParseFiles
+		tName := path.Base(layouts[0])
+		t, err := template.New(tName).Funcs(template.FuncMap{
+			"unescaped": unescaped,
+		}).ParseFS(templates.FS, append(layouts, tps...)...)
+		fmt.Println(t.Templates())
 		if err != nil {
 			return nil, err
 		}

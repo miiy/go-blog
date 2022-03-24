@@ -4,10 +4,10 @@
         <div class="row">
             <div class="col-lg-3 mb-3">
                 <a class="d-inline-flex align-items-center mb-2 link-dark text-decoration-none" href="/" aria-label="Bootstrap">
-                    <span class="fs-5">DocxLib</span>
+                    <span class="fs-5">{{ .App.Name }}</span>
                 </a>
                 <ul class="list-unstyled small text-muted">
-                    <li class="mb-2">&copy; 2022 docxlib.com</li>
+                    <li class="mb-2">desc</li>
                 </ul>
             </div>
             <div class="col-6 col-lg-2 offset-lg-1 mb-3">
@@ -25,6 +25,11 @@
             <!--end of col-->
         </div>
         <!--end of row-->
+        <div class="row">
+            <div class="col-lg-12 col-12">
+                {{ .App.FooterCopyright | unescaped }}
+            </div>
+        </div>
     </div>
     <!--end of container-->
 </footer>
