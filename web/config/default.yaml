@@ -5,5 +5,5 @@ app:
   addr: localhost:8080
   name: blog
   url: www.blog.dev
-  footer-copyright: <p class="text-center">&copy; 2022 docxlib.com <a href="https://beian.miit.gov.cn">ICP</a></p>
+  footer-copyright: <p class="text-center">&copy; 2022</p>
 

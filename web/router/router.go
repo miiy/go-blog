@@ -1,11 +1,11 @@
 package router
 
 import (
-	"fmt"
 	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
 	"goblog.com/pkg/gin/middleware"
 	"goblog.com/web/pkg/config"
+	pkgTemplate "goblog.com/web/pkg/template"
 	"goblog.com/web/resources/assets"
 	"goblog.com/web/resources/templates"
 	"html/template"
@@ -83,7 +83,6 @@ func RegisterRouter(r *gin.Engine, appOpts config.AppOptions) {
 	r.Use(middleware.RequestInfo())
 
 }
-func unescaped (x string) interface{} { return template.HTML(x) }
 
 func createTemplateRender() (multitemplate.Renderer, error) {
 	r := multitemplate.NewRenderer()
@@ -103,9 +102,8 @@ func createTemplateRender() (multitemplate.Renderer, error) {
 		// template name see template.ParseFiles
 		tName := path.Base(layouts[0])
 		t, err := template.New(tName).Funcs(template.FuncMap{
-			"unescaped": unescaped,
+			"unescaped": pkgTemplate.Unescaped,
 		}).ParseFS(templates.FS, append(layouts, tps...)...)
-		fmt.Println(t.Templates())
 		if err != nil {
 			return nil, err
 		}
