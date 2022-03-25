@@ -1,27 +1,18 @@
 package router
 
 import (
-	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/render"
 	"goblog.com/pkg/gin/middleware"
 	"goblog.com/web/pkg/config"
-	pkgTemplate "goblog.com/web/pkg/template"
+	"goblog.com/web/pkg/template"
 	"goblog.com/web/resources/assets"
-	"goblog.com/web/resources/templates"
-	"html/template"
 	"net/http"
-	"path"
 )
 
 func RegisterRouter(r *gin.Engine, appOpts config.AppOptions) {
-
-
 	// template
-	tr, err := createTemplateRender()
-	if err != nil {
-		panic(err)
-	}
-	r.HTMLRender = tr
+	r.HTMLRender = htmlRender()
 
 	// assets
 	r.StaticFS("/assets", http.FS(assets.FS))
@@ -84,9 +75,7 @@ func RegisterRouter(r *gin.Engine, appOpts config.AppOptions) {
 
 }
 
-func createTemplateRender() (multitemplate.Renderer, error) {
-	r := multitemplate.NewRenderer()
-
+func htmlRender() render.HTMLRender {
 	layouts := []string{"layout/layout.html", "layout/header.html", "layout/footer.html"}
 	templatesMap := map[string][]string{
 		"home/index":     {"home/index.html"},
@@ -97,18 +86,12 @@ func createTemplateRender() (multitemplate.Renderer, error) {
 		"pages/list":     {"pages/list.html"},
 		"pages/detail":   {"pages/detail.html"},
 	}
-
-	for name, tps := range templatesMap {
-		// template name see template.ParseFiles
-		tName := path.Base(layouts[0])
-		t, err := template.New(tName).Funcs(template.FuncMap{
-			"unescaped": pkgTemplate.Unescaped,
-		}).ParseFS(templates.FS, append(layouts, tps...)...)
-		if err != nil {
-			return nil, err
-		}
-		r.Add(name, t)
+	for k, v := range templatesMap {
+		templatesMap[k] = append(layouts, v...)
 	}
-
-	return r, nil
+	tr, err := template.NewTemplateRender(templatesMap)
+	if err != nil {
+		panic(err)
+	}
+	return tr
 }
