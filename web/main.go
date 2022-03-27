@@ -2,15 +2,23 @@ package main
 
 import (
 	"flag"
-	"github.com/gin-gonic/gin"
+	"fmt"
+	"goblog.com/pkg/viper"
 	"goblog.com/web/pkg/config"
 	"goblog.com/web/router"
 	"log"
 )
 
 func main() {
-	configFile := flag.String("f", "config/default.yaml", "config file")
+	configFile := flag.String("c", "./config/default.yaml", "config file")
 	flag.Parse()
+
+	v, err := viper.NewViper("default.yaml", "yaml", []string{"./config"})
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(v.AllKeys())
+	fmt.Println(v.Get("app.name"))
 
 	// config
 	c, err := config.NewConfig(*configFile)
@@ -18,11 +26,13 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	r := gin.Default()
-	router.RegisterRouter(r, c.App)
-	if c.App.Debug {
-		gin.SetMode(gin.DebugMode)
+	app, f, err := InitApplication()
+	if err != nil {
+		panic(err)
 	}
+	defer f()
 
-	r.Run(c.App.Addr)
+	router.RegisterRouter(app.Router, v)
+
+	app.Router.Run(c.App.Addr)
 }

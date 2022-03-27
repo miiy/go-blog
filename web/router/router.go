@@ -3,14 +3,21 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/render"
+	"github.com/spf13/viper"
 	"goblog.com/pkg/gin/middleware"
-	"goblog.com/web/pkg/config"
-	"goblog.com/web/pkg/template"
+	"goblog.com/pkg/gin/template"
+	"goblog.com/web/app/article"
+	"goblog.com/web/app/book"
+	"goblog.com/web/app/home"
 	"goblog.com/web/resources/assets"
+	"goblog.com/web/resources/templates"
 	"net/http"
 )
 
-func RegisterRouter(r *gin.Engine, appOpts config.AppOptions) {
+var v *viper.Viper
+
+func RegisterRouter(r *gin.Engine, vv *viper.Viper) {
+	v = vv
 	// template
 	r.HTMLRender = htmlRender()
 
@@ -27,48 +34,9 @@ func RegisterRouter(r *gin.Engine, appOpts config.AppOptions) {
 	// uploads
 	r.Static("/uploads", "./storage/uploads")
 
-
-	// index
-	r.GET("/", func(c *gin.Context) {
-		c.HTML(200, "home/index", gin.H{
-			"PageTitle": "Home",
-			"Content":   "Hello, world.",
-			"Header":    "header.",
-			"App": appOpts,
-		})
-	})
-
-	// article
-	r.GET("/articles", func(c *gin.Context) {
-		c.HTML(200, "article/list", gin.H{
-			"PageTitle": "Article list",
-		})
-	})
-	r.GET("/articles/:id", func(c *gin.Context) {
-		c.HTML(200, "article/detail", gin.H{
-			"PageTitle": "Article detail",
-		})
-	})
-	// book
-	r.GET("/books", func(c *gin.Context) {
-		c.HTML(200, "book/list", gin.H{
-			"PageTitle": "Book list",
-		})
-	})
-	// book detail
-	r.GET("/books/:id", func(c *gin.Context) {
-		c.HTML(200, "book/detail", gin.H{
-			"PageTitle": "Book detail",
-		})
-	})
-
-	// pages
-	r.GET("/pages/list", func(c *gin.Context) {
-		c.HTML(200, "pages/list", gin.H{})
-	})
-	r.GET("/pages/detail", func(c *gin.Context) {
-		c.HTML(200, "pages/detail", gin.H{})
-	})
+	home.Router(r)
+	article.Router(r)
+	book.Router(r)
 
 	// middleware
 	r.Use(middleware.RequestInfo())
@@ -86,12 +54,28 @@ func htmlRender() render.HTMLRender {
 		"pages/list":     {"pages/list.html"},
 		"pages/detail":   {"pages/detail.html"},
 	}
-	for k, v := range templatesMap {
-		templatesMap[k] = append(layouts, v...)
+	funMap := map[string]interface{}{
+		"config": getConfig,
 	}
-	tr, err := template.NewTemplateRender(templatesMap)
+
+	var tcs []template.Config
+	for k, v := range templatesMap {
+		c := template.Config{
+			Name:    k,
+			Files:   append(layouts, v...),
+			FuncMap: funMap,
+		}
+		tcs = append(tcs, c)
+	}
+
+	tr, err := template.NewTemplateRender(templates.FS, tcs)
 	if err != nil {
 		panic(err)
 	}
 	return tr
+}
+
+func getConfig(key string) string {
+
+	return v.GetString(key)
 }

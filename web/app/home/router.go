@@ -1,6 +1,7 @@
 package home
 
-func (m *Module) RegisterRouter() {
-	r := m.router
+import "github.com/gin-gonic/gin"
+
+func Router(r *gin.Engine) {
 	r.GET("/", indexHandler)
 }

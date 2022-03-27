@@ -1,3 +1,4 @@
+
 module goblog.com/pkg
 
 go 1.17
@@ -7,6 +8,7 @@ replace goblog.com/pkg => ../pkg
 require (
 	github.com/elastic/go-elasticsearch/v8 v8.0.0-20210608143047-aa1301e7ba9d
 	github.com/gin-contrib/cors v1.3.1
+	github.com/gin-contrib/multitemplate v0.0.0-20220323084503-710510e67c20
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-playground/locales v0.13.0
 	github.com/go-playground/universal-translator v0.17.0
@@ -15,6 +17,7 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/golang-jwt/jwt/v4 v4.0.0
 	github.com/golang-migrate/migrate/v4 v4.15.1
+	github.com/google/wire v0.5.0
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.10.0
 	go.uber.org/zap v1.21.0

@@ -14,3 +14,5 @@ replace (
 	goblog.com/service/usertag => ../../service/usertag
 	goblog.com/service/usertagpost => ../../service/usertagpost
 )
+
+require github.com/google/wire v0.5.0

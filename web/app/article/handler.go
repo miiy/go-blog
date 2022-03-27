@@ -1,15 +1,19 @@
-package post
+package article
 
 import (
 	"github.com/gin-gonic/gin"
 )
 
-func indexHandler(ctx *gin.Context) {
-	//response.Success(ctx, "index")
+func indexHandler(c *gin.Context) {
+	c.HTML(200, "article/list", gin.H{
+		"PageTitle": "Article list",
+	})
 }
 
-func showHandler(ctx *gin.Context) {
-	//response.Success(ctx, "show")
+func showHandler(c *gin.Context) {
+	c.HTML(200, "article/detail", gin.H{
+		"PageTitle": "Article detail",
+	})
 }
 
 func createHandler(ctx *gin.Context) {

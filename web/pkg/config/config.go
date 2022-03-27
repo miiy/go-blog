@@ -19,8 +19,8 @@ type Config struct {
 	App AppOptions `yaml:"app"`
 }
 
-
 func NewConfig(filename string) (*Config, error) {
+
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err

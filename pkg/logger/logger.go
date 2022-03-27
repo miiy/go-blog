@@ -1,11 +1,18 @@
 package logger
 
 import (
+	"github.com/google/wire"
 	"go.uber.org/zap"
 )
 
 type Options struct {
 	Env string
+}
+
+func NewOptions() *Options {
+	return &Options{
+		Env: "",
+	}
 }
 
 func NewLogger(o *Options) (*zap.Logger, func(), error) {
@@ -26,3 +33,7 @@ func NewLogger(o *Options) (*zap.Logger, func(), error) {
 	}
 	return logger, cleanUp, nil
 }
+
+
+
+var ProviderSet = wire.NewSet(NewOptions, NewLogger)
