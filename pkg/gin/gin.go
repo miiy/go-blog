@@ -4,40 +4,41 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
-	"goblog.com/pkg/enviroment"
+	"goblog.com/pkg/environment"
 )
 
-type Options struct {
-	Env string
-	Debug bool
+type Config struct {
+	Env   environment.Environment
 }
 
-type Callback func(r *gin.Engine)
+type Option func(*Config)
 
-func NewOptions() *Options {
-	return &Options{
-		Env:   "",
-		Debug: false,
+var defaultGin = Config{
+	Env: environment.DEVELOPMENT,
+}
+
+func WithEnv(e environment.Environment) Option {
+	return func(o *Config) {
+		o.Env = e
 	}
 }
-func NewGin(o *Options) (*gin.Engine, error) {
-	if o.Debug {
-		fmt.Printf( "[App-debug] Router env is %s\n", o.Env)
+
+func NewGin(opts ...Option) (*gin.Engine, error) {
+	conf := defaultGin
+	for _, o := range opts {
+		o(&conf)
 	}
-	if o.Env == enviroment.PRODUCTION {
+	if conf.Env == environment.PRODUCTION {
 		gin.SetMode(gin.ReleaseMode)
-	} else if o.Env == enviroment.TESTING {
+	} else if conf.Env == environment.TESTING {
 		gin.SetMode(gin.TestMode)
 	} else {
+		fmt.Printf( "[App-debug] Router env is %s\n", conf.Env)
 		gin.SetMode(gin.DebugMode)
 	}
+
 	engine := gin.New()
 	return engine, nil
 }
 
-var ProviderSet = wire.NewSet(NewOptions, NewGin)
-
-//
-//func (r *router) Register(callback Callback) {
-//	callback(r)
-//}
+var ProviderSet = wire.NewSet(NewGin)

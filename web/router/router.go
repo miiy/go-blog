@@ -54,19 +54,17 @@ func htmlRender() render.HTMLRender {
 		"pages/list":     {"pages/list.html"},
 		"pages/detail":   {"pages/detail.html"},
 	}
-	funMap := map[string]interface{}{
-		"config": getConfig,
-	}
 
 	var tcs []template.Config
 	for k, v := range templatesMap {
 		c := template.Config{
 			Name:    k,
 			Files:   append(layouts, v...),
-			FuncMap: funMap,
 		}
 		tcs = append(tcs, c)
 	}
+	template.AddFunc("config", getConfig)
+
 
 	tr, err := template.NewTemplateRender(templates.FS, tcs)
 	if err != nil {

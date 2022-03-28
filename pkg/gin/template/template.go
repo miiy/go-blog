@@ -7,10 +7,16 @@ import (
 	"path"
 )
 
+
 type Config struct {
 	Name string
 	Files []string
-	FuncMap map[string]interface{}
+}
+
+var funcMap = map[string]interface{}{}
+
+func AddFunc(name string, i interface{}) {
+	funcMap[name] = i
 }
 
 func NewTemplateRender(fs fs.FS, tcs []Config) (multitemplate.Renderer, error) {
@@ -18,12 +24,7 @@ func NewTemplateRender(fs fs.FS, tcs []Config) (multitemplate.Renderer, error) {
 	for _, tc := range tcs {
 		// template name see template.ParseFiles
 		tName := path.Base(tc.Files[0])
-		funcMap := template.FuncMap{
-			"unescaped": unescaped,
-		}
-		for fn, fv := range tc.FuncMap {
-			funcMap[fn] = fv
-		}
+		funcMap["unescaped"] = unescaped
 		t, err := template.New(tName).Funcs(funcMap).ParseFS(fs, tc.Files...)
 		if err != nil {
 			return nil, err
