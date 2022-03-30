@@ -13,7 +13,7 @@ type Config struct {
 
 type Option func(*Config)
 
-var defaultGin = Config{
+var defaultConfig = Config{
 	Env: environment.DEVELOPMENT,
 }
 
@@ -24,7 +24,7 @@ func WithEnv(e environment.Environment) Option {
 }
 
 func NewGin(opts ...Option) (*gin.Engine, error) {
-	conf := defaultGin
+	conf := defaultConfig
 	for _, o := range opts {
 		o(&conf)
 	}

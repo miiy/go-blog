@@ -3,23 +3,35 @@ package logger
 import (
 	"github.com/google/wire"
 	"go.uber.org/zap"
+	"goblog.com/pkg/environment"
 )
 
-type Options struct {
-	Env string
+type Config struct {
+	Env environment.Environment
 }
 
-func NewOptions() *Options {
-	return &Options{
-		Env: "",
+type Option func(*Config)
+
+var defaultConfig = Config{
+	Env: environment.PRODUCTION,
+}
+
+func WithEnv(e environment.Environment) Option {
+	return func(l *Config) {
+		l.Env = e
 	}
 }
 
-func NewLogger(o *Options) (*zap.Logger, func(), error) {
+func NewLogger(opts ...Option) (*zap.Logger, func(), error) {
+	c := defaultConfig
+	for _, o := range opts {
+		o(&c)
+	}
+
 	var logger *zap.Logger
 	var err error
 
-	if o.Env == "local" || o.Env == "testing" {
+	if c.Env == environment.DEVELOPMENT || c.Env == environment.TESTING {
 		logger, err = zap.NewDevelopment()
 	} else {
 		logger, err = zap.NewProduction()
@@ -35,5 +47,4 @@ func NewLogger(o *Options) (*zap.Logger, func(), error) {
 }
 
 
-
-var ProviderSet = wire.NewSet(NewOptions, NewLogger)
+var ProviderSet = wire.NewSet(NewLogger)

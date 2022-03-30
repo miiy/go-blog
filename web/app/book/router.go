@@ -11,3 +11,10 @@ func Router(r *gin.Engine) {
 	r.PUT("/books/:id", updateHandler)
 	r.DELETE("/books/:id", destroyHandler)
 }
+
+func Templates() map[string][]string {
+	return map[string][]string{
+		"book/detail": {"layout/layout.html", "layout/header.html", "layout/footer.html", "book/detail.html"},
+		"book/list": {"layout/layout.html", "layout/header.html", "layout/footer.html", "book/list.html"},
+	}
+}

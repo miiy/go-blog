@@ -6,29 +6,20 @@ import (
 	"go.uber.org/zap"
 	"goblog.com/web/app/article"
 	"goblog.com/web/app/book"
+	"goblog.com/web/pkg/config"
 )
 
 type Application struct {
-	Env string
-	Locale string
-	Debug bool
-
-	Version string
-
-	Router *gin.Engine
-	Logger *zap.Logger
+	Config  *config.Config
+	Router  *gin.Engine
+	Logger  *zap.Logger
 	Article *article.Article
 	Book    *book.Book
 }
 
-func NewApplication(router *gin.Engine, logger *zap.Logger, article *article.Article, book *book.Book) *Application {
+func NewApplication(config *config.Config, router *gin.Engine, logger *zap.Logger, article *article.Article, book *book.Book) *Application {
 	return &Application{
-		Env: "",
-		Locale: "",
-		Debug: false,
-
-		Version: "",
-
+		Config: config,
 		Logger: logger,
 		Router: router,
 		Article: article,
@@ -37,3 +28,9 @@ func NewApplication(router *gin.Engine, logger *zap.Logger, article *article.Art
 }
 
 var ProviderSet = wire.NewSet(NewApplication)
+
+func (app *Application) RegisterRouter(funcs ...func(r *gin.Engine)) {
+	for _, f := range funcs {
+		f(app.Router)
+	}
+}

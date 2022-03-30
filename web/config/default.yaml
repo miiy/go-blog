@@ -1,5 +1,5 @@
 app:
-  env: local # local, testing, production
+  env: local # local, development, testing, production
   debug: true
   locale: zh-CN
   addr: localhost:8080

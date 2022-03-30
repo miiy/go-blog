@@ -10,23 +10,32 @@ import (
 	"goblog.com/web/app/article"
 	"goblog.com/web/app/book"
 	"goblog.com/web/pkg/application"
+	"goblog.com/web/pkg/config"
 )
 
-var providerSet = wire.NewSet(
-	application.ProviderSet,
-	wire.NewSet(
-		gin.ProviderSet,
-		ginOption,
-	),
-	logger.ProviderSet,
-	article.ProviderSet,
-	book.ProviderSet,
-)
-
-func InitApplication() (*application.Application, func(), error) {
-	panic(wire.Build(providerSet))
+func InitApplication(conf string) (*application.Application, func(), error) {
+	panic(
+		wire.Build(
+			application.ProviderSet,
+			config.ProviderSet,
+			providerGinOption,
+			gin.ProviderSet,
+			logger.ProviderSet,
+			providerLoggerOption,
+			article.ProviderSet,
+			book.ProviderSet,
+		),
+	)
 }
 
-func ginOption() []gin.Option {
-	return []gin.Option{gin.WithEnv(environment.DEVELOPMENT)}
+func providerGinOption() []gin.Option {
+	return []gin.Option{
+		gin.WithEnv(environment.DEVELOPMENT),
+	}
+}
+
+func providerLoggerOption() []logger.Option {
+	return []logger.Option{
+		logger.WithEnv(environment.DEVELOPMENT),
+	}
 }

@@ -7,30 +7,44 @@ import (
 	"path"
 )
 
-
-type Config struct {
-	Name string
-	Files []string
+type Template struct {
+	Render multitemplate.Renderer
+	FuncMap map[string]interface{}
 }
 
-var funcMap = map[string]interface{}{}
-
-func AddFunc(name string, i interface{}) {
-	funcMap[name] = i
+func (r *Template) AddFunc(name string, i interface{}) {
+	r.FuncMap[name] = i
 }
 
-func NewTemplateRender(fs fs.FS, tcs []Config) (multitemplate.Renderer, error) {
-	r := multitemplate.NewRenderer()
-	for _, tc := range tcs {
-		// template name see template.ParseFiles
-		tName := path.Base(tc.Files[0])
-		funcMap["unescaped"] = unescaped
-		t, err := template.New(tName).Funcs(funcMap).ParseFS(fs, tc.Files...)
+// AddTemplate
+// Example:
+// filesMap = map[string][]string{
+//     "home/index": {"layout/layout.html", "home/index.html"},
+// }
+func (r *Template) AddTemplate (fs fs.FS, filesMap map[string][]string) {
+	for name, files := range filesMap {
+		tName := path.Base(files[0])
+		t, err := template.New(tName).Funcs(r.FuncMap).ParseFS(fs, files...)
 		if err != nil {
-			return nil, err
+			panic(err)
 		}
-		r.Add(tc.Name, t)
+		r.Render.Add(name, t)
+	}
+}
+
+
+func NewTemplate() *Template {
+	r := &Template{
+		Render: multitemplate.NewRenderer(),
+		FuncMap: make(map[string]interface{}),
 	}
 
-	return r, nil
+	// default funcMap
+	r.AddFunc("unescaped", unescaped)
+
+	return r
+}
+
+func unescaped(x string) interface{} {
+	return template.HTML(x)
 }

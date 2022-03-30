@@ -2,25 +2,41 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/gin/render"
-	"github.com/spf13/viper"
 	"goblog.com/pkg/gin/middleware"
 	"goblog.com/pkg/gin/template"
 	"goblog.com/web/app/article"
 	"goblog.com/web/app/book"
 	"goblog.com/web/app/home"
+	"goblog.com/web/pkg/config"
 	"goblog.com/web/resources/assets"
 	"goblog.com/web/resources/templates"
 	"net/http"
 )
 
-var v *viper.Viper
+func Router(r *gin.Engine) {
+	setDefaultRouter(r)
 
-func RegisterRouter(r *gin.Engine, vv *viper.Viper) {
-	v = vv
 	// template
-	r.HTMLRender = htmlRender()
+	t := template.NewTemplate()
+	t.AddFunc("config", func(key string) string {
+		return config.GetString(key)
+	})
+	t.AddTemplate(templates.FS, home.Templates())
+	t.AddTemplate(templates.FS, article.Templates())
+	t.AddTemplate(templates.FS, book.Templates())
 
+	r.HTMLRender = t.Render
+
+	// modules router
+	home.Router(r)
+	article.Router(r)
+	book.Router(r)
+
+	// middleware
+	r.Use(middleware.RequestInfo())
+}
+
+func setDefaultRouter(r *gin.Engine)  {
 	// assets
 	r.StaticFS("/assets", http.FS(assets.FS))
 
@@ -33,47 +49,4 @@ func RegisterRouter(r *gin.Engine, vv *viper.Viper) {
 
 	// uploads
 	r.Static("/uploads", "./storage/uploads")
-
-	home.Router(r)
-	article.Router(r)
-	book.Router(r)
-
-	// middleware
-	r.Use(middleware.RequestInfo())
-
-}
-
-func htmlRender() render.HTMLRender {
-	layouts := []string{"layout/layout.html", "layout/header.html", "layout/footer.html"}
-	templatesMap := map[string][]string{
-		"home/index":     {"home/index.html"},
-		"article/detail": {"article/detail.html"},
-		"article/list":   {"article/list.html"},
-		"book/detail":    {"book/detail.html"},
-		"book/list":      {"book/list.html"},
-		"pages/list":     {"pages/list.html"},
-		"pages/detail":   {"pages/detail.html"},
-	}
-
-	var tcs []template.Config
-	for k, v := range templatesMap {
-		c := template.Config{
-			Name:    k,
-			Files:   append(layouts, v...),
-		}
-		tcs = append(tcs, c)
-	}
-	template.AddFunc("config", getConfig)
-
-
-	tr, err := template.NewTemplateRender(templates.FS, tcs)
-	if err != nil {
-		panic(err)
-	}
-	return tr
-}
-
-func getConfig(key string) string {
-
-	return v.GetString(key)
 }
