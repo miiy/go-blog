@@ -6,16 +6,20 @@ import (
 )
 
 func main() {
-	//host := flag.String("host", "127.0.0.1", "host")
+	//addr := flag.String("host", "127.0.0.1:8080", "host")
 	conf := flag.String("c", "./config/default.yaml", "config file")
 	flag.Parse()
 
-	app, f, err := InitApplication(*conf)
+	app, cleanUp, err := InitApplication(*conf)
 	if err != nil {
 		panic(err)
 	}
-	defer f()
+	defer cleanUp()
 
 	app.RegisterRouter(router.Router)
-	app.Router.Run(app.Config.App.Addr)
+
+	// health
+	// router: /health/*
+	//InitializeHealth(app).RegisterRouter()
+	app.Run(app.Config.App.Addr)
 }
