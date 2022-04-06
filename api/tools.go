@@ -1,6 +1,6 @@
 // +build tools
 
-package tools
+package api
 
 import (
 	_ "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway"

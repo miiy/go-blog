@@ -2,7 +2,7 @@ syntax="proto3";
 
 package article_service.proto;
 
-option go_package = "goblog.com/service/article/proto/v1;article";
+option go_package = "goblog.com/api/article/proto/v1;article";
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";

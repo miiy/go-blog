@@ -2,7 +2,10 @@ module goblog.com/service/article
 
 go 1.17
 
-replace goblog.com/pkg => ../../pkg
+replace (
+	goblog.com/api => ../../api
+	goblog.com/pkg => ../../pkg
+)
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
@@ -10,10 +13,10 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.10.0
 	go.uber.org/zap v1.21.0
 	goblog.com/pkg v0.0.0-00010101000000-000000000000
-	google.golang.org/genproto v0.0.0-20220322021311-435b647f9ef2
+	google.golang.org/genproto v0.0.0-20220405205423-9d709892a2bf
 	google.golang.org/grpc v1.45.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.2.0
-	google.golang.org/protobuf v1.27.1
+	google.golang.org/protobuf v1.28.0
 	gorm.io/gorm v1.23.3
 )
 
@@ -27,6 +30,7 @@ require (
 	github.com/jinzhu/now v1.1.4 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
+	goblog.com/api v0.0.0-00010101000000-000000000000 // indirect
 	golang.org/x/net v0.0.0-20220225172249-27dd8689420f // indirect
 	golang.org/x/sys v0.0.0-20220307203707-22a9840ba4d7 // indirect
 	golang.org/x/text v0.3.7 // indirect

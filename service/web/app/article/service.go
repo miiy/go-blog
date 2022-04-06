@@ -3,7 +3,7 @@ package article
 import (
 	"context"
 	"go.uber.org/zap"
-	articlepb "goblog.com/service/article/proto/v1"
+	articlepb "goblog.com/api/article/v1"
 	"time"
 )
 

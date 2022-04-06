@@ -5,8 +5,8 @@ import (
 	"github.com/grpc-ecosystem/go-grpc-middleware/logging/zap/ctxzap"
 	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
 	"go.uber.org/zap"
+	articlepb "goblog.com/api/article/v1"
 	"goblog.com/pkg/pagination"
-	pb "goblog.com/service/article/proto/v1"
 	"goblog.com/service/article/repository"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -19,17 +19,17 @@ import (
 type ArticleServiceServer struct {
 	Repository *repository.Repository
 	db *gorm.DB
-	pb.UnimplementedArticleServiceServer
+	articlepb.UnimplementedArticleServiceServer
 }
 
-func NewArticleServiceServer(db *gorm.DB, logger *zap.Logger) pb.ArticleServiceServer {
+func NewArticleServiceServer(db *gorm.DB, logger *zap.Logger) articlepb.ArticleServiceServer {
 	return &ArticleServiceServer{
 		db: db,
 		Repository: repository.NewRepository(db, logger),
 	}
 }
 
-func (s *ArticleServiceServer) CreateArticle(ctx context.Context, request *pb.CreateArticleRequest) (*pb.Article, error) {
+func (s *ArticleServiceServer) CreateArticle(ctx context.Context, request *articlepb.CreateArticleRequest) (*articlepb.Article, error) {
 	//user, err := authUser(ctx, request.UserId)
 	//if err != nil {
 	//	return nil, err
@@ -71,11 +71,11 @@ func (s *ArticleServiceServer) CreateArticle(ctx context.Context, request *pb.Cr
 	return articlePb, nil
 }
 
-func (s *ArticleServiceServer) BatchCreateArticles(ctx context.Context, request *pb.BatchCreateArticlesRequest) (*pb.BatchCreateArticlesResponse, error) {
+func (s *ArticleServiceServer) BatchCreateArticles(ctx context.Context, request *articlepb.BatchCreateArticlesRequest) (*articlepb.BatchCreateArticlesResponse, error) {
 	return nil, nil
 }
 
-func (s *ArticleServiceServer) GetArticle(ctx context.Context, request *pb.GetArticleRequest) (*pb.Article, error) {
+func (s *ArticleServiceServer) GetArticle(ctx context.Context, request *articlepb.GetArticleRequest) (*articlepb.Article, error) {
 	a, err := s.Repository.First(ctx, request.Id)
 	if err != nil {
 		if err == repository.ErrRecordNotFound {
@@ -93,7 +93,7 @@ func (s *ArticleServiceServer) GetArticle(ctx context.Context, request *pb.GetAr
 }
 
 
-func (s *ArticleServiceServer) UpdateArticle(ctx context.Context, request *pb.UpdateArticleRequest) (*pb.Article, error) {
+func (s *ArticleServiceServer) UpdateArticle(ctx context.Context, request *articlepb.UpdateArticleRequest) (*articlepb.Article, error) {
 	article := request.GetArticle()
 
 	a := &repository.Article{
@@ -124,7 +124,7 @@ func (s *ArticleServiceServer) UpdateArticle(ctx context.Context, request *pb.Up
 	return articlePb, nil
 }
 
-func (s *ArticleServiceServer) DeleteArticle(ctx context.Context, request *pb.DeleteArticleRequest) (*emptypb.Empty, error) {
+func (s *ArticleServiceServer) DeleteArticle(ctx context.Context, request *articlepb.DeleteArticleRequest) (*emptypb.Empty, error) {
 	err := s.Repository.Delete(ctx, request.Id)
 	if err != nil {
 		return nil, err
@@ -133,7 +133,7 @@ func (s *ArticleServiceServer) DeleteArticle(ctx context.Context, request *pb.De
 	return nil, nil
 }
 
-func (s *ArticleServiceServer) ListArticles(ctx context.Context, request *pb.ListArticlesRequest) (*pb.ListArticlesResponse, error) {
+func (s *ArticleServiceServer) ListArticles(ctx context.Context, request *articlepb.ListArticlesRequest) (*articlepb.ListArticlesResponse, error) {
 	l := ctxzap.Extract(ctx)
 	l.Info("222")
 	grpc_ctxtags.Extract(ctx).Set("request", request)
@@ -158,7 +158,7 @@ func (s *ArticleServiceServer) ListArticles(ctx context.Context, request *pb.Lis
 	if err != nil {
 		return nil, err
 	}
-	var items []*pb.Article
+	var items []*articlepb.Article
 	for _, v  := range articles {
 		item, err := articleToProto(v)
 		if err != nil {
@@ -167,7 +167,7 @@ func (s *ArticleServiceServer) ListArticles(ctx context.Context, request *pb.Lis
 		items = append(items, item)
 	}
 
-	return &pb.ListArticlesResponse{
+	return &articlepb.ListArticlesResponse{
 		Total:       pg.Total,
 		PageSize:    pg.PerPage,
 		CurrentPage: pg.CurrentPage,
@@ -175,8 +175,8 @@ func (s *ArticleServiceServer) ListArticles(ctx context.Context, request *pb.Lis
 	}, nil
 }
 
-func articleToProto(a *repository.Article) (*pb.Article, error) {
-	article := &pb.Article{
+func articleToProto(a *repository.Article) (*articlepb.Article, error) {
+	article := &articlepb.Article{
 		Id:              a.Id,
 		UserId:          a.UserId,
 		Title:           a.Title,
@@ -188,7 +188,7 @@ func articleToProto(a *repository.Article) (*pb.Article, error) {
 		FromUrl:         a.FromUrl,
 		Summary:         a.Summary,
 		Content:         a.Content,
-		Status:          pb.Article_ArticleStatus(a.Status),
+		Status:          articlepb.Article_ArticleStatus(a.Status),
 		CreateTime:      timestamppb.New(a.CreatedAt),
 		UpdateTime:      timestamppb.New(a.UpdatedAt),
 	}

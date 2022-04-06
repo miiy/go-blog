@@ -3,12 +3,11 @@ package article
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
+	articlepb "goblog.com/api/article/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
 	"go.uber.org/zap"
-	//"goblog.com/pkg/application"
-	articleClient "goblog.com/service/article/proto/v1"
 )
 
 type Article struct {
@@ -28,7 +27,7 @@ func NewArticle(router *gin.Engine, logger *zap.Logger) *Article {
 	}
 	//defer conn.Close()
 
-	ac := articleClient.NewArticleServiceClient(conn)
+	ac := articlepb.NewArticleServiceClient(conn)
 
 	article = &Article{
 		router:  router,
