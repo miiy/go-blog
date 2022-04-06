@@ -1,9 +1,0 @@
-app:
-  env: local # local, development, testing, production
-  debug: true
-  locale: zh-CN
-  addr: localhost:8080
-  name: blog
-  url: www.blog.dev
-  footer-copyright: <p class="text-center">&copy; 2022</p>
-

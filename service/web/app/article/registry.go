@@ -31,8 +31,8 @@ func NewArticle(router *gin.Engine, logger *zap.Logger) *Article {
 	ac := articleClient.NewArticleServiceClient(conn)
 
 	article = &Article{
-		router: router,
-		logger: logger,
+		router:  router,
+		logger:  logger,
 		service: NewService(ac, logger),
 	}
 	return article

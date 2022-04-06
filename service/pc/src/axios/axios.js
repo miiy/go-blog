@@ -1,5 +1,5 @@
 // https://github.com/axios/axios
-import axios from "axios";
+import axios from "service/pc/src/axios/axios";
 
 const instance = axios.create({
     // baseURL: 'http://localhost:8051'

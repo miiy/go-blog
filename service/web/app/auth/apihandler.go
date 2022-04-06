@@ -89,8 +89,8 @@ func (h *apiHandler) signIn(c *gin.Context) {
 
 	apisUserSigIn := APIUserSigIn{
 		AccessToken: token,
-		TokenType: "Bearer",
-		ExpiresIn: module.jwtAuth.Options.ExpiresIn,
+		TokenType:   "Bearer",
+		ExpiresIn:   module.jwtAuth.Options.ExpiresIn,
 		User: &APIUser{
 			Username: user.Username,
 		},
@@ -114,8 +114,8 @@ func (h *apiHandler) refreshToken(c *gin.Context) {
 
 	apisUserSigIn := APIUserSigIn{
 		AccessToken: token,
-		TokenType: "Bearer",
-		ExpiresIn: module.jwtAuth.Options.ExpiresIn,
+		TokenType:   "Bearer",
+		ExpiresIn:   module.jwtAuth.Options.ExpiresIn,
 	}
 	c.JSON(http.StatusOK, SuccessResponse(apisUserSigIn))
 }

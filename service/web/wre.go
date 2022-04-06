@@ -7,10 +7,10 @@ import (
 	"goblog.com/pkg/environment"
 	"goblog.com/pkg/gin"
 	"goblog.com/pkg/logger"
-	"goblog.com/web/app/article"
-	"goblog.com/web/app/book"
-	"goblog.com/web/pkg/application"
-	"goblog.com/web/pkg/config"
+	"goblog.com/service/web/app/article"
+	"goblog.com/service/web/app/book"
+	"goblog.com/service/web/pkg/application"
+	"goblog.com/service/web/pkg/config"
 )
 
 func InitApplication(conf string) (*application.Application, func(), error) {

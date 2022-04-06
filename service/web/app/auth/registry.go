@@ -53,7 +53,7 @@ func NewModule(
 }
 
 var ProviderSet = wire.NewSet(
-		NewModule, NewHandler, NewApiHandler, NewService, NewRepository,
+	NewModule, NewHandler, NewApiHandler, NewService, NewRepository,
 		wire.FieldsOf(new(*application.Application), "Logger", "Database", "Redis", "Router", "Session", "Validator", "JwtAuth"),
 	)
 

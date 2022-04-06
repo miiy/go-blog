@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	"goblog.com/web/router"
+	"goblog.com/service/web/router"
 )
 
 func main() {

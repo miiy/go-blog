@@ -1,10 +1,10 @@
-module goblog.com/web
+module goblog.com/service/web
 
 go 1.17
 
 replace (
-	goblog.com/pkg => ../pkg
-	goblog.com/service/article => ../service/article
+	goblog.com/pkg => ../../pkg
+	goblog.com/service/article => ../article
 )
 
 require (
