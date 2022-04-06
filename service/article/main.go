@@ -10,16 +10,16 @@ import (
 	"goblog.com/pkg/grpc_gateway/gateway"
 	"google.golang.org/protobuf/encoding/protojson"
 	//grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
-	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
+	grpczap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	"github.com/grpc-ecosystem/go-grpc-middleware/recovery"
-	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
+	grpcctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
 	"github.com/grpc-ecosystem/go-grpc-middleware/validator"
 	"goblog.com/pkg/config"
 	"goblog.com/pkg/database"
 	//"goblog.com/pkg/jwtauth"
 	"goblog.com/pkg/logger"
 	"goblog.com/service/article/openapi"
-	v1ArticleSvr "goblog.com/service/article/service"
+	articleservice "goblog.com/service/article/service"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -75,19 +75,19 @@ func main() {
 	s := grpc.NewServer(
 		grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
 			grpc_recovery.StreamServerInterceptor(recoveryOpts...),
-			grpc_ctxtags.StreamServerInterceptor(),
-			grpc_zap.StreamServerInterceptor(zapLogger),
+			grpcctxtags.StreamServerInterceptor(),
+			grpczap.StreamServerInterceptor(zapLogger),
 			grpc_validator.StreamServerInterceptor(),
 		)),
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
 			grpc_recovery.UnaryServerInterceptor(recoveryOpts...),
-			grpc_ctxtags.UnaryServerInterceptor(),
-			grpc_zap.UnaryServerInterceptor(zapLogger),
+			grpcctxtags.UnaryServerInterceptor(),
+			grpczap.UnaryServerInterceptor(zapLogger),
 			grpc_validator.UnaryServerInterceptor(),
 		)),
 	)
 
-	articlepb.RegisterArticleServiceServer(s, v1ArticleSvr.NewArticleServiceServer(db.Gorm, zapLogger))
+	articlepb.RegisterArticleServiceServer(s, articleservice.NewArticleServiceServer(db.Gorm, zapLogger))
 
 	// run GRPC server
 	go func() {
