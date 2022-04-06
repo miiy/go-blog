@@ -2,9 +2,15 @@ package article
 
 import (
 	"github.com/gin-gonic/gin"
+	"log"
 )
 
 func indexHandler(c *gin.Context) {
+	list, err := article.service.ArticleList()
+	if err != nil {
+
+	}
+	log.Println(list)
 	c.HTML(200, "article/list", gin.H{
 		"PageTitle": "Article list",
 	})

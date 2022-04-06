@@ -16,7 +16,7 @@ import (
 	"goblog.com/pkg/config"
 	"goblog.com/pkg/database"
 	//"goblog.com/pkg/jwtauth"
-	pkg_zap "goblog.com/pkg/zap"
+	"goblog.com/pkg/logger"
 	"goblog.com/service/article/openapi"
 	articlepb "goblog.com/service/article/proto/v1"
 	v1ArticleSvr "goblog.com/service/article/service"
@@ -29,7 +29,7 @@ import (
 
 func main() {
 	// flag
-	configFile := flag.String("f", "../../config/default.yaml", "config file")
+	configFile := flag.String("c", "./config/default.yaml", "config file")
 	var addr = flag.String("addr", "localhost:50051", "the address to connect to")
 	flag.Parse()
 
@@ -39,10 +39,12 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	zapLogger, err := pkg_zap.NewZap()
+	zapLogger, cleanup, err := logger.NewLogger()
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer cleanup()
+
 	// 不使用 grpcLog，不替换
 	// Make sure that log statements internal to gRPC library are logged using the zapLogger as well.
 	//grpc_zap.ReplaceGrpcLoggerV2(zapLogger)

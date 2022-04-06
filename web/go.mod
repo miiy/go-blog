@@ -2,7 +2,10 @@ module goblog.com/web
 
 go 1.17
 
-replace goblog.com/pkg => ../pkg
+replace (
+	goblog.com/pkg => ../pkg
+	goblog.com/service/article => ../service/article
+)
 
 require (
 	github.com/gin-gonic/gin v1.7.7
@@ -14,7 +17,7 @@ require (
 	goblog.com/pkg v0.0.0-00010101000000-000000000000
 	golang.org/x/crypto v0.0.0-20220307211146-efcb8507fb70
 	gopkg.in/yaml.v2 v2.4.0
-	gorm.io/gorm v1.23.2
+	gorm.io/gorm v1.23.3
 )
 
 require (
@@ -31,6 +34,7 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.0.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0 // indirect
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.10.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.4 // indirect
@@ -52,10 +56,11 @@ require (
 	github.com/ugorji/go/codec v1.1.7 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
+	goblog.com/service/article v0.0.0-00010101000000-000000000000 // indirect
 	golang.org/x/net v0.0.0-20220225172249-27dd8689420f // indirect
 	golang.org/x/sys v0.0.0-20220307203707-22a9840ba4d7 // indirect
 	golang.org/x/text v0.3.7 // indirect
-	google.golang.org/genproto v0.0.0-20220317150908-0efb43f6373e // indirect
+	google.golang.org/genproto v0.0.0-20220322021311-435b647f9ef2 // indirect
 	google.golang.org/grpc v1.45.0 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/ini.v1 v1.66.2 // indirect

@@ -16,6 +16,7 @@ func main() {
 	}
 	defer cleanUp()
 
+
 	app.RegisterRouter(router.Router)
 
 	// health
