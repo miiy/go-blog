@@ -1,0 +1,90 @@
+syntax="proto3";
+
+package usertag_service.v1;
+
+option go_package = "goblog.com/service/usertag/proto;proto";
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+
+message UserTag {
+  int64 id = 1;
+  int64 user_id = 2;
+  string name = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+message UserTagId {
+  int64 id = 1;
+}
+
+message UserIdWithUserTagId {
+  int64 user_id = 1;
+  int64 id = 2;
+}
+
+message RowsAffected {
+  int64 rows_affected = 1;
+}
+
+message CreateRequest {
+  int64 user_id = 1;
+  string name = 2;
+}
+
+message UpdateRequest {
+  int64 id = 1;
+  int64 user_id = 2;
+  string name = 3;
+}
+
+message ListRequest {
+  int64 user_id = 1;
+  int64 page = 2;
+  int64 per_page = 3;
+}
+
+message ListResponse {
+  int64 total = 1;
+  int64 per_page = 2;
+  int64 current_page = 3;
+  int64 last_page = 4;
+  int64 from = 5;
+  int64 to = 6;
+  repeated UserTag data = 7;
+}
+
+service UserTagService {
+  rpc Create(CreateRequest) returns (UserTagId) {
+    option (google.api.http) = {
+      post: "/v1/users/{user_id}/tags"
+      body: "*"
+    };
+  }
+
+  rpc Get(UserIdWithUserTagId) returns (UserTag) {
+    option (google.api.http) = {
+      get: "/v1/users/{user_id}/tags/{id}"
+    };
+  }
+
+  rpc Update(UpdateRequest) returns (RowsAffected) {
+    option (google.api.http) = {
+      put: "/v1/users/{user_id}/tags/{id}"
+      body: "*"
+    };
+  }
+
+  rpc Delete(UserIdWithUserTagId) returns (RowsAffected) {
+    option (google.api.http) = {
+      delete: "/v1/users/{user_id}/tags/{id}"
+    };
+  }
+
+  rpc List(ListRequest) returns (ListResponse) {
+    option (google.api.http) = {
+      get: "/v1/users/{user_id}/tags"
+    };
+  }
+}
