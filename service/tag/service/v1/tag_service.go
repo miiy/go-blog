@@ -3,9 +3,9 @@ package v1
 import (
 	"context"
 	"database/sql"
-	pb "goblog.com/service/tag/proto/v1"
-	"goblog.com/service/tag/repository"
+	tagpb "goblog.com/api/tag/v1"
 	"goblog.com/pkg/pagination"
+	"goblog.com/service/tag/repository"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -18,10 +18,10 @@ type Options struct {
 type TagServiceServer struct {
 	Options *Options
 	Repository *repository.Repository
-	pb.UnimplementedTagServiceServer
+	tagpb.UnimplementedTagServiceServer
 }
 
-func NewTagServiceServer(o *Options, db *sql.DB) pb.TagServiceServer {
+func NewTagServiceServer(o *Options, db *sql.DB) tagpb.TagServiceServer {
 	repository := repository.NewRepository(db)
 	return &TagServiceServer{
 		Options: o,
@@ -29,7 +29,7 @@ func NewTagServiceServer(o *Options, db *sql.DB) pb.TagServiceServer {
 	}
 }
 
-func (s *TagServiceServer) Create(ctx context.Context, request *pb.CreateTag) (*pb.TagId, error) {
+func (s *TagServiceServer) Create(ctx context.Context, request *tagpb.CreateTag) (*tagpb.TagId, error) {
 	// validate
 	p := &repository.InsertParam{
 		Name:        request.Name,
@@ -40,12 +40,12 @@ func (s *TagServiceServer) Create(ctx context.Context, request *pb.CreateTag) (*
 	if err != nil {
 		return nil, err
 	}
-	return &pb.TagId{
+	return &tagpb.TagId{
 		Id: id,
 	}, nil
 }
 
-func (s *TagServiceServer) Get(ctx context.Context, request *pb.TagId) (*pb.Tag, error) {
+func (s *TagServiceServer) Get(ctx context.Context, request *tagpb.TagId) (*tagpb.Tag, error) {
 	t, err := s.Repository.Get(ctx, request.Id)
 	if err != nil {
 		if err == repository.ErrorNotFound {
@@ -56,7 +56,7 @@ func (s *TagServiceServer) Get(ctx context.Context, request *pb.TagId) (*pb.Tag,
 		return nil, st.Err()
 	}
 
-	return &pb.Tag{
+	return &tagpb.Tag{
 		Id:          t.Id,
 		Name:        t.Name,
 		Description: t.Description,
@@ -66,7 +66,7 @@ func (s *TagServiceServer) Get(ctx context.Context, request *pb.TagId) (*pb.Tag,
 	}, nil
 }
 
-func (s *TagServiceServer) Update(ctx context.Context, request *pb.UpdateTag) (*pb.RowsAffected, error) {
+func (s *TagServiceServer) Update(ctx context.Context, request *tagpb.UpdateTag) (*tagpb.RowsAffected, error) {
 	p := &repository.UpdateParam{
 		Name:        request.Name,
 		Description: request.Description,
@@ -76,23 +76,23 @@ func (s *TagServiceServer) Update(ctx context.Context, request *pb.UpdateTag) (*
 	if err != nil {
 		return nil, err
 	}
-	return &pb.RowsAffected{
+	return &tagpb.RowsAffected{
 		RowsAffected: ra,
 	}, nil
 }
 
-func (s *TagServiceServer) Delete(ctx context.Context, request *pb.TagId) (*pb.RowsAffected, error) {
+func (s *TagServiceServer) Delete(ctx context.Context, request *tagpb.TagId) (*tagpb.RowsAffected, error) {
 	ra, err := s.Repository.Delete(ctx, request.Id)
 	if err != nil {
 		return nil, err
 	}
 
-	return &pb.RowsAffected{
+	return &tagpb.RowsAffected{
 		RowsAffected: ra,
 	}, nil
 }
 
-func (s *TagServiceServer) List(ctx context.Context, request *pb.ListRequest) (*pb.ListResponse, error) {
+func (s *TagServiceServer) List(ctx context.Context, request *tagpb.ListRequest) (*tagpb.ListResponse, error) {
 	// validate
 
 	// count
@@ -109,9 +109,9 @@ func (s *TagServiceServer) List(ctx context.Context, request *pb.ListRequest) (*
 	if err != nil {
 		return nil, err
 	}
-	var items []*pb.Tag
+	var items []*tagpb.Tag
 	for _, v  := range tags {
-		item := &pb.Tag{
+		item := &tagpb.Tag{
 			Id:          v.Id,
 			Name:        v.Name,
 			Description: v.Description,
@@ -122,7 +122,7 @@ func (s *TagServiceServer) List(ctx context.Context, request *pb.ListRequest) (*
 		items = append(items, item)
 	}
 
-	return &pb.ListResponse{
+	return &tagpb.ListResponse{
 		Total:       pg.Total,
 		PerPage:     pg.PerPage,
 		CurrentPage: pg.CurrentPage,

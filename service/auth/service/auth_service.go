@@ -5,10 +5,10 @@ import (
 	"database/sql"
 	"errors"
 	"github.com/grpc-ecosystem/go-grpc-middleware/logging/zap/ctxzap"
-	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
-	pb "goblog.com/service/auth/proto"
-	"goblog.com/service/auth/repository"
+	grpcctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
+	authpb "goblog.com/api/auth/v1"
 	"goblog.com/pkg/jwtauth"
+	"goblog.com/service/auth/repository"
 	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/grpclog"
@@ -19,7 +19,7 @@ type AuthServiceServer struct {
 	repository *repository.Repository
 	jwtAuth *jwtauth.JWTAuth
 	log grpclog.LoggerV2
-	pb.UnimplementedAuthServiceServer
+	authpb.UnimplementedAuthServiceServer
 }
 
 var (
@@ -36,7 +36,7 @@ var (
 
 // NewAuthServiceServer
 //
-func NewAuthServiceServer(db *sql.DB, jwtAuth *jwtauth.JWTAuth) pb.AuthServiceServer {
+func NewAuthServiceServer(db *sql.DB, jwtAuth *jwtauth.JWTAuth) authpb.AuthServiceServer {
 	r := repository.NewRepository(db)
 	return &AuthServiceServer{
 		repository: r,
@@ -56,7 +56,7 @@ func (s *AuthServiceServer) AuthFuncOverride(ctx context.Context, fullMethodName
 	}
 
 	for _, method := range allowMethod {
-		if fullMethodName == "/" + pb.AuthService_ServiceDesc.ServiceName + "/" + method {
+		if fullMethodName == "/" + authpb.AuthService_ServiceDesc.ServiceName + "/" + method {
 			return ctx, nil
 		}
 	}
@@ -64,7 +64,7 @@ func (s *AuthServiceServer) AuthFuncOverride(ctx context.Context, fullMethodName
 	return nil, status.New(codes.Unauthenticated, ErrUnauthenticated.Error()).Err()
 }
 
-func validateSignUp(request *pb.SignUpRequest) error {
+func validateSignUp(request *authpb.SignUpRequest) error {
 	// validate
 	if request.Username == "" || request.Email == "" || request.Password == "" || request.PasswordConfirmation == "" {
 		return ErrInvalidArgument
@@ -77,7 +77,7 @@ func validateSignUp(request *pb.SignUpRequest) error {
 
 // SignUp
 //
-func (s *AuthServiceServer) SignUp(ctx context.Context, request *pb.SignUpRequest) (*pb.SignUpResponse, error) {
+func (s *AuthServiceServer) SignUp(ctx context.Context, request *authpb.SignUpRequest) (*authpb.SignUpResponse, error) {
 	if err := validateSignUp(request); err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -114,8 +114,8 @@ func (s *AuthServiceServer) SignUp(ctx context.Context, request *pb.SignUpReques
 		return nil, err
 	}
 
-	return &pb.SignUpResponse{
-		User: &pb.SignUpResponse_User{
+	return &authpb.SignUpResponse{
+		User: &authpb.SignUpResponse_User{
 			Username: user.Username,
 		},
 	}, nil
@@ -123,38 +123,38 @@ func (s *AuthServiceServer) SignUp(ctx context.Context, request *pb.SignUpReques
 
 // UsernameCheck
 //
-func (s *AuthServiceServer) fieldCheck(ctx context.Context, field, value string) (*pb.FieldCheckResponse, error) {
+func (s *AuthServiceServer) fieldCheck(ctx context.Context, field, value string) (*authpb.FieldCheckResponse, error) {
 	exist, err := s.repository.FieldExist(ctx, field, value)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &pb.FieldCheckResponse{
+	return &authpb.FieldCheckResponse{
 		Exist: exist,
 	}, nil
 }
 
 // UsernameCheck
 //
-func (s *AuthServiceServer) UsernameCheck(ctx context.Context, request *pb.FieldCheckRequest) (*pb.FieldCheckResponse, error) {
+func (s *AuthServiceServer) UsernameCheck(ctx context.Context, request *authpb.FieldCheckRequest) (*authpb.FieldCheckResponse, error) {
 	return s.fieldCheck(ctx, repository.FieldUsername, request.Value)
 }
 
 // EmailCheck
 //
-func (s *AuthServiceServer) EmailCheck(ctx context.Context, request *pb.FieldCheckRequest) (*pb.FieldCheckResponse, error) {
+func (s *AuthServiceServer) EmailCheck(ctx context.Context, request *authpb.FieldCheckRequest) (*authpb.FieldCheckResponse, error) {
 	return s.fieldCheck(ctx, repository.FieldEmail, request.Value)
 }
 
 // PhoneCheck
 //
-func (s *AuthServiceServer) PhoneCheck(ctx context.Context, request *pb.FieldCheckRequest) (*pb.FieldCheckResponse, error) {
+func (s *AuthServiceServer) PhoneCheck(ctx context.Context, request *authpb.FieldCheckRequest) (*authpb.FieldCheckResponse, error) {
 	return s.fieldCheck(ctx, repository.FieldPhone, request.Value)
 }
 
 // validateSignIn
 //
-func validateSignIn(request *pb.SignInRequest) error {
+func validateSignIn(request *authpb.SignInRequest) error {
 	if request.Username == "" || request.Password == "" {
 		return ErrInvalidArgument
 	}
@@ -163,9 +163,9 @@ func validateSignIn(request *pb.SignInRequest) error {
 
 // SignIn
 //
-func (s *AuthServiceServer) SignIn(ctx context.Context, request *pb.SignInRequest) (*pb.SignInResponse, error) {
+func (s *AuthServiceServer) SignIn(ctx context.Context, request *authpb.SignInRequest) (*authpb.SignInResponse, error) {
 	// Add fields the ctxtags of the request which will be added to all extracted loggers.
-	grpc_ctxtags.Extract(ctx).Set("custom_tags.string", "something").Set("custom_tags.int", 1337)
+	grpcctxtags.Extract(ctx).Set("custom_tags.string", "something").Set("custom_tags.int", 1337)
 	l := ctxzap.Extract(ctx)
 	l.Info("zap log")
 
@@ -192,11 +192,11 @@ func (s *AuthServiceServer) SignIn(ctx context.Context, request *pb.SignInReques
 		return nil, err
 	}
 
-	return &pb.SignInResponse{
+	return &authpb.SignInResponse{
 		TokenType: "Bearer",
 		AccessToken: token,
 		ExpiresIn: s.jwtAuth.Options.ExpiresIn,
-		User: &pb.SignInResponse_User{
+		User: &authpb.SignInResponse_User{
 			Username: user.Username,
 		},
 	}, nil
@@ -204,7 +204,7 @@ func (s *AuthServiceServer) SignIn(ctx context.Context, request *pb.SignInReques
 
 // validateVerifyToken
 //
-func validateVerifyToken(request *pb.VerifyTokenRequest) error {
+func validateVerifyToken(request *authpb.VerifyTokenRequest) error {
 	if request.AccessToken == "" {
 		return ErrInvalidArgument
 	}
@@ -213,7 +213,7 @@ func validateVerifyToken(request *pb.VerifyTokenRequest) error {
 
 // VerifyToken
 //
-func (s *AuthServiceServer) VerifyToken(_ context.Context, request *pb.VerifyTokenRequest) (*pb.VerifyTokenResponse, error) {
+func (s *AuthServiceServer) VerifyToken(_ context.Context, request *authpb.VerifyTokenRequest) (*authpb.VerifyTokenResponse, error) {
 
 	if err := validateVerifyToken(request); err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
@@ -227,8 +227,8 @@ func (s *AuthServiceServer) VerifyToken(_ context.Context, request *pb.VerifyTok
 		return nil, status.Error(codes.NotFound, err.Error())
 	}
 
-	return &pb.VerifyTokenResponse{
-		User: &pb.VerifyTokenResponse_User{
+	return &authpb.VerifyTokenResponse{
+		User: &authpb.VerifyTokenResponse_User{
 			Username: claims.Username,
 		},
 	}, nil
@@ -236,16 +236,16 @@ func (s *AuthServiceServer) VerifyToken(_ context.Context, request *pb.VerifyTok
 
 // RefreshToken
 //
-func (s *AuthServiceServer) RefreshToken(ctx context.Context, request *pb.RefreshTokenRequest) (*pb.RefreshTokenResponse, error) {
-	return &pb.RefreshTokenResponse{
+func (s *AuthServiceServer) RefreshToken(ctx context.Context, request *authpb.RefreshTokenRequest) (*authpb.RefreshTokenResponse, error) {
+	return &authpb.RefreshTokenResponse{
 
 	}, nil
 }
 
 // SignOut
 //
-func (s *AuthServiceServer) SignOut(ctx context.Context, request *pb.SignOutRequest) (*pb.SignOutResponse, error) {
-	return &pb.SignOutResponse{
+func (s *AuthServiceServer) SignOut(ctx context.Context, request *authpb.SignOutRequest) (*authpb.SignOutResponse, error) {
+	return &authpb.SignOutResponse{
 
 	}, nil
 }

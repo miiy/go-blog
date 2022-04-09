@@ -86,7 +86,7 @@ func (r *Repository) FindCount(ctx context.Context) (int64, error) {
 	return count, nil
 }
 
-func (r *Repository) Find(ctx context.Context, limit, offset int32) ([]*Article, error) {
+func (r *Repository) Find(ctx context.Context, limit, offset int64) ([]*Article, error) {
 	var items []*Article
 	r.db.Model(&Article{}).Find(&items).Limit(int(limit)).Offset(int(offset))
 

@@ -22,7 +22,7 @@ type JWTAuth struct {
 
 type Claims struct {
 	Username string
-	jwt.StandardClaims
+	jwt.RegisteredClaims
 }
 
 func NewJWTAuth(o *Options) *JWTAuth {
@@ -41,8 +41,8 @@ func (j *JWTAuth) CreateToken(username string) (string, error) {
 	// set our claims
 	claims := Claims{
 		username,
-		jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(tokenExpireDuration).Unix(),
+		jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(tokenExpireDuration)),
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

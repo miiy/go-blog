@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"flag"
-	auth "goblog.com/service/auth/proto"
+	authpb "goblog.com/api/auth/v1"
 	"google.golang.org/grpc"
 	"log"
 	"time"
@@ -26,7 +26,7 @@ func main() {
 	}
 	defer conn.Close()
 
-	tc := auth.NewAuthServiceClient(conn)
+	tc := authpb.NewAuthServiceClient(conn)
 	u1 := &user{
 		email:    "a@a.com",
 		username: "a3",
@@ -55,11 +55,11 @@ func main() {
 	log.Println("VerifyToken:", vResp)
 }
 
-func callSignUp(client auth.AuthServiceClient, email, username, password, passwordConfirmation string) (*auth.SignUpResponse, error) {
+func callSignUp(client authpb.AuthServiceClient, email, username, password, passwordConfirmation string) (*authpb.SignUpResponse, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	req := auth.SignUpRequest{
+	req := authpb.SignUpRequest{
 		Email: email,
 		Username: username,
 		Password: password,
@@ -68,20 +68,20 @@ func callSignUp(client auth.AuthServiceClient, email, username, password, passwo
 	return client.SignUp(ctx, &req)
 }
 
-func callVerifyToken(client auth.AuthServiceClient, accessToken string) (*auth.VerifyTokenResponse, error) {
+func callVerifyToken(client authpb.AuthServiceClient, accessToken string) (*authpb.VerifyTokenResponse, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	req := auth.VerifyTokenRequest{
+	req := authpb.VerifyTokenRequest{
 		AccessToken: accessToken,
 	}
 	return client.VerifyToken(ctx, &req)
 }
 
-func callSignIn(client auth.AuthServiceClient, username, password string) (*auth.SignInResponse, error)  {
+func callSignIn(client authpb.AuthServiceClient, username, password string) (*authpb.SignInResponse, error)  {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
-	req := &auth.SignInRequest{
+	req := &authpb.SignInRequest{
 		Username: username,
 		Password: password,
 	}

@@ -3,12 +3,12 @@ package auth
 import (
 	"database/sql"
 	"github.com/google/wire"
-	pb "goblog.com/service/auth/proto"
-	authSrv "goblog.com/service/auth/service"
+	authpb "goblog.com/api/auth/v1"
 	"goblog.com/pkg/jwtauth"
+	authSrv "goblog.com/service/auth/service"
 )
 
-func NewAuth(db *sql.DB, jwtAuth *jwtauth.JWTAuth) (pb.AuthServiceServer, error) {
+func NewAuth(db *sql.DB, jwtAuth *jwtauth.JWTAuth) (authpb.AuthServiceServer, error) {
 	return authSrv.NewAuthServiceServer(db, jwtAuth), nil
 }
 

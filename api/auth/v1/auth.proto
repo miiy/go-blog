@@ -1,0 +1,147 @@
+syntax="proto3";
+
+package auth_service.v1;
+
+option go_package = "goblog.com/api/auth/v1;auth";
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+
+message User {
+  int64 id = 1;
+  string username = 2;
+  string password = 3;
+  string email = 4;
+  string phone = 5;
+  int64 status = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
+  google.protobuf.Timestamp deleted_at = 9;
+}
+
+message RowsAffected {
+  int64 rows_affected = 1;
+}
+
+message SignUpRequest {
+  string email = 1;
+  string username = 2;
+  string password = 3;
+  string password_confirmation = 4;
+}
+
+message SignUpResponse {
+  message User {
+    string username = 1;
+  }
+  User user = 1;
+}
+
+message FieldCheckRequest {
+  string value = 1;
+}
+
+message FieldCheckResponse {
+  bool exist = 1;
+}
+
+message SignInRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message SignInResponse {
+  string token_type = 1;
+  string access_token = 2;
+  int64 expires_in = 3;
+  message User {
+    string username = 1;
+  }
+  User user = 4;
+}
+
+message VerifyTokenRequest {
+  string access_token = 1;
+}
+
+message VerifyTokenResponse {
+  message User {
+    string username = 1;
+  }
+  User user = 1;
+}
+
+message RefreshTokenRequest {
+  string access_token = 1;
+}
+
+message RefreshTokenResponse {
+
+}
+
+message SignOutRequest {
+  string access_token = 1;
+}
+
+message SignOutResponse {
+
+}
+
+service AuthService {
+  rpc SignUp(SignUpRequest) returns (SignUpResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/auth/signup",
+      body: "*"
+    };
+  }
+
+  rpc UsernameCheck(FieldCheckRequest) returns (FieldCheckResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/auth/signup/username/check",
+      body: "*"
+    };
+  }
+
+  rpc EmailCheck(FieldCheckRequest) returns (FieldCheckResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/auth/signup/email/check",
+      body: "*"
+    };
+  }
+
+  rpc PhoneCheck(FieldCheckRequest) returns (FieldCheckResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/auth/signup/phone/check",
+      body: "*"
+    };
+  }
+
+  rpc SignIn(SignInRequest) returns (SignInResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/auth/signin",
+      body: "*"
+    };
+  }
+
+  rpc VerifyToken(VerifyTokenRequest) returns (VerifyTokenResponse) {
+    option (google.api.http) = {
+      post: "/v1/auth/token/verify",
+      body: "*"
+    };
+  }
+
+  rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse) {
+    option (google.api.http) = {
+      post: "/v1/auth/token/refresh",
+      body: "*"
+    };
+  }
+
+  rpc SignOut(SignOutRequest) returns (SignOutResponse) {
+    option (google.api.http) = {
+      post: "/v1/auth/signout",
+      body: "*"
+    };
+  }
+
+}

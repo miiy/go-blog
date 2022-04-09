@@ -6,23 +6,23 @@ import (
 
 type Pagination struct {
 	Total int64
-	PerPage int32
-	CurrentPage int32
-	LastPage int32
-	From int32
-	To int32
+	PerPage int64
+	CurrentPage int64
+	LastPage int64
+	From int64
+	To int64
 }
 
 var (
-	PerPageDefault int32 = 20
+	PerPageDefault int64 = 20
 )
 
-func NewPagination(page, perPage int32, total int64) *Pagination {
+func NewPagination(page, perPage, total int64) *Pagination {
 	if perPage <= 0 {
 		perPage = PerPageDefault
 	}
 
-	lastPage := int32(math.Ceil(float64(total) / float64(perPage)))
+	lastPage := int64(math.Ceil(float64(total) / float64(perPage)))
 	if page <= 0 {
 		page = 1
 	}

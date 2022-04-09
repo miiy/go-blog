@@ -1,0 +1,94 @@
+syntax="proto3";
+
+package user_service.v1;
+
+option go_package = "goblog.com/api/user/v1;user";
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+
+message User {
+  int64 id = 1;
+  string name = 3;
+  string password = 4;
+  string email = 5;
+  string phone = 6;
+  int64 status = 7;
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp updated_at = 9;
+}
+
+message UserId {
+  int64 id = 1;
+}
+
+message RowsAffected {
+  int64 rows_affected = 1;
+}
+
+message CreateUserRequest {
+  int64  id = 1;
+  string name = 2;
+  string password = 3;
+  string email = 4;
+  string phone = 5;
+}
+
+message UpdateUserRequest {
+  int64 id = 1;
+  string name = 2;
+  string password = 3;
+  string email = 4;
+  string phone = 5;
+}
+
+message ListUserRequest {
+  int64 page = 2;
+  int64 per_page = 3;
+}
+
+message ListUserResponse {
+  int64 total = 1;
+  int64 per_page = 2;
+  int64 current_page = 3;
+  int64 last_page = 4;
+  int64 from = 5;
+  int64 to = 6;
+  repeated User users = 7;
+}
+
+
+service UserService {
+
+  rpc CreateUserTag(CreateUserRequest) returns (User) {
+    option (google.api.http) = {
+      post: "/v1/users"
+      body: "*"
+    };
+  }
+
+  rpc GetUser(UserId) returns (User) {
+    option (google.api.http) = {
+      get: "/v1/users/{id}"
+    };
+  }
+
+  rpc UpdateUserTag(UpdateUserRequest) returns (RowsAffected) {
+    option (google.api.http) = {
+      put: "/v1/users/{id}"
+      body: "*"
+    };
+  }
+
+  rpc DeleteUser(UserId) returns (RowsAffected) {
+    option (google.api.http) = {
+      delete: "/v1/users/{id}"
+    };
+  }
+
+  rpc ListUser(ListUserRequest) returns (ListUserResponse) {
+    option (google.api.http) = {
+      get: "/v1/users"
+    };
+  }
+}

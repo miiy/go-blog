@@ -1,0 +1,276 @@
+syntax="proto3";
+
+package userpost_service.v1;
+
+option go_package = "goblog.com/api/userpost/v1;userpost";
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+
+
+message UserPost {
+  int64 id = 1;
+  int64 user_id = 2;
+  string title = 3;
+  string content = 4;
+  int64 status = 5;
+  google.protobuf.Timestamp published_time = 6;
+  google.protobuf.Timestamp updated_time = 7;
+  int64 sort = 8;
+  google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp updated_at = 10;
+}
+
+enum UserPostStatus {
+  DEFAULT = 0;
+  ACTIVE = 1;
+  DISABLE = 2;
+}
+
+message UserPostId {
+  int64 id = 1;
+}
+
+message UserIdWithUserPostId {
+  int64 user_id = 1;
+  int64 id = 2;
+}
+
+message RowsAffected {
+  int64 rows_affected = 1;
+}
+
+message CreateUserPostRequest {
+  int64 user_id = 1;
+  string title = 2 ;
+  string content = 3;
+  UserPostStatus status = 4;
+  google.protobuf.Timestamp published_time = 5;
+  google.protobuf.Timestamp updated_time = 6;
+  int64 sort = 7;
+}
+
+message UpdateUserPostRequest {
+  int64 id = 1;
+  int64 user_id = 2;
+  string title = 3;
+  string content = 4;
+  int64 status = 5;
+  google.protobuf.Timestamp published_time = 6;
+  google.protobuf.Timestamp updated_time = 7;
+  int64 sort = 8;
+}
+
+message UpdateUserPostSortRequest {
+  int64 id = 1;
+  int64 user_id = 2;
+  enum SortTypes {
+    DEFAULT = 0;
+    TOP = 1;
+    BOTTOM = 2;
+    CUSTOM = 3;
+  }
+  SortTypes sort_type = 3;
+  int64 sort = 4;
+}
+
+message ListUserPostRequest {
+  int64 user_id = 1;
+  int64 page = 2;
+  int64 per_page = 3;
+  string keyword = 4;
+}
+
+message ListUserPostResponse {
+  int64 total = 1;
+  int64 per_page = 2;
+  int64 current_page = 3;
+  int64 last_page = 4;
+  int64 from = 5;
+  int64 to = 6;
+  repeated UserPost data = 7;
+}
+
+
+
+
+
+
+message UserTag {
+  int64 id = 1;
+  int64 user_id = 2;
+  string name = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+message UserTagId {
+  int64 id = 1;
+}
+
+message UserIdWithUserTagId {
+  int64 user_id = 1;
+  int64 id = 2;
+}
+
+message CreateUserTagRequest {
+  int64 user_id = 1;
+  string name = 2;
+}
+
+message UpdateUserTagRequest {
+  int64 id = 1;
+  int64 user_id = 2;
+  string name = 3;
+}
+
+message ListUserTagRequest {
+  int64 user_id = 1;
+  int64 page = 2;
+  int64 per_page = 3;
+}
+
+message ListUserTagResponse {
+  int64 total = 1;
+  int64 per_page = 2;
+  int64 current_page = 3;
+  int64 last_page = 4;
+  int64 from = 5;
+  int64 to = 6;
+  repeated UserTag data = 7;
+}
+
+
+
+
+
+message UserTagPost {
+  int64 id = 1;
+  int64 user_id = 2;
+  int64 tag_id = 3;
+  int64 post_id = 4;
+}
+
+message CreateUserTagPostRequest {
+  int64 id = 1;
+  string name = 2;
+  UserTagPost user_tag_post = 3;
+}
+
+message CreateUserTagPostResponse {
+  int64 added = 1;
+}
+
+message DeleteUserTagPostRequest {
+  int64 id = 1;
+}
+
+message DeleteUserTagPostResponse {
+  int64 deleted = 1;
+}
+
+message PostUserTagPostListRequest {
+  int64 id = 1;
+  string name = 2;
+}
+
+message PostUserTagPostListResponse {
+
+}
+
+
+
+service UserPostService {
+
+  rpc CreateUserPost(CreateUserPostRequest) returns (UserPostId) {
+    option (google.api.http) = {
+      post: "/v1/users/{user_id}/posts"
+      body: "*"
+    };
+  }
+
+  rpc GetUserPost(UserIdWithUserPostId) returns (UserPost) {
+    option (google.api.http) = {
+      get: "/v1/users/{user_id}/posts/{id}"
+    };
+  }
+
+  rpc UpdateUserPost(UpdateUserPostRequest) returns (RowsAffected) {
+    option (google.api.http) = {
+      put: "/v1/users/{user_id}/posts/{id}"
+      body: "*"
+    };
+  }
+
+  rpc UpdateUserPostSort(UpdateUserPostSortRequest) returns (RowsAffected) {
+    option (google.api.http) = {
+      put: "/v1/users/{user_id}/posts/{id}/sort"
+      body: "*"
+    };
+  }
+
+  rpc DeleteUserPost(UserIdWithUserPostId) returns (RowsAffected) {
+    option (google.api.http) = {
+      delete: "/v1/users/{user_id}/posts/{id}"
+    };
+  }
+
+  rpc ListUserPost(ListUserPostRequest) returns (ListUserPostResponse) {
+    option (google.api.http) = {
+      get: "/v1/users/{user_id}/posts"
+    };
+  }
+
+
+  rpc CreateUserTag(CreateUserTagRequest) returns (UserTagId) {
+    option (google.api.http) = {
+      post: "/v1/users/{user_id}/tags"
+      body: "*"
+    };
+  }
+
+  rpc GetUserTag(UserIdWithUserTagId) returns (UserTag) {
+    option (google.api.http) = {
+      get: "/v1/users/{user_id}/tags/{id}"
+    };
+  }
+
+  rpc UpdateUserTag(UpdateUserTagRequest) returns (RowsAffected) {
+    option (google.api.http) = {
+      put: "/v1/users/{user_id}/tags/{id}"
+      body: "*"
+    };
+  }
+
+  rpc DeleteUserTag(UserIdWithUserTagId) returns (RowsAffected) {
+    option (google.api.http) = {
+      delete: "/v1/users/{user_id}/tags/{id}"
+    };
+  }
+
+  rpc ListUserTag(ListUserTagRequest) returns (ListUserTagResponse) {
+    option (google.api.http) = {
+      get: "/v1/users/{user_id}/tags"
+    };
+  }
+
+  rpc CreateUserTagPost(CreateUserTagPostRequest) returns (CreateUserTagPostResponse) {
+    option (google.api.http) = {
+      post: "/v1/user/{name}/tag-post"
+      body: "*"
+    };
+  }
+
+  rpc DeleteUserTagPost(CreateUserTagPostRequest) returns (CreateUserTagPostResponse) {
+    option (google.api.http) = {
+      delete: "/v1/user/{name}/tag-post/{id}"
+    };
+  }
+
+
+  rpc PostUserTagPostList(PostUserTagPostListRequest) returns (PostUserTagPostListResponse) {
+    option (google.api.http) = {
+      get: "/v1/user/{name}/tag/{id}/post"
+    };
+  }
+}

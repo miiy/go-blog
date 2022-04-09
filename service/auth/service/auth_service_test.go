@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"github.com/DATA-DOG/go-sqlmock"
-	pb "goblog.com/service/auth/proto"
+	authpb "goblog.com/api/auth/v1"
 	"goblog.com/pkg/jwtauth"
 	"log"
 	"testing"
@@ -15,7 +15,7 @@ var (
 	mock sqlmock.Sqlmock
 )
 
-func newSrv() (pb.AuthServiceServer, func()) {
+func newSrv() (authpb.AuthServiceServer, func()) {
 	var db *sql.DB
 	var err error
 	db, mock, err = sqlmock.New()
@@ -49,7 +49,7 @@ func TestAuthServiceServer_validateRegister(t *testing.T) {
 	]
 }
 `
-	var data map[string][]*pb.SignUpRequest
+	var data map[string][]*authpb.SignUpRequest
 	err := json.Unmarshal([]byte(jsonData), &data)
 	if err != nil {
 		log.Fatal(err)
@@ -78,7 +78,7 @@ func TestAuthServiceServer_Register(t *testing.T) {
 	ctx := context.Background()
 
 	t.Run("test validate", func(t *testing.T) {
-		_, err := srv.SignUp(ctx, &pb.SignUpRequest{
+		_, err := srv.SignUp(ctx, &authpb.SignUpRequest{
 			Email:                "",
 			Username:             "t",
 			Password:             "t",
@@ -101,7 +101,7 @@ func TestAuthServiceServer_Register(t *testing.T) {
 	uRows := mock.NewRows([]string{"id", "username", "password", "status"}).AddRow(1, "t", "", 0)
 	mock.ExpectQuery("SELECT (.+) FROM users").WithArgs(1).WillReturnRows(uRows)
 
-	res, err := srv.SignUp(ctx, &pb.SignUpRequest{
+	res, err := srv.SignUp(ctx, &authpb.SignUpRequest{
 		Email:                "t",
 		Username:             "t",
 		Password:             "t",
@@ -131,7 +131,7 @@ func TestAuthServiceServer_validateSignIn(t *testing.T) {
 	]
 }
 `
-	var data map[string][]*pb.SignInRequest
+	var data map[string][]*authpb.SignInRequest
 	err := json.Unmarshal([]byte(jsonData), &data)
 	if err != nil {
 		log.Fatal(err)
