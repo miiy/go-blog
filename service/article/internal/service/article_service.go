@@ -7,7 +7,7 @@ import (
 	"go.uber.org/zap"
 	articlepb "goblog.com/api/article/v1"
 	"goblog.com/pkg/pagination"
-	"goblog.com/service/article/repository"
+	"goblog.com/service/article/internal/repository"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
