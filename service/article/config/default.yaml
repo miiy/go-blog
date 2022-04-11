@@ -1,14 +1,9 @@
 app:
+  name: article
   env: local # local, testing, production
   debug: true
-  locale: zh-CN
-
-database:
-  driver: mysql
-  host: 127.0.0.1
-  port: 3306
-  database: up
-  username: root
-  password: 123456
-  charset: utf8mb4
-  collation: utf8mb4_unicode_ci
+server:
+  http-addr: 127.0.0.1:50051
+  grpc-addr: 127.0.0.1:8051
+mysql:
+  dsn: root:123456@tcp(127.0.0.1:3306)/up?charset=utf8mb4&parseTime=true&multiStatements=true

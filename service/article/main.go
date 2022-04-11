@@ -9,15 +9,13 @@ import (
 	articlepb "goblog.com/api/article/v1"
 	"goblog.com/pkg/grpc_gateway/gateway"
 	"google.golang.org/protobuf/encoding/protojson"
+
 	//grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
 	grpczap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	"github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	grpcctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
 	"github.com/grpc-ecosystem/go-grpc-middleware/validator"
-	"goblog.com/pkg/config"
-	"goblog.com/pkg/database"
 	//"goblog.com/pkg/jwtauth"
-	"goblog.com/pkg/logger"
 	"goblog.com/service/article/openapi"
 	articleservice "goblog.com/service/article/service"
 	"google.golang.org/grpc"
@@ -29,34 +27,28 @@ import (
 
 func main() {
 	// flag
-	configFile := flag.String("c", "./config/default.yaml", "config file")
-	var addr = flag.String("addr", "localhost:50051", "the address to connect to")
+	conf := flag.String("c", "./config/default.yaml", "config file")
 	flag.Parse()
 
-	// config
-	c, err := config.NewConfig(*configFile)
+	app, cleanUp, err := InitApplication(*conf)
 	if err != nil {
-		log.Fatalln(err)
+		panic(err)
 	}
+	defer cleanUp()
 
-	zapLogger, cleanup, err := logger.NewLogger()
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer cleanup()
+	zapLogger := app.Logger
+	httpAddr := app.Config.Server.HttpAddr
+	grpcAddr := app.Config.Server.GrpcAddr
+
 
 	// 不使用 grpcLog，不替换
 	// Make sure that log statements internal to gRPC library are logged using the zapLogger as well.
 	//grpc_zap.ReplaceGrpcLoggerV2(zapLogger)
 
-	// db
-	db, err := database.NewDatabase(&c.Database)
-	if err != nil {
-		log.Fatalln(err)
-	}
+
 
 	// gRPC server
-	lis, err := net.Listen("tcp", *addr)
+	lis, err := net.Listen("tcp", httpAddr)
 	if err != nil {
 		log.Fatalln("Failed to listen:", err)
 	}
@@ -87,7 +79,7 @@ func main() {
 		)),
 	)
 
-	articlepb.RegisterArticleServiceServer(s, articleservice.NewArticleServiceServer(db.Gorm, zapLogger))
+	articlepb.RegisterArticleServiceServer(s, articleservice.NewArticleServiceServer(app.Database.Gorm, app.Logger))
 
 	// run GRPC server
 	go func() {
@@ -106,8 +98,8 @@ func main() {
 		},
 	})
 	gwOpts := gateway.Options{
-		Addr:                    "127.0.0.1:8051",
-		GRPCServerAddr:          "localhost:50051",
+		Addr:                    httpAddr,
+		GRPCServerAddr:          grpcAddr,
 		OpenAPIFS:               openapi.OpenAPIFS,
 		ServerMuxOption:         []runtime.ServeMuxOption{serverMuxOption},
 		RegisterServiceHandlers: []gateway.RegisterServiceHandler{articlepb.RegisterArticleServiceHandler},

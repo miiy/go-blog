@@ -8,13 +8,13 @@ import (
 	"time"
 )
 
-type Repository struct {
+type ArticleRepository struct {
 	db     *gorm.DB
 	logger *zap.Logger
 }
 
-func NewRepository(db *gorm.DB, logger *zap.Logger) *Repository {
-	return &Repository{
+func NewArticleRepository(db *gorm.DB, logger *zap.Logger) *ArticleRepository {
+	return &ArticleRepository{
 		db:     db,
 		logger: logger,
 	}
@@ -44,8 +44,8 @@ var (
 	ErrUpdateError    = errors.New("update error")
 )
 
-func (r *Repository) Create(ctx context.Context, a *Article) (*Article, error) {
-	err := r.db.Create(&a).Error
+func (r *ArticleRepository) Create(ctx context.Context, a *Article) (*Article, error) {
+	err := r.db.WithContext(ctx).Create(&a).Error
 	if err != nil {
 		r.logger.Error(ErrCreateError.Error(), zap.Error(err))
 		return nil, ErrUpdateError
@@ -53,8 +53,8 @@ func (r *Repository) Create(ctx context.Context, a *Article) (*Article, error) {
 	return a, nil
 }
 
-func (r *Repository) Update(ctx context.Context, id uint64, a *Article) (*Article, error) {
-	err := r.db.Model(&Article{}).Where("id = ?", id).Updates(a).Error
+func (r *ArticleRepository) Update(ctx context.Context, id uint64, a *Article) (*Article, error) {
+	err := r.db.WithContext(ctx).Model(&Article{}).Where("id = ?", id).Updates(a).Error
 	if err != nil {
 		r.logger.Error(ErrUpdateError.Error(), zap.Error(err))
 		return nil, ErrUpdateError
@@ -62,8 +62,8 @@ func (r *Repository) Update(ctx context.Context, id uint64, a *Article) (*Articl
 	return a, nil
 }
 
-func (r *Repository) Delete(ctx context.Context, id uint64) error {
-	err := r.db.Delete(&Article{}, id).Error
+func (r *ArticleRepository) Delete(ctx context.Context, id uint64) error {
+	err := r.db.WithContext(ctx).Delete(&Article{}, id).Error
 	if err != nil {
 		r.logger.Error(ErrUpdateError.Error(), zap.Error(err))
 		return ErrUpdateError
@@ -71,24 +71,24 @@ func (r *Repository) Delete(ctx context.Context, id uint64) error {
 	return nil
 }
 
-func (r *Repository) First(ctx context.Context, id uint64) (*Article, error) {
+func (r *ArticleRepository) First(ctx context.Context, id uint64, columns interface{}) (*Article, error) {
 	var article Article
-	err := r.db.Model(&Article{}).First(&article, id).Error
+	err := r.db.WithContext(ctx).Model(&Article{}).Select(columns).First(&article, id).Error
 	if err != nil && err == gorm.ErrRecordNotFound {
 		return nil, ErrRecordNotFound
 	}
 	return &article, nil
 }
 
-func (r *Repository) FindCount(ctx context.Context) (int64, error) {
+func (r *ArticleRepository) FindCount(ctx context.Context) (int64, error) {
 	var count int64
-	r.db.Model(&Article{}).Count(&count)
+	r.db.WithContext(ctx).Model(&Article{}).Count(&count)
 	return count, nil
 }
 
-func (r *Repository) Find(ctx context.Context, limit, offset int64) ([]*Article, error) {
+func (r *ArticleRepository) Find(ctx context.Context, limit, offset int64) ([]*Article, error) {
 	var items []*Article
-	r.db.Model(&Article{}).Find(&items).Limit(int(limit)).Offset(int(offset))
+	r.db.WithContext(ctx).Model(&Article{}).Find(&items).Limit(int(limit)).Offset(int(offset))
 
 	return items, nil
 }

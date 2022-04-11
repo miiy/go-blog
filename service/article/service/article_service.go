@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	"github.com/grpc-ecosystem/go-grpc-middleware/logging/zap/ctxzap"
-	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
+	grpcttxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
 	"go.uber.org/zap"
 	articlepb "goblog.com/api/article/v1"
 	"goblog.com/pkg/pagination"
@@ -17,7 +17,7 @@ import (
 )
 
 type ArticleServiceServer struct {
-	Repository *repository.Repository
+	Repository *repository.ArticleRepository
 	db *gorm.DB
 	articlepb.UnimplementedArticleServiceServer
 }
@@ -25,7 +25,7 @@ type ArticleServiceServer struct {
 func NewArticleServiceServer(db *gorm.DB, logger *zap.Logger) articlepb.ArticleServiceServer {
 	return &ArticleServiceServer{
 		db: db,
-		Repository: repository.NewRepository(db, logger),
+		Repository: repository.NewArticleRepository(db, logger),
 	}
 }
 
@@ -35,14 +35,15 @@ func (s *ArticleServiceServer) CreateArticle(ctx context.Context, request *artic
 	//	return nil, err
 	//}
 	//
-	//if request.PublishedTime == nil {
-	//	request.PublishedTime = timestamppb.Now()
-	//}
-	//if request.UpdatedTime == nil {
-	//	request.UpdatedTime = timestamppb.Now()
-	//}
 
 	article := request.GetArticle()
+	if article.PublishedTime == nil {
+		article.PublishedTime = timestamppb.Now()
+	}
+	if article.UpdatedTime == nil {
+		article.UpdatedTime = timestamppb.Now()
+	}
+
 	a := &repository.Article{
 		UserId:          0,
 		CategoryId:      article.CategoryId,
@@ -76,7 +77,7 @@ func (s *ArticleServiceServer) BatchCreateArticles(ctx context.Context, request 
 }
 
 func (s *ArticleServiceServer) GetArticle(ctx context.Context, request *articlepb.GetArticleRequest) (*articlepb.Article, error) {
-	a, err := s.Repository.First(ctx, request.Id)
+	a, err := s.Repository.First(ctx, request.Id, "*")
 	if err != nil {
 		if err == repository.ErrRecordNotFound {
 			st := status.New(codes.NotFound, err.Error())
@@ -136,7 +137,7 @@ func (s *ArticleServiceServer) DeleteArticle(ctx context.Context, request *artic
 func (s *ArticleServiceServer) ListArticles(ctx context.Context, request *articlepb.ListArticlesRequest) (*articlepb.ListArticlesResponse, error) {
 	l := ctxzap.Extract(ctx)
 	l.Info("222")
-	grpc_ctxtags.Extract(ctx).Set("request", request)
+	grpcttxtags.Extract(ctx).Set("request", request)
 
 	//user, err := authUser(ctx, request.UserId)
 	//if err != nil {
