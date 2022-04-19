@@ -8,18 +8,17 @@ import (
 	"github.com/golang-migrate/migrate/v4/source/iofs"
 	_ "goblog.com/pkg/config"
 	"goblog.com/pkg/migrate"
-	mainpkg "goblog.com/service/article/cmd/article"
 	"goblog.com/service/article/migrations"
 	"log"
 	"strings"
 )
 
 func main() {
-	conf := flag.String("c", "./config/default.yaml", "config file")
+	conf := flag.String("c", "./configs/default.yaml", "config file")
 	cmd := flag.String("cmd", "up", "up, down")
 	flag.Parse()
 
-	app, cleanUp, err := mainpkg.InitApplication(*conf)
+	app, cleanUp, err := InitApplication(*conf)
 	if err != nil {
 		panic(err)
 	}
@@ -39,13 +38,15 @@ func main() {
 func run(db *sql.DB, dbName, cmd string) error {
 
 
-	d, err := iofs.New(migrations.FS, "migrations")
+	d, err := iofs.New(migrations.FS, ".")
 	if err != nil {
 		return err
 	}
 
 
-	mDriver, err := migrateMysql.WithInstance(db, &migrateMysql.Config{})
+	mDriver, err := migrateMysql.WithInstance(db, &migrateMysql.Config{
+		MigrationsTable: "article_migrations",
+	})
 	if err != nil {
 		return err
 	}
