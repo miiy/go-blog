@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	feedbackpb "goblog.com/api/feedback/v1"
 	"goblog.com/pkg/pagination"
-	"goblog.com/service/feedback/repository"
+	"goblog.com/service/feedback/internal/repository"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 

@@ -1,0 +1,8 @@
+app:
+  env: local # local, testing, production
+  debug: true
+  locale: zh-CN
+  addr: 0.0.0.0:80
+  name: test
+  url: www.test.com
+  footer-copyright: <p class="text-center">&copy; 2022</p>

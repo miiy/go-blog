@@ -27,7 +27,7 @@ import (
 
 func main() {
 	// flag
-	conf := flag.String("c", "./config/default.yaml", "config file")
+	conf := flag.String("c", "./configs/default.yaml", "config file")
 	flag.Parse()
 
 	app, cleanUp, err := InitApplication(*conf)

@@ -4,12 +4,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"goblog.com/pkg/gin/middleware"
 	"goblog.com/pkg/gin/template"
-	"goblog.com/service/web/app/article"
-	"goblog.com/service/web/app/book"
-	"goblog.com/service/web/app/home"
-	"goblog.com/service/web/pkg/config"
-	"goblog.com/service/web/resources/assets"
-	"goblog.com/service/web/resources/templates"
+	"goblog.com/service/web/internal/app/article"
+	"goblog.com/service/web/internal/app/book"
+	"goblog.com/service/web/internal/app/home"
+	"goblog.com/service/web/internal/pkg/config"
+	"goblog.com/service/web/internal/resources/assets"
+	"goblog.com/service/web/internal/resources/templates"
 	"net/http"
 )
 

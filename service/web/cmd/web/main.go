@@ -2,12 +2,12 @@ package main
 
 import (
 	"flag"
-	"goblog.com/service/web/router"
+	"goblog.com/service/web/internal/router"
 )
 
 func main() {
 	//addr := flag.String("host", "127.0.0.1:8080", "host")
-	conf := flag.String("c", "./config/default.yaml", "config file")
+	conf := flag.String("c", "./configs/default.yaml", "config file")
 	flag.Parse()
 
 	app, cleanUp, err := InitApplication(*conf)

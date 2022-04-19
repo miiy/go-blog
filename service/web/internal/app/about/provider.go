@@ -3,6 +3,8 @@ package about
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
+	"goblog.com/service/web/internal/pkg/application"
+
 	//"goblog.com/pkg/application"
 	"github.com/go-redis/redis/v8"
 	"go.uber.org/zap"

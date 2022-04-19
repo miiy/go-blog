@@ -8,7 +8,7 @@ import (
 	"github.com/golang-migrate/migrate/v4/source/iofs"
 	_ "goblog.com/pkg/config"
 	"goblog.com/pkg/migrate"
-	mainpkg "goblog.com/service/article"
+	mainpkg "goblog.com/service/article/cmd/article"
 	"goblog.com/service/article/migrations"
 	"log"
 	"strings"
