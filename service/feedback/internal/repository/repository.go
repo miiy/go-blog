@@ -30,10 +30,6 @@ type InsertParam struct {
 	Content string
 }
 
-type UpdateParam struct {
-	Content string
-}
-
 const (
 	sqlCreate = `INSERT INTO feedbacks(user_id, content, created_at, updated_at) VALUES (?, ?, ?, ?)`
 	sqlSoftDelete = `UPDATE feedbacks SET deleted_at = ? WHERE id = ?`
@@ -47,35 +43,49 @@ LIMIT ? OFFSET ?
 
 )
 
-func (r *Repository) Insert(ctx context.Context, p *InsertParam) (int64, error) {
+func (r *Repository) Insert(ctx context.Context, p *InsertParam) (*Feedback, error) {
 	stmt, err := r.db.PrepareContext(ctx, sqlCreate)
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
 	defer stmt.Close()
 
-	now := time.Now()
-	res, err := stmt.ExecContext(ctx, p.UserId, p.Content, now, now)
+	curTime := time.Now()
+	feedback := &Feedback{
+		Id:        0,
+		UserId:    p.UserId,
+		Content:   p.Content,
+		CreatedAt: curTime,
+		UpdatedAt: curTime,
+		DeletedAt: sql.NullTime{},
+	}
+	res, err := stmt.ExecContext(ctx, feedback.UserId, feedback.Content, feedback.CreatedAt, feedback.UpdatedAt)
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
 
-	return res.LastInsertId()
+	lastInsertId, err := res.LastInsertId()
+	if err != nil {
+		return nil, err
+	}
+	feedback.Id = lastInsertId
+	
+	return feedback, nil
 }
 
-func (r *Repository) Delete(ctx context.Context, id int64) (int64, error) {
+func (r *Repository) Delete(ctx context.Context, id int64) error {
 	stmt, err := r.db.PrepareContext(ctx, sqlSoftDelete)
 	if err != nil {
-		return 0, err
+		return err
 	}
 	defer stmt.Close()
 
-	res, err := stmt.ExecContext(ctx , time.Now(), id)
+	_, err = stmt.ExecContext(ctx , time.Now(), id)
 	if err != nil {
-		return 0, err
+		return err
 	}
-
-	return res.RowsAffected()
+	
+	return nil
 }
 
 func (r *Repository) ListCount(ctx context.Context) (int64, error) {
@@ -93,7 +103,7 @@ func (r *Repository) ListCount(ctx context.Context) (int64, error) {
 	return count, nil
 }
 
-func (r *Repository) List(ctx context.Context, userId, limit, offset int64) ([]*Feedback, error) {
+func (r *Repository) List(ctx context.Context, userId int64, limit, offset int64) ([]*Feedback, error) {
 	// query
 	stmt, err := r.db.PrepareContext(ctx, sqlList)
 	if err != nil {
@@ -108,14 +118,15 @@ func (r *Repository) List(ctx context.Context, userId, limit, offset int64) ([]*
 	}
 
 	for rows.Next() {
-		var i = new(Feedback)
+		i := new(Feedback)
 		err = rows.Scan(
 			&i.Id,
 			&i.UserId,
 			&i.Content,
 			&i.CreatedAt,
 			&i.UpdatedAt,
-		);
+			&i.DeletedAt,
+		)
 		if err != nil {
 			return nil, err
 		}

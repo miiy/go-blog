@@ -11,6 +11,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -22,9 +23,9 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type FeedbackServiceClient interface {
-	Create(ctx context.Context, in *CreateFeedback, opts ...grpc.CallOption) (*FeedbackId, error)
-	Delete(ctx context.Context, in *FeedbackId, opts ...grpc.CallOption) (*RowsAffected, error)
-	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
+	Create(ctx context.Context, in *CreateFeedbackRequest, opts ...grpc.CallOption) (*Feedback, error)
+	Delete(ctx context.Context, in *DeleteFeedbackRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	List(ctx context.Context, in *ListFeedbacksRequest, opts ...grpc.CallOption) (*ListFeedbacksResponse, error)
 }
 
 type feedbackServiceClient struct {
@@ -35,8 +36,8 @@ func NewFeedbackServiceClient(cc grpc.ClientConnInterface) FeedbackServiceClient
 	return &feedbackServiceClient{cc}
 }
 
-func (c *feedbackServiceClient) Create(ctx context.Context, in *CreateFeedback, opts ...grpc.CallOption) (*FeedbackId, error) {
-	out := new(FeedbackId)
+func (c *feedbackServiceClient) Create(ctx context.Context, in *CreateFeedbackRequest, opts ...grpc.CallOption) (*Feedback, error) {
+	out := new(Feedback)
 	err := c.cc.Invoke(ctx, "/feedback.FeedbackService/Create", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -44,8 +45,8 @@ func (c *feedbackServiceClient) Create(ctx context.Context, in *CreateFeedback, 
 	return out, nil
 }
 
-func (c *feedbackServiceClient) Delete(ctx context.Context, in *FeedbackId, opts ...grpc.CallOption) (*RowsAffected, error) {
-	out := new(RowsAffected)
+func (c *feedbackServiceClient) Delete(ctx context.Context, in *DeleteFeedbackRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/feedback.FeedbackService/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -53,8 +54,8 @@ func (c *feedbackServiceClient) Delete(ctx context.Context, in *FeedbackId, opts
 	return out, nil
 }
 
-func (c *feedbackServiceClient) List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
-	out := new(ListResponse)
+func (c *feedbackServiceClient) List(ctx context.Context, in *ListFeedbacksRequest, opts ...grpc.CallOption) (*ListFeedbacksResponse, error) {
+	out := new(ListFeedbacksResponse)
 	err := c.cc.Invoke(ctx, "/feedback.FeedbackService/List", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -66,9 +67,9 @@ func (c *feedbackServiceClient) List(ctx context.Context, in *ListRequest, opts 
 // All implementations must embed UnimplementedFeedbackServiceServer
 // for forward compatibility
 type FeedbackServiceServer interface {
-	Create(context.Context, *CreateFeedback) (*FeedbackId, error)
-	Delete(context.Context, *FeedbackId) (*RowsAffected, error)
-	List(context.Context, *ListRequest) (*ListResponse, error)
+	Create(context.Context, *CreateFeedbackRequest) (*Feedback, error)
+	Delete(context.Context, *DeleteFeedbackRequest) (*emptypb.Empty, error)
+	List(context.Context, *ListFeedbacksRequest) (*ListFeedbacksResponse, error)
 	mustEmbedUnimplementedFeedbackServiceServer()
 }
 
@@ -76,13 +77,13 @@ type FeedbackServiceServer interface {
 type UnimplementedFeedbackServiceServer struct {
 }
 
-func (UnimplementedFeedbackServiceServer) Create(context.Context, *CreateFeedback) (*FeedbackId, error) {
+func (UnimplementedFeedbackServiceServer) Create(context.Context, *CreateFeedbackRequest) (*Feedback, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
-func (UnimplementedFeedbackServiceServer) Delete(context.Context, *FeedbackId) (*RowsAffected, error) {
+func (UnimplementedFeedbackServiceServer) Delete(context.Context, *DeleteFeedbackRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
-func (UnimplementedFeedbackServiceServer) List(context.Context, *ListRequest) (*ListResponse, error) {
+func (UnimplementedFeedbackServiceServer) List(context.Context, *ListFeedbacksRequest) (*ListFeedbacksResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
 }
 func (UnimplementedFeedbackServiceServer) mustEmbedUnimplementedFeedbackServiceServer() {}
@@ -99,7 +100,7 @@ func RegisterFeedbackServiceServer(s grpc.ServiceRegistrar, srv FeedbackServiceS
 }
 
 func _FeedbackService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateFeedback)
+	in := new(CreateFeedbackRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -111,13 +112,13 @@ func _FeedbackService_Create_Handler(srv interface{}, ctx context.Context, dec f
 		FullMethod: "/feedback.FeedbackService/Create",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FeedbackServiceServer).Create(ctx, req.(*CreateFeedback))
+		return srv.(FeedbackServiceServer).Create(ctx, req.(*CreateFeedbackRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _FeedbackService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FeedbackId)
+	in := new(DeleteFeedbackRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -129,13 +130,13 @@ func _FeedbackService_Delete_Handler(srv interface{}, ctx context.Context, dec f
 		FullMethod: "/feedback.FeedbackService/Delete",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FeedbackServiceServer).Delete(ctx, req.(*FeedbackId))
+		return srv.(FeedbackServiceServer).Delete(ctx, req.(*DeleteFeedbackRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _FeedbackService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListRequest)
+	in := new(ListFeedbacksRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -147,7 +148,7 @@ func _FeedbackService_List_Handler(srv interface{}, ctx context.Context, dec fun
 		FullMethod: "/feedback.FeedbackService/List",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FeedbackServiceServer).List(ctx, req.(*ListRequest))
+		return srv.(FeedbackServiceServer).List(ctx, req.(*ListFeedbacksRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

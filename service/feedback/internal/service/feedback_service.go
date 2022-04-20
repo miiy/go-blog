@@ -3,9 +3,11 @@ package service
 import (
 	"context"
 	"database/sql"
+	"errors"
 	feedbackpb "goblog.com/api/feedback/v1"
 	"goblog.com/pkg/pagination"
 	"goblog.com/service/feedback/internal/repository"
+	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -15,39 +17,41 @@ type FeedbackServiceServer struct {
 }
 
 func NewFeedbackServiceServer(db *sql.DB) feedbackpb.FeedbackServiceServer {
-	repository := repository.NewRepository(db)
+	r := repository.NewRepository(db)
 	return &FeedbackServiceServer{
-		Repository: repository,
+		Repository: r,
 	}
 }
 
-func (s *FeedbackServiceServer) Create(ctx context.Context, request *feedbackpb.CreateFeedback) (*feedbackpb.FeedbackId, error) {
+func (s *FeedbackServiceServer) Create(ctx context.Context, request *feedbackpb.CreateFeedbackRequest) (*feedbackpb.Feedback, error) {
 	// validate
+	if request.Content == "" {
+		return nil, errors.New("content can not empty")
+	}
+
 	p := &repository.InsertParam{
 		UserId:  request.UserId,
 		Content: request.Content,
 	}
-	id, err := s.Repository.Insert(ctx, p)
-	if err != nil {
-		return nil, err
-	}
-	return &feedbackpb.FeedbackId{
-		Id: id,
-	}, nil
-}
 
-func (s *FeedbackServiceServer) Delete(ctx context.Context, request *feedbackpb.FeedbackId) (*feedbackpb.RowsAffected, error) {
-	ra, err := s.Repository.Delete(ctx, request.Id)
+	feedback, err := s.Repository.Insert(ctx, p)
 	if err != nil {
 		return nil, err
 	}
 
-	return &feedbackpb.RowsAffected{
-		RowsAffected: ra,
-	}, nil
+	return feedbackToProto(feedback), nil
 }
 
-func (s *FeedbackServiceServer) List(ctx context.Context, request *feedbackpb.ListRequest) (*feedbackpb.ListResponse, error) {
+func (s *FeedbackServiceServer) Delete(ctx context.Context, request *feedbackpb.DeleteFeedbackRequest) (*emptypb.Empty, error) {
+	err := s.Repository.Delete(ctx, request.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	return nil, nil
+}
+
+func (s *FeedbackServiceServer) List(ctx context.Context, request *feedbackpb.ListFeedbacksRequest) (*feedbackpb.ListFeedbacksResponse, error) {
 	// validate
 
 	// count
@@ -66,23 +70,28 @@ func (s *FeedbackServiceServer) List(ctx context.Context, request *feedbackpb.Li
 	}
 	var items []*feedbackpb.Feedback
 	for _, v  := range tags {
-		item := &feedbackpb.Feedback{
-			Id:        v.Id,
-			UserId:    v.UserId,
-			Content:   v.Content,
-			CreatedAt: timestamppb.New(v.CreatedAt),
-			UpdatedAt: timestamppb.New(v.UpdatedAt),
-		}
+		item := feedbackToProto(v)
 		items = append(items, item)
 	}
 
-	return &feedbackpb.ListResponse{
+	return &feedbackpb.ListFeedbacksResponse{
 		Total:       pg.Total,
 		PerPage:     pg.PerPage,
 		CurrentPage: pg.CurrentPage,
 		LastPage:    pg.LastPage,
 		From:        pg.From,
 		To:          pg.To,
-		Data:        items,
+		Feedbacks:   items,
 	}, nil
+}
+
+func feedbackToProto(feedback *repository.Feedback) *feedbackpb.Feedback {
+	return &feedbackpb.Feedback{
+		Id:        feedback.Id,
+		UserId:    feedback.UserId,
+		Content:   feedback.Content,
+		CreatedAt: timestamppb.New(feedback.CreatedAt),
+		UpdatedAt: timestamppb.New(feedback.UpdatedAt),
+		DeletedAt: timestamppb.New(feedback.DeletedAt.Time),
+	}
 }

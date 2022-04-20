@@ -5,7 +5,7 @@ package feedback;
 option go_package = "goblog.com/api/feedback/v1;feedback";
 
 import "google/protobuf/timestamp.proto";
-import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
 
 message Feedback {
   int64 id = 1;
@@ -13,54 +13,38 @@ message Feedback {
   string content = 3;
   google.protobuf.Timestamp created_at = 4;
   google.protobuf.Timestamp updated_at = 5;
+  google.protobuf.Timestamp deleted_at = 6;
 }
 
-message FeedbackId {
-  int64 id = 1;
-}
-
-message RowsAffected {
-  int64 rows_affected = 1;
-}
-
-message CreateFeedback {
+message CreateFeedbackRequest {
   int64 user_id = 1;
   string content = 2;
 }
 
-message ListRequest {
+message DeleteFeedbackRequest {
+  int64 id = 1;
+}
+
+message ListFeedbacksRequest {
   int64 user_id = 1;
   int64 page = 2;
   int64 per_page = 3;
 }
 
-message ListResponse {
+message ListFeedbacksResponse {
   int64 total = 1;
   int64 per_page = 2;
   int64 current_page = 3;
   int64 last_page = 4;
   int64 from = 5;
   int64 to = 6;
-  repeated Feedback data = 7;
+  repeated Feedback feedbacks = 7;
 }
 
 service FeedbackService {
-  rpc Create(CreateFeedback) returns (FeedbackId) {
-    option (google.api.http) = {
-      post: "/v1/feedbacks"
-      body: "*"
-    };
-  }
+  rpc Create(CreateFeedbackRequest) returns (Feedback) {}
 
-  rpc Delete(FeedbackId) returns (RowsAffected) {
-    option (google.api.http) = {
-      delete: "/v1/feedbacks/{id}"
-    };
-  }
+  rpc Delete(DeleteFeedbackRequest) returns (google.protobuf.Empty) {}
 
-  rpc List(ListRequest) returns (ListResponse) {
-    option (google.api.http) = {
-      get: "/v1/feedbacks"
-    };
-  }
+  rpc List(ListFeedbacksRequest) returns (ListFeedbacksResponse) {}
 }

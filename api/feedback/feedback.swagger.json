@@ -15,127 +15,8 @@
   "produces": [
     "application/json"
   ],
-  "paths": {
-    "/v1/feedbacks": {
-      "get": {
-        "operationId": "FeedbackService_List",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/feedbackListResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "format": "int64"
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "format": "int64"
-          },
-          {
-            "name": "perPage",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "format": "int64"
-          }
-        ],
-        "tags": [
-          "FeedbackService"
-        ]
-      },
-      "post": {
-        "operationId": "FeedbackService_Create",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/feedbackFeedbackId"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/feedbackCreateFeedback"
-            }
-          }
-        ],
-        "tags": [
-          "FeedbackService"
-        ]
-      }
-    },
-    "/v1/feedbacks/{id}": {
-      "delete": {
-        "operationId": "FeedbackService_Delete",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/feedbackRowsAffected"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "int64"
-          }
-        ],
-        "tags": [
-          "FeedbackService"
-        ]
-      }
-    }
-  },
+  "paths": {},
   "definitions": {
-    "feedbackCreateFeedback": {
-      "type": "object",
-      "properties": {
-        "userId": {
-          "type": "string",
-          "format": "int64"
-        },
-        "content": {
-          "type": "string"
-        }
-      }
-    },
     "feedbackFeedback": {
       "type": "object",
       "properties": {
@@ -157,19 +38,14 @@
         "updatedAt": {
           "type": "string",
           "format": "date-time"
-        }
-      }
-    },
-    "feedbackFeedbackId": {
-      "type": "object",
-      "properties": {
-        "id": {
+        },
+        "deletedAt": {
           "type": "string",
-          "format": "int64"
+          "format": "date-time"
         }
       }
     },
-    "feedbackListResponse": {
+    "feedbackListFeedbacksResponse": {
       "type": "object",
       "properties": {
         "total": {
@@ -196,20 +72,11 @@
           "type": "string",
           "format": "int64"
         },
-        "data": {
+        "feedbacks": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/feedbackFeedback"
           }
-        }
-      }
-    },
-    "feedbackRowsAffected": {
-      "type": "object",
-      "properties": {
-        "rowsAffected": {
-          "type": "string",
-          "format": "int64"
         }
       }
     },
