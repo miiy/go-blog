@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	feedbackpb "goblog.com/api/feedback/v1"
-	"goblog.com/service/feedback/internal/service"
+	"goblog.com/service/feedback/internal/server"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
@@ -35,7 +35,7 @@ func main()  {
 	s := grpc.NewServer()
 	healthcheck := health.NewServer()
 	healthpb.RegisterHealthServer(s, healthcheck)
-	feedbackpb.RegisterFeedbackServiceServer(s, service.NewFeedbackServiceServer(app.Database.DB))
+	feedbackpb.RegisterFeedbackServiceServer(s, server.NewFeedbackServer(app.Database.DB))
 
 	if err = s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)

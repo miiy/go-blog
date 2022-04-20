@@ -1,32 +1,33 @@
-package service
+package server
 
 import (
 	"context"
 	"database/sql"
-	"errors"
 	feedbackpb "goblog.com/api/feedback/v1"
 	"goblog.com/pkg/pagination"
 	"goblog.com/service/feedback/internal/repository"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-type FeedbackServiceServer struct {
+type FeedbackServer struct {
 	Repository *repository.Repository
 	feedbackpb.UnimplementedFeedbackServiceServer
 }
 
-func NewFeedbackServiceServer(db *sql.DB) feedbackpb.FeedbackServiceServer {
+func NewFeedbackServer(db *sql.DB) feedbackpb.FeedbackServiceServer {
 	r := repository.NewRepository(db)
-	return &FeedbackServiceServer{
+	return &FeedbackServer{
 		Repository: r,
 	}
 }
 
-func (s *FeedbackServiceServer) Create(ctx context.Context, request *feedbackpb.CreateFeedbackRequest) (*feedbackpb.Feedback, error) {
+func (s *FeedbackServer) CreateFeedback(ctx context.Context, request *feedbackpb.CreateFeedbackRequest) (*feedbackpb.Feedback, error) {
 	// validate
-	if request.Content == "" {
-		return nil, errors.New("content can not empty")
+	if request.GetContent() == "" {
+		return nil, status.Error(codes.InvalidArgument, "content can not empty")
 	}
 
 	p := &repository.InsertParam{
@@ -42,7 +43,7 @@ func (s *FeedbackServiceServer) Create(ctx context.Context, request *feedbackpb.
 	return feedbackToProto(feedback), nil
 }
 
-func (s *FeedbackServiceServer) Delete(ctx context.Context, request *feedbackpb.DeleteFeedbackRequest) (*emptypb.Empty, error) {
+func (s *FeedbackServer) DeleteFeedback(ctx context.Context, request *feedbackpb.DeleteFeedbackRequest) (*emptypb.Empty, error) {
 	err := s.Repository.Delete(ctx, request.Id)
 	if err != nil {
 		return nil, err
@@ -51,7 +52,7 @@ func (s *FeedbackServiceServer) Delete(ctx context.Context, request *feedbackpb.
 	return nil, nil
 }
 
-func (s *FeedbackServiceServer) List(ctx context.Context, request *feedbackpb.ListFeedbacksRequest) (*feedbackpb.ListFeedbacksResponse, error) {
+func (s *FeedbackServer) ListFeedbacks(ctx context.Context, request *feedbackpb.ListFeedbacksRequest) (*feedbackpb.ListFeedbacksResponse, error) {
 	// validate
 
 	// count

@@ -42,9 +42,9 @@ message ListFeedbacksResponse {
 }
 
 service FeedbackService {
-  rpc Create(CreateFeedbackRequest) returns (Feedback) {}
+  rpc CreateFeedback(CreateFeedbackRequest) returns (Feedback) {}
 
-  rpc Delete(DeleteFeedbackRequest) returns (google.protobuf.Empty) {}
+  rpc DeleteFeedback(DeleteFeedbackRequest) returns (google.protobuf.Empty) {}
 
-  rpc List(ListFeedbacksRequest) returns (ListFeedbacksResponse) {}
+  rpc ListFeedbacks(ListFeedbacksRequest) returns (ListFeedbacksResponse) {}
 }
