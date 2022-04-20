@@ -22,19 +22,12 @@ protoc -I ./book/v1 \
 -I ../third_party/googleapis \
 --go_out ./book/v1 --go_opt paths=source_relative \
 --go-grpc_out ./book/v1 --go-grpc_opt paths=source_relative \
---grpc-gateway_out ./book/v1 --grpc-gateway_opt paths=source_relative \
---openapiv2_out ./book \
---openapiv2_opt logtostderr=true \
---openapiv2_opt use_go_templates=true \
 ./book/v1/book.proto
 
 protoc -I ./feedback/v1 \
 -I ../third_party/googleapis \
 --go_out ./feedback/v1 --go_opt paths=source_relative \
 --go-grpc_out ./feedback/v1 --go-grpc_opt paths=source_relative \
---openapiv2_out ./feedback \
---openapiv2_opt logtostderr=true \
---openapiv2_opt use_go_templates=true \
 ./feedback/v1/feedback.proto
 
 protoc -I ./tag/v1 \

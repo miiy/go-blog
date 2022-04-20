@@ -23,7 +23,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/protoListArticlesResponse"
+              "$ref": "#/definitions/articleListArticlesResponse"
             }
           },
           "default": {
@@ -59,7 +59,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/protoArticle"
+              "$ref": "#/definitions/articleArticle"
             }
           },
           "default": {
@@ -76,7 +76,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/protoArticle"
+              "$ref": "#/definitions/articleArticle"
             }
           },
           {
@@ -106,7 +106,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/protoArticle"
+              "$ref": "#/definitions/articleArticle"
             }
           },
           "default": {
@@ -211,7 +211,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/protoArticle"
+              "$ref": "#/definitions/articleArticle"
             }
           },
           "default": {
@@ -271,7 +271,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/protoBatchCreateArticlesResponse"
+              "$ref": "#/definitions/articleBatchCreateArticlesResponse"
             }
           },
           "default": {
@@ -287,7 +287,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/protoBatchCreateArticlesRequest"
+              "$ref": "#/definitions/articleBatchCreateArticlesRequest"
             }
           }
         ],
@@ -307,7 +307,7 @@
       ],
       "default": "DEFAULT"
     },
-    "protoArticle": {
+    "articleArticle": {
       "type": "object",
       "properties": {
         "id": {
@@ -366,13 +366,13 @@
         }
       }
     },
-    "protoBatchCreateArticlesRequest": {
+    "articleBatchCreateArticlesRequest": {
       "type": "object",
       "properties": {
         "articles": {
           "type": "object",
           "additionalProperties": {
-            "$ref": "#/definitions/protoArticle"
+            "$ref": "#/definitions/articleArticle"
           },
           "required": [
             "articles"
@@ -384,19 +384,19 @@
         "articles"
       ]
     },
-    "protoBatchCreateArticlesResponse": {
+    "articleBatchCreateArticlesResponse": {
       "type": "object",
       "properties": {
         "articles": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/protoArticle"
+            "$ref": "#/definitions/articleArticle"
           }
         }
       },
       "description": "Response for creating articles in batch."
     },
-    "protoListArticlesResponse": {
+    "articleListArticlesResponse": {
       "type": "object",
       "properties": {
         "total": {
@@ -414,7 +414,7 @@
         "articles": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/protoArticle"
+            "$ref": "#/definitions/articleArticle"
           }
         }
       }

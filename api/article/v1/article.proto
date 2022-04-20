@@ -1,8 +1,11 @@
 syntax="proto3";
 
-package article_service.proto;
+option go_package = "goblog.com/api/article";
+option java_multiple_files = true;
+option java_package = "com.goblog.article";
+option java_outer_classname = "ArticleProto";
 
-option go_package = "goblog.com/api/article/proto/v1;article";
+package article;
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";

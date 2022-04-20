@@ -41,7 +41,7 @@ func NewArticleServiceClient(cc grpc.ClientConnInterface) ArticleServiceClient {
 
 func (c *articleServiceClient) CreateArticle(ctx context.Context, in *CreateArticleRequest, opts ...grpc.CallOption) (*Article, error) {
 	out := new(Article)
-	err := c.cc.Invoke(ctx, "/article_service.proto.ArticleService/CreateArticle", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/article.ArticleService/CreateArticle", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func (c *articleServiceClient) CreateArticle(ctx context.Context, in *CreateArti
 
 func (c *articleServiceClient) BatchCreateArticles(ctx context.Context, in *BatchCreateArticlesRequest, opts ...grpc.CallOption) (*BatchCreateArticlesResponse, error) {
 	out := new(BatchCreateArticlesResponse)
-	err := c.cc.Invoke(ctx, "/article_service.proto.ArticleService/BatchCreateArticles", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/article.ArticleService/BatchCreateArticles", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +59,7 @@ func (c *articleServiceClient) BatchCreateArticles(ctx context.Context, in *Batc
 
 func (c *articleServiceClient) GetArticle(ctx context.Context, in *GetArticleRequest, opts ...grpc.CallOption) (*Article, error) {
 	out := new(Article)
-	err := c.cc.Invoke(ctx, "/article_service.proto.ArticleService/GetArticle", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/article.ArticleService/GetArticle", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +68,7 @@ func (c *articleServiceClient) GetArticle(ctx context.Context, in *GetArticleReq
 
 func (c *articleServiceClient) UpdateArticle(ctx context.Context, in *UpdateArticleRequest, opts ...grpc.CallOption) (*Article, error) {
 	out := new(Article)
-	err := c.cc.Invoke(ctx, "/article_service.proto.ArticleService/UpdateArticle", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/article.ArticleService/UpdateArticle", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -77,7 +77,7 @@ func (c *articleServiceClient) UpdateArticle(ctx context.Context, in *UpdateArti
 
 func (c *articleServiceClient) DeleteArticle(ctx context.Context, in *DeleteArticleRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/article_service.proto.ArticleService/DeleteArticle", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/article.ArticleService/DeleteArticle", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +86,7 @@ func (c *articleServiceClient) DeleteArticle(ctx context.Context, in *DeleteArti
 
 func (c *articleServiceClient) ListArticles(ctx context.Context, in *ListArticlesRequest, opts ...grpc.CallOption) (*ListArticlesResponse, error) {
 	out := new(ListArticlesResponse)
-	err := c.cc.Invoke(ctx, "/article_service.proto.ArticleService/ListArticles", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/article.ArticleService/ListArticles", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -151,7 +151,7 @@ func _ArticleService_CreateArticle_Handler(srv interface{}, ctx context.Context,
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/article_service.proto.ArticleService/CreateArticle",
+		FullMethod: "/article.ArticleService/CreateArticle",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ArticleServiceServer).CreateArticle(ctx, req.(*CreateArticleRequest))
@@ -169,7 +169,7 @@ func _ArticleService_BatchCreateArticles_Handler(srv interface{}, ctx context.Co
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/article_service.proto.ArticleService/BatchCreateArticles",
+		FullMethod: "/article.ArticleService/BatchCreateArticles",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ArticleServiceServer).BatchCreateArticles(ctx, req.(*BatchCreateArticlesRequest))
@@ -187,7 +187,7 @@ func _ArticleService_GetArticle_Handler(srv interface{}, ctx context.Context, de
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/article_service.proto.ArticleService/GetArticle",
+		FullMethod: "/article.ArticleService/GetArticle",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ArticleServiceServer).GetArticle(ctx, req.(*GetArticleRequest))
@@ -205,7 +205,7 @@ func _ArticleService_UpdateArticle_Handler(srv interface{}, ctx context.Context,
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/article_service.proto.ArticleService/UpdateArticle",
+		FullMethod: "/article.ArticleService/UpdateArticle",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ArticleServiceServer).UpdateArticle(ctx, req.(*UpdateArticleRequest))
@@ -223,7 +223,7 @@ func _ArticleService_DeleteArticle_Handler(srv interface{}, ctx context.Context,
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/article_service.proto.ArticleService/DeleteArticle",
+		FullMethod: "/article.ArticleService/DeleteArticle",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ArticleServiceServer).DeleteArticle(ctx, req.(*DeleteArticleRequest))
@@ -241,7 +241,7 @@ func _ArticleService_ListArticles_Handler(srv interface{}, ctx context.Context, 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/article_service.proto.ArticleService/ListArticles",
+		FullMethod: "/article.ArticleService/ListArticles",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ArticleServiceServer).ListArticles(ctx, req.(*ListArticlesRequest))
@@ -253,7 +253,7 @@ func _ArticleService_ListArticles_Handler(srv interface{}, ctx context.Context, 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var ArticleService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "article_service.proto.ArticleService",
+	ServiceName: "article.ArticleService",
 	HandlerType: (*ArticleServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

@@ -1,13 +1,15 @@
 syntax="proto3";
 
-package book_service.proto;
+option go_package = "goblog.com/api/book";
+option java_multiple_files = true;
+option java_package = "com.goblog.book";
+option java_outer_classname = "BookProto";
 
-option go_package = "goblog.com/api/book/proto/v1;book";
+package book;
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/field_mask.proto";
-import "google/api/annotations.proto";
 import "google/api/field_behavior.proto";
 
 message Book {
@@ -16,14 +18,14 @@ message Book {
     ACTIVE = 1;
     DISABLE = 2;
   }
-  uint64 id = 1;
-  uint64 user_id = 2;
-  uint64 category_id = 3;
+  int64 id = 1;
+  int64 user_id = 2;
+  int64 category_id = 3;
   string name = 4;
   string publisher = 5;
-  string year = 6;
+  int64 year = 6;
   string pages = 7;
-  string price = 8;
+  float  price = 8;
   string binding = 9;
   string series = 10;
   string isbn = 11;
@@ -37,6 +39,7 @@ message Book {
   // Output only. Creation time of the book.
   google.protobuf.Timestamp create_time = 19;
   google.protobuf.Timestamp update_time = 20;
+  google.protobuf.Timestamp deleted_time = 21;
 }
 
 // Request to create a new book.
@@ -68,12 +71,12 @@ message BatchCreateBooksResponse {
 
 // Request to get a book.
 message GetBookRequest {
-  uint64 id = 1 [(google.api.field_behavior) = REQUIRED];
+  int64 id = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 // Request to update a book.
 message UpdateBookRequest {
-  uint64 id = 1 [(google.api.field_behavior) = REQUIRED];
+  int64 id = 1 [(google.api.field_behavior) = REQUIRED];
 
   Book book = 2 [(google.api.field_behavior) = REQUIRED];
 
@@ -83,58 +86,31 @@ message UpdateBookRequest {
 
 // Request to delete a book.
 message DeleteBookRequest {
-  uint64 id = 1 [(google.api.field_behavior) = REQUIRED];
+  int64 id = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message ListBooksRequest {
-  int32 page = 1;
-  int32 page_size = 2;
+  int64 page = 1;
+  int64 page_size = 2;
 }
 
 message ListBooksResponse {
   int64 total = 1;
-  int32 page_size = 2;
-  int32 current_page = 3;
+  int64 page_size = 2;
+  int64 current_page = 3;
   repeated Book books = 7;
 }
 
 service BookService {
-  rpc CreateBook(CreateBookRequest) returns (Book) {
-    option (google.api.http) = {
-      post: "/v1/books"
-      body: "book"
-    };
-  }
+  rpc CreateBook(CreateBookRequest) returns (Book) {}
 
-  rpc BatchCreateBooks(BatchCreateBooksRequest) returns (BatchCreateBooksResponse) {
-    option (google.api.http) = {
-      post: "/v1/books:batchCreate"
-      body: "*"
-    };
-  }
+  rpc BatchCreateBooks(BatchCreateBooksRequest) returns (BatchCreateBooksResponse) {}
 
-  rpc GetBook(GetBookRequest) returns (Book) {
-    option (google.api.http) = {
-      get: "/v1/books/{id}"
-    };
-  }
+  rpc GetBook(GetBookRequest) returns (Book) {}
 
-  rpc UpdateBook(UpdateBookRequest) returns (Book) {
-    option (google.api.http) = {
-      put: "/v1/books/{book.id}"
-      body: "book"
-    };
-  }
+  rpc UpdateBook(UpdateBookRequest) returns (Book) {}
 
-  rpc DeleteBook(DeleteBookRequest) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
-      delete: "/v1/books/{id}"
-    };
-  }
+  rpc DeleteBook(DeleteBookRequest) returns (google.protobuf.Empty) {}
 
-  rpc ListBooks(ListBooksRequest) returns (ListBooksResponse) {
-    option (google.api.http) = {
-      get: "/v1/books"
-    };
-  }
+  rpc ListBooks(ListBooksRequest) returns (ListBooksResponse) {}
 }

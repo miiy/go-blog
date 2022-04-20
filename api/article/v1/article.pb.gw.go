@@ -356,7 +356,7 @@ func RegisterArticleServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article_service.proto.ArticleService/CreateArticle", runtime.WithHTTPPathPattern("/v1/articles"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleService/CreateArticle", runtime.WithHTTPPathPattern("/v1/articles"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -380,7 +380,7 @@ func RegisterArticleServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article_service.proto.ArticleService/BatchCreateArticles", runtime.WithHTTPPathPattern("/v1/articles:batchCreate"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleService/BatchCreateArticles", runtime.WithHTTPPathPattern("/v1/articles:batchCreate"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -404,7 +404,7 @@ func RegisterArticleServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article_service.proto.ArticleService/GetArticle", runtime.WithHTTPPathPattern("/v1/articles/{id}"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleService/GetArticle", runtime.WithHTTPPathPattern("/v1/articles/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -428,7 +428,7 @@ func RegisterArticleServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article_service.proto.ArticleService/UpdateArticle", runtime.WithHTTPPathPattern("/v1/articles/{article.id}"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleService/UpdateArticle", runtime.WithHTTPPathPattern("/v1/articles/{article.id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -452,7 +452,7 @@ func RegisterArticleServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article_service.proto.ArticleService/DeleteArticle", runtime.WithHTTPPathPattern("/v1/articles/{id}"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleService/DeleteArticle", runtime.WithHTTPPathPattern("/v1/articles/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -476,7 +476,7 @@ func RegisterArticleServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article_service.proto.ArticleService/ListArticles", runtime.WithHTTPPathPattern("/v1/articles"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleService/ListArticles", runtime.WithHTTPPathPattern("/v1/articles"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -539,7 +539,7 @@ func RegisterArticleServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article_service.proto.ArticleService/CreateArticle", runtime.WithHTTPPathPattern("/v1/articles"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleService/CreateArticle", runtime.WithHTTPPathPattern("/v1/articles"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -560,7 +560,7 @@ func RegisterArticleServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article_service.proto.ArticleService/BatchCreateArticles", runtime.WithHTTPPathPattern("/v1/articles:batchCreate"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleService/BatchCreateArticles", runtime.WithHTTPPathPattern("/v1/articles:batchCreate"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -581,7 +581,7 @@ func RegisterArticleServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article_service.proto.ArticleService/GetArticle", runtime.WithHTTPPathPattern("/v1/articles/{id}"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleService/GetArticle", runtime.WithHTTPPathPattern("/v1/articles/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -602,7 +602,7 @@ func RegisterArticleServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article_service.proto.ArticleService/UpdateArticle", runtime.WithHTTPPathPattern("/v1/articles/{article.id}"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleService/UpdateArticle", runtime.WithHTTPPathPattern("/v1/articles/{article.id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -623,7 +623,7 @@ func RegisterArticleServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article_service.proto.ArticleService/DeleteArticle", runtime.WithHTTPPathPattern("/v1/articles/{id}"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleService/DeleteArticle", runtime.WithHTTPPathPattern("/v1/articles/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -644,7 +644,7 @@ func RegisterArticleServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article_service.proto.ArticleService/ListArticles", runtime.WithHTTPPathPattern("/v1/articles"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleService/ListArticles", runtime.WithHTTPPathPattern("/v1/articles"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return

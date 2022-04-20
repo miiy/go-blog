@@ -41,7 +41,7 @@ func NewBookServiceClient(cc grpc.ClientConnInterface) BookServiceClient {
 
 func (c *bookServiceClient) CreateBook(ctx context.Context, in *CreateBookRequest, opts ...grpc.CallOption) (*Book, error) {
 	out := new(Book)
-	err := c.cc.Invoke(ctx, "/book_service.proto.BookService/CreateBook", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/book.BookService/CreateBook", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func (c *bookServiceClient) CreateBook(ctx context.Context, in *CreateBookReques
 
 func (c *bookServiceClient) BatchCreateBooks(ctx context.Context, in *BatchCreateBooksRequest, opts ...grpc.CallOption) (*BatchCreateBooksResponse, error) {
 	out := new(BatchCreateBooksResponse)
-	err := c.cc.Invoke(ctx, "/book_service.proto.BookService/BatchCreateBooks", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/book.BookService/BatchCreateBooks", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +59,7 @@ func (c *bookServiceClient) BatchCreateBooks(ctx context.Context, in *BatchCreat
 
 func (c *bookServiceClient) GetBook(ctx context.Context, in *GetBookRequest, opts ...grpc.CallOption) (*Book, error) {
 	out := new(Book)
-	err := c.cc.Invoke(ctx, "/book_service.proto.BookService/GetBook", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/book.BookService/GetBook", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +68,7 @@ func (c *bookServiceClient) GetBook(ctx context.Context, in *GetBookRequest, opt
 
 func (c *bookServiceClient) UpdateBook(ctx context.Context, in *UpdateBookRequest, opts ...grpc.CallOption) (*Book, error) {
 	out := new(Book)
-	err := c.cc.Invoke(ctx, "/book_service.proto.BookService/UpdateBook", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/book.BookService/UpdateBook", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -77,7 +77,7 @@ func (c *bookServiceClient) UpdateBook(ctx context.Context, in *UpdateBookReques
 
 func (c *bookServiceClient) DeleteBook(ctx context.Context, in *DeleteBookRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/book_service.proto.BookService/DeleteBook", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/book.BookService/DeleteBook", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +86,7 @@ func (c *bookServiceClient) DeleteBook(ctx context.Context, in *DeleteBookReques
 
 func (c *bookServiceClient) ListBooks(ctx context.Context, in *ListBooksRequest, opts ...grpc.CallOption) (*ListBooksResponse, error) {
 	out := new(ListBooksResponse)
-	err := c.cc.Invoke(ctx, "/book_service.proto.BookService/ListBooks", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/book.BookService/ListBooks", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -151,7 +151,7 @@ func _BookService_CreateBook_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/book_service.proto.BookService/CreateBook",
+		FullMethod: "/book.BookService/CreateBook",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(BookServiceServer).CreateBook(ctx, req.(*CreateBookRequest))
@@ -169,7 +169,7 @@ func _BookService_BatchCreateBooks_Handler(srv interface{}, ctx context.Context,
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/book_service.proto.BookService/BatchCreateBooks",
+		FullMethod: "/book.BookService/BatchCreateBooks",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(BookServiceServer).BatchCreateBooks(ctx, req.(*BatchCreateBooksRequest))
@@ -187,7 +187,7 @@ func _BookService_GetBook_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/book_service.proto.BookService/GetBook",
+		FullMethod: "/book.BookService/GetBook",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(BookServiceServer).GetBook(ctx, req.(*GetBookRequest))
@@ -205,7 +205,7 @@ func _BookService_UpdateBook_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/book_service.proto.BookService/UpdateBook",
+		FullMethod: "/book.BookService/UpdateBook",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(BookServiceServer).UpdateBook(ctx, req.(*UpdateBookRequest))
@@ -223,7 +223,7 @@ func _BookService_DeleteBook_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/book_service.proto.BookService/DeleteBook",
+		FullMethod: "/book.BookService/DeleteBook",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(BookServiceServer).DeleteBook(ctx, req.(*DeleteBookRequest))
@@ -241,7 +241,7 @@ func _BookService_ListBooks_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/book_service.proto.BookService/ListBooks",
+		FullMethod: "/book.BookService/ListBooks",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(BookServiceServer).ListBooks(ctx, req.(*ListBooksRequest))
@@ -253,7 +253,7 @@ func _BookService_ListBooks_Handler(srv interface{}, ctx context.Context, dec fu
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var BookService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "book_service.proto.BookService",
+	ServiceName: "book.BookService",
 	HandlerType: (*BookServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
