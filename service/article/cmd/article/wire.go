@@ -26,8 +26,15 @@ func providerLoggerOption(config *config.Config) []logger.Option {
 	}
 }
 
-func providerDatabase(config *config.Config) database.DSNString {
-	return database.ProviderDSNString(config.Mysql.DSN)
+func providerDatabase(config *config.Config) database.Config {
+	return database.Config{
+		Driver:   config.Database.Driver,
+		Host:     config.Database.Host,
+		Port:     config.Database.Port,
+		Username: config.Database.Username,
+		Password: config.Database.Password,
+		Database: config.Database.Database,
+	}
 }
 
 func providerDatabaseOption(config *config.Config) []database.Option {

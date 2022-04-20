@@ -20,9 +20,9 @@ func InitApplication(conf string) (*application.Application, func(), error) {
 	if err != nil {
 		return nil, nil, err
 	}
-	dsnString := providerDatabase(configConfig)
+	databaseConfig := providerDatabase(configConfig)
 	v := providerDatabaseOption(configConfig)
-	databaseDatabase, err := database.NewDatabase(dsnString, v...)
+	databaseDatabase, err := database.NewDatabase(databaseConfig, v...)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -43,8 +43,15 @@ func providerLoggerOption(config2 *config.Config) []logger.Option {
 	return []logger.Option{logger.WithEnv(environment.Environment(config2.App.Env))}
 }
 
-func providerDatabase(config2 *config.Config) database.DSNString {
-	return database.ProviderDSNString(config2.Mysql.DSN)
+func providerDatabase(config2 *config.Config) database.Config {
+	return database.Config{
+		Driver:   config2.Database.Driver,
+		Host:     config2.Database.Host,
+		Port:     config2.Database.Port,
+		Username: config2.Database.Username,
+		Password: config2.Database.Password,
+		Database: config2.Database.Database,
+	}
 }
 
 func providerDatabaseOption(config2 *config.Config) []database.Option {

@@ -37,8 +37,8 @@ func main() {
 	defer cleanUp()
 
 	zapLogger := app.Logger
-	httpAddr := app.Config.Server.HttpAddr
-	grpcAddr := app.Config.Server.GrpcAddr
+	httpAddr := ":50051"
+	grpcAddr := ":8081"
 
 
 	// 不使用 grpcLog，不替换

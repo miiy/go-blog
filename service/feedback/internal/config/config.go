@@ -10,8 +10,7 @@ import (
 
 type Config struct {
 	App App
-	Server Server
-	Mysql Mysql
+	Database Database
 }
 
 type App struct {
@@ -20,13 +19,13 @@ type App struct {
 	Debug bool
 }
 
-type Server struct {
-	HttpAddr string `mapstructure:"http-addr"`
-	GrpcAddr string `mapstructure:"grpc-addr"`
-}
-
-type Mysql struct {
-	DSN string
+type Database struct {
+	Driver string
+	Host string
+	Port string
+	Database string
+	Username string
+	Password string
 }
 
 var config *Config
