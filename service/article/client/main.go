@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	var addr = flag.String("addr", "localhost:50051", "the address to connect to")
+	var addr = flag.String("addr", "localhost:50052", "the address to connect to")
 	flag.Parse()
 
 	// Set up a connection to the server.

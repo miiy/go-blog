@@ -39,7 +39,7 @@ func NewTagServiceClient(cc grpc.ClientConnInterface) TagServiceClient {
 
 func (c *tagServiceClient) Create(ctx context.Context, in *CreateTag, opts ...grpc.CallOption) (*TagId, error) {
 	out := new(TagId)
-	err := c.cc.Invoke(ctx, "/tag_service.v1.TagService/Create", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/tag.TagService/Create", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +48,7 @@ func (c *tagServiceClient) Create(ctx context.Context, in *CreateTag, opts ...gr
 
 func (c *tagServiceClient) Get(ctx context.Context, in *TagId, opts ...grpc.CallOption) (*Tag, error) {
 	out := new(Tag)
-	err := c.cc.Invoke(ctx, "/tag_service.v1.TagService/Get", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/tag.TagService/Get", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +57,7 @@ func (c *tagServiceClient) Get(ctx context.Context, in *TagId, opts ...grpc.Call
 
 func (c *tagServiceClient) Update(ctx context.Context, in *UpdateTag, opts ...grpc.CallOption) (*RowsAffected, error) {
 	out := new(RowsAffected)
-	err := c.cc.Invoke(ctx, "/tag_service.v1.TagService/Update", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/tag.TagService/Update", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +66,7 @@ func (c *tagServiceClient) Update(ctx context.Context, in *UpdateTag, opts ...gr
 
 func (c *tagServiceClient) Delete(ctx context.Context, in *TagId, opts ...grpc.CallOption) (*RowsAffected, error) {
 	out := new(RowsAffected)
-	err := c.cc.Invoke(ctx, "/tag_service.v1.TagService/Delete", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/tag.TagService/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +75,7 @@ func (c *tagServiceClient) Delete(ctx context.Context, in *TagId, opts ...grpc.C
 
 func (c *tagServiceClient) List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
 	out := new(ListResponse)
-	err := c.cc.Invoke(ctx, "/tag_service.v1.TagService/List", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/tag.TagService/List", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -136,7 +136,7 @@ func _TagService_Create_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/tag_service.v1.TagService/Create",
+		FullMethod: "/tag.TagService/Create",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TagServiceServer).Create(ctx, req.(*CreateTag))
@@ -154,7 +154,7 @@ func _TagService_Get_Handler(srv interface{}, ctx context.Context, dec func(inte
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/tag_service.v1.TagService/Get",
+		FullMethod: "/tag.TagService/Get",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TagServiceServer).Get(ctx, req.(*TagId))
@@ -172,7 +172,7 @@ func _TagService_Update_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/tag_service.v1.TagService/Update",
+		FullMethod: "/tag.TagService/Update",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TagServiceServer).Update(ctx, req.(*UpdateTag))
@@ -190,7 +190,7 @@ func _TagService_Delete_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/tag_service.v1.TagService/Delete",
+		FullMethod: "/tag.TagService/Delete",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TagServiceServer).Delete(ctx, req.(*TagId))
@@ -208,7 +208,7 @@ func _TagService_List_Handler(srv interface{}, ctx context.Context, dec func(int
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/tag_service.v1.TagService/List",
+		FullMethod: "/tag.TagService/List",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TagServiceServer).List(ctx, req.(*ListRequest))
@@ -220,7 +220,7 @@ func _TagService_List_Handler(srv interface{}, ctx context.Context, dec func(int
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var TagService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "tag_service.v1.TagService",
+	ServiceName: "tag.TagService",
 	HandlerType: (*TagServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

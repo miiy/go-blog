@@ -3,7 +3,6 @@ package main
 import (
 	"database/sql"
 	"flag"
-	"github.com/go-sql-driver/mysql"
 	migrateMysql "github.com/golang-migrate/migrate/v4/database/mysql"
 	"github.com/golang-migrate/migrate/v4/source/iofs"
 	_ "goblog.com/pkg/config"
@@ -25,12 +24,7 @@ func main() {
 	defer cleanUp()
 
 
-	mysqlCfg, err := mysql.ParseDSN(app.Config.Mysql.DSN)
-	if err != nil {
-		panic(err)
-	}
-
-	if err := run(app.Database.DB, mysqlCfg.DBName, *cmd); err != nil {
+	if err = run(app.Database.DB, app.Config.Database.Database, *cmd); err != nil {
 		log.Fatalln(err)
 	}
 }

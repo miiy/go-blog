@@ -2,9 +2,6 @@ app:
   name: article
   env: local # local, testing, production
   debug: true
-server:
-  http-addr: 127.0.0.1:50051
-  grpc-addr: 127.0.0.1:8051
 database:
   driver: mysql
   host: 127.0.0.1

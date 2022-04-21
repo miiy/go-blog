@@ -39,7 +39,7 @@ func NewUserServiceClient(cc grpc.ClientConnInterface) UserServiceClient {
 
 func (c *userServiceClient) CreateUserTag(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*User, error) {
 	out := new(User)
-	err := c.cc.Invoke(ctx, "/user_service.v1.UserService/CreateUserTag", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/user.UserService/CreateUserTag", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +48,7 @@ func (c *userServiceClient) CreateUserTag(ctx context.Context, in *CreateUserReq
 
 func (c *userServiceClient) GetUser(ctx context.Context, in *UserId, opts ...grpc.CallOption) (*User, error) {
 	out := new(User)
-	err := c.cc.Invoke(ctx, "/user_service.v1.UserService/GetUser", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/user.UserService/GetUser", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +57,7 @@ func (c *userServiceClient) GetUser(ctx context.Context, in *UserId, opts ...grp
 
 func (c *userServiceClient) UpdateUserTag(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*RowsAffected, error) {
 	out := new(RowsAffected)
-	err := c.cc.Invoke(ctx, "/user_service.v1.UserService/UpdateUserTag", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/user.UserService/UpdateUserTag", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +66,7 @@ func (c *userServiceClient) UpdateUserTag(ctx context.Context, in *UpdateUserReq
 
 func (c *userServiceClient) DeleteUser(ctx context.Context, in *UserId, opts ...grpc.CallOption) (*RowsAffected, error) {
 	out := new(RowsAffected)
-	err := c.cc.Invoke(ctx, "/user_service.v1.UserService/DeleteUser", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/user.UserService/DeleteUser", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +75,7 @@ func (c *userServiceClient) DeleteUser(ctx context.Context, in *UserId, opts ...
 
 func (c *userServiceClient) ListUser(ctx context.Context, in *ListUserRequest, opts ...grpc.CallOption) (*ListUserResponse, error) {
 	out := new(ListUserResponse)
-	err := c.cc.Invoke(ctx, "/user_service.v1.UserService/ListUser", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/user.UserService/ListUser", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -136,7 +136,7 @@ func _UserService_CreateUserTag_Handler(srv interface{}, ctx context.Context, de
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/user_service.v1.UserService/CreateUserTag",
+		FullMethod: "/user.UserService/CreateUserTag",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).CreateUserTag(ctx, req.(*CreateUserRequest))
@@ -154,7 +154,7 @@ func _UserService_GetUser_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/user_service.v1.UserService/GetUser",
+		FullMethod: "/user.UserService/GetUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).GetUser(ctx, req.(*UserId))
@@ -172,7 +172,7 @@ func _UserService_UpdateUserTag_Handler(srv interface{}, ctx context.Context, de
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/user_service.v1.UserService/UpdateUserTag",
+		FullMethod: "/user.UserService/UpdateUserTag",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).UpdateUserTag(ctx, req.(*UpdateUserRequest))
@@ -190,7 +190,7 @@ func _UserService_DeleteUser_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/user_service.v1.UserService/DeleteUser",
+		FullMethod: "/user.UserService/DeleteUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).DeleteUser(ctx, req.(*UserId))
@@ -208,7 +208,7 @@ func _UserService_ListUser_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/user_service.v1.UserService/ListUser",
+		FullMethod: "/user.UserService/ListUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).ListUser(ctx, req.(*ListUserRequest))
@@ -220,7 +220,7 @@ func _UserService_ListUser_Handler(srv interface{}, ctx context.Context, dec fun
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var UserService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "user_service.v1.UserService",
+	ServiceName: "user.UserService",
 	HandlerType: (*UserServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

@@ -2,7 +2,10 @@ module goblog.com/service/search
 
 go 1.17
 
-replace goblog.com/pkg => ../../pkg
+replace (
+	goblog.com/api => ../../api
+	goblog.com/pkg => ../../pkg
+)
 
 require (
 	github.com/elastic/go-elasticsearch/v8 v8.1.0

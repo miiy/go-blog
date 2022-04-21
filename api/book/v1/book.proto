@@ -24,7 +24,7 @@ message Book {
   string name = 4;
   string publisher = 5;
   int64 year = 6;
-  string pages = 7;
+  int64 pages = 7;
   float  price = 8;
   string binding = 9;
   string series = 10;

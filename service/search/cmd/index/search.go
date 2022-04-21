@@ -1,4 +1,4 @@
-package cmd
+package index
 
 // create index, add alias, sync data
 func createIndex()  {

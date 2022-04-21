@@ -35,31 +35,28 @@ func (s *BookServer) CreateBook(ctx context.Context, request *bookpb.CreateBookR
 		CategoryId:      reqBook.CategoryId,
 		Name:            reqBook.Name,
 		Publisher:       reqBook.Publisher,
-		Year:            reqBook.Year,
-		Pages:           reqBook.Pages,
-		Price:           reqBook.Price,
+		Year:            int(reqBook.Year),
+		Pages:           int(reqBook.Pages),
+		Price:           float64(reqBook.Price),
 		Binding:         reqBook.Binding,
 		ISBN:            reqBook.Isbn,
 		BookDescription: reqBook.BookDescription,
 		AboutTheAuthor:  reqBook.AboutTheAuthor,
 		TableOfContents: reqBook.TableOfContents,
 		Content:         reqBook.Content,
-		Status:          reqBook.Status,
+		Status:          int(reqBook.Status),
 		MetaTitle:       reqBook.MetaTitle,
 		MetaDescription: reqBook.MetaDescription,
 		CreatedTime:     time.Now(),
 		UpdatedTime:     time.Now(),
-		DeletedTime:     sql.NullString{},
+		DeletedTime:     sql.NullTime{},
 	}
 
 	_, err := s.Repository.Create(ctx, book)
 	if err != nil {
 		return nil, err
 	}
-	bookPb, err := bookToProto(book)
-	if err != nil {
-		return nil, err
-	}
+	bookPb := bookToProto(book)
 	return bookPb, nil
 }
 
@@ -81,4 +78,30 @@ func (s *BookServer) DeleteBook(ctx context.Context, request *bookpb.DeleteBookR
 
 func (s *BookServer) ListBooks(ctx context.Context, request *bookpb.ListBooksRequest) (*bookpb.ListBooksResponse, error) {
 	panic("implement me")
+}
+
+func bookToProto(book *repository.Book) *bookpb.Book {
+	return &bookpb.Book{
+		Id:              book.Id,
+		UserId:          book.UserId,
+		CategoryId:      book.CategoryId,
+		Name:            book.Name,
+		Publisher:       book.Publisher,
+		Year:            int64(book.Year),
+		Pages:           int64(book.Pages),
+		Price:           float32(book.Price),
+		Binding:         book.Binding,
+		Series:          book.Series,
+		Isbn:            book.ISBN,
+		BookDescription: book.BookDescription,
+		AboutTheAuthor:  book.AboutTheAuthor,
+		TableOfContents: book.TableOfContents,
+		Content:         book.Content,
+		Status:          bookpb.Book_BookStatus(book.Status),
+		MetaTitle:       book.MetaTitle,
+		MetaDescription: book.MetaDescription,
+		CreateTime:      timestamppb.New(book.CreatedTime),
+		UpdateTime:      timestamppb.New(book.UpdatedTime),
+		DeletedTime:     timestamppb.New(book.DeletedTime.Time),
+	}
 }

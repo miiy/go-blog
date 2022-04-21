@@ -1,8 +1,11 @@
 syntax="proto3";
 
-package userpost_service.v1;
+option go_package = "goblog.com/api/userpost";
+option java_multiple_files = true;
+option java_package = "com.goblog.userpost";
+option java_outer_classname = "UserPostProto";
 
-option go_package = "goblog.com/api/userpost/v1;userpost";
+package userpost;
 
 import "google/protobuf/timestamp.proto";
 import "google/api/annotations.proto";

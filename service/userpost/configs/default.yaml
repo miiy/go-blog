@@ -1,0 +1,11 @@
+app:
+  name: userpost
+  env: local # local, testing, production
+  debug: true
+database:
+  driver: mysql
+  host: 127.0.0.1
+  port: 3306
+  database: up
+  username: root
+  password: 123456

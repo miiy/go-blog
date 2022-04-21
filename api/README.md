@@ -34,10 +34,6 @@ protoc -I ./tag/v1 \
 -I ../third_party/googleapis \
 --go_out ./tag/v1 --go_opt paths=source_relative \
 --go-grpc_out ./tag/v1 --go-grpc_opt paths=source_relative \
---grpc-gateway_out ./tag/v1 --grpc-gateway_opt paths=source_relative \
---openapiv2_out ./tag \
---openapiv2_opt logtostderr=true \
---openapiv2_opt use_go_templates=true \
 ./tag/v1/tag.proto
 
 
@@ -45,10 +41,6 @@ protoc -I ./user/v1 \
 -I ../third_party/googleapis \
 --go_out ./user/v1 --go_opt paths=source_relative \
 --go-grpc_out ./user/v1 --go-grpc_opt paths=source_relative \
---grpc-gateway_out ./user/v1 --grpc-gateway_opt paths=source_relative \
---openapiv2_out ./user \
---openapiv2_opt logtostderr=true \
---openapiv2_opt use_go_templates=true \
 ./user/v1/user.proto
 
 
@@ -56,8 +48,4 @@ protoc -I ./userpost/v1 \
 -I ../third_party/googleapis \
 --go_out ./userpost/v1 --go_opt paths=source_relative \
 --go-grpc_out ./userpost/v1 --go-grpc_opt paths=source_relative \
---grpc-gateway_out ./userpost/v1 --grpc-gateway_opt paths=source_relative \
---openapiv2_out ./userpost \
---openapiv2_opt logtostderr=true \
---openapiv2_opt use_go_templates=true \
 ./userpost/v1/userpost.proto

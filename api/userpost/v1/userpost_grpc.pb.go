@@ -48,7 +48,7 @@ func NewUserPostServiceClient(cc grpc.ClientConnInterface) UserPostServiceClient
 
 func (c *userPostServiceClient) CreateUserPost(ctx context.Context, in *CreateUserPostRequest, opts ...grpc.CallOption) (*UserPostId, error) {
 	out := new(UserPostId)
-	err := c.cc.Invoke(ctx, "/userpost_service.v1.UserPostService/CreateUserPost", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userpost.UserPostService/CreateUserPost", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +57,7 @@ func (c *userPostServiceClient) CreateUserPost(ctx context.Context, in *CreateUs
 
 func (c *userPostServiceClient) GetUserPost(ctx context.Context, in *UserIdWithUserPostId, opts ...grpc.CallOption) (*UserPost, error) {
 	out := new(UserPost)
-	err := c.cc.Invoke(ctx, "/userpost_service.v1.UserPostService/GetUserPost", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userpost.UserPostService/GetUserPost", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +66,7 @@ func (c *userPostServiceClient) GetUserPost(ctx context.Context, in *UserIdWithU
 
 func (c *userPostServiceClient) UpdateUserPost(ctx context.Context, in *UpdateUserPostRequest, opts ...grpc.CallOption) (*RowsAffected, error) {
 	out := new(RowsAffected)
-	err := c.cc.Invoke(ctx, "/userpost_service.v1.UserPostService/UpdateUserPost", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userpost.UserPostService/UpdateUserPost", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +75,7 @@ func (c *userPostServiceClient) UpdateUserPost(ctx context.Context, in *UpdateUs
 
 func (c *userPostServiceClient) UpdateUserPostSort(ctx context.Context, in *UpdateUserPostSortRequest, opts ...grpc.CallOption) (*RowsAffected, error) {
 	out := new(RowsAffected)
-	err := c.cc.Invoke(ctx, "/userpost_service.v1.UserPostService/UpdateUserPostSort", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userpost.UserPostService/UpdateUserPostSort", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +84,7 @@ func (c *userPostServiceClient) UpdateUserPostSort(ctx context.Context, in *Upda
 
 func (c *userPostServiceClient) DeleteUserPost(ctx context.Context, in *UserIdWithUserPostId, opts ...grpc.CallOption) (*RowsAffected, error) {
 	out := new(RowsAffected)
-	err := c.cc.Invoke(ctx, "/userpost_service.v1.UserPostService/DeleteUserPost", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userpost.UserPostService/DeleteUserPost", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -93,7 +93,7 @@ func (c *userPostServiceClient) DeleteUserPost(ctx context.Context, in *UserIdWi
 
 func (c *userPostServiceClient) ListUserPost(ctx context.Context, in *ListUserPostRequest, opts ...grpc.CallOption) (*ListUserPostResponse, error) {
 	out := new(ListUserPostResponse)
-	err := c.cc.Invoke(ctx, "/userpost_service.v1.UserPostService/ListUserPost", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userpost.UserPostService/ListUserPost", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -102,7 +102,7 @@ func (c *userPostServiceClient) ListUserPost(ctx context.Context, in *ListUserPo
 
 func (c *userPostServiceClient) CreateUserTag(ctx context.Context, in *CreateUserTagRequest, opts ...grpc.CallOption) (*UserTagId, error) {
 	out := new(UserTagId)
-	err := c.cc.Invoke(ctx, "/userpost_service.v1.UserPostService/CreateUserTag", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userpost.UserPostService/CreateUserTag", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -111,7 +111,7 @@ func (c *userPostServiceClient) CreateUserTag(ctx context.Context, in *CreateUse
 
 func (c *userPostServiceClient) GetUserTag(ctx context.Context, in *UserIdWithUserTagId, opts ...grpc.CallOption) (*UserTag, error) {
 	out := new(UserTag)
-	err := c.cc.Invoke(ctx, "/userpost_service.v1.UserPostService/GetUserTag", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userpost.UserPostService/GetUserTag", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -120,7 +120,7 @@ func (c *userPostServiceClient) GetUserTag(ctx context.Context, in *UserIdWithUs
 
 func (c *userPostServiceClient) UpdateUserTag(ctx context.Context, in *UpdateUserTagRequest, opts ...grpc.CallOption) (*RowsAffected, error) {
 	out := new(RowsAffected)
-	err := c.cc.Invoke(ctx, "/userpost_service.v1.UserPostService/UpdateUserTag", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userpost.UserPostService/UpdateUserTag", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -129,7 +129,7 @@ func (c *userPostServiceClient) UpdateUserTag(ctx context.Context, in *UpdateUse
 
 func (c *userPostServiceClient) DeleteUserTag(ctx context.Context, in *UserIdWithUserTagId, opts ...grpc.CallOption) (*RowsAffected, error) {
 	out := new(RowsAffected)
-	err := c.cc.Invoke(ctx, "/userpost_service.v1.UserPostService/DeleteUserTag", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userpost.UserPostService/DeleteUserTag", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -138,7 +138,7 @@ func (c *userPostServiceClient) DeleteUserTag(ctx context.Context, in *UserIdWit
 
 func (c *userPostServiceClient) ListUserTag(ctx context.Context, in *ListUserTagRequest, opts ...grpc.CallOption) (*ListUserTagResponse, error) {
 	out := new(ListUserTagResponse)
-	err := c.cc.Invoke(ctx, "/userpost_service.v1.UserPostService/ListUserTag", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userpost.UserPostService/ListUserTag", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -147,7 +147,7 @@ func (c *userPostServiceClient) ListUserTag(ctx context.Context, in *ListUserTag
 
 func (c *userPostServiceClient) CreateUserTagPost(ctx context.Context, in *CreateUserTagPostRequest, opts ...grpc.CallOption) (*CreateUserTagPostResponse, error) {
 	out := new(CreateUserTagPostResponse)
-	err := c.cc.Invoke(ctx, "/userpost_service.v1.UserPostService/CreateUserTagPost", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userpost.UserPostService/CreateUserTagPost", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -156,7 +156,7 @@ func (c *userPostServiceClient) CreateUserTagPost(ctx context.Context, in *Creat
 
 func (c *userPostServiceClient) DeleteUserTagPost(ctx context.Context, in *CreateUserTagPostRequest, opts ...grpc.CallOption) (*CreateUserTagPostResponse, error) {
 	out := new(CreateUserTagPostResponse)
-	err := c.cc.Invoke(ctx, "/userpost_service.v1.UserPostService/DeleteUserTagPost", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userpost.UserPostService/DeleteUserTagPost", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -165,7 +165,7 @@ func (c *userPostServiceClient) DeleteUserTagPost(ctx context.Context, in *Creat
 
 func (c *userPostServiceClient) PostUserTagPostList(ctx context.Context, in *PostUserTagPostListRequest, opts ...grpc.CallOption) (*PostUserTagPostListResponse, error) {
 	out := new(PostUserTagPostListResponse)
-	err := c.cc.Invoke(ctx, "/userpost_service.v1.UserPostService/PostUserTagPostList", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userpost.UserPostService/PostUserTagPostList", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -262,7 +262,7 @@ func _UserPostService_CreateUserPost_Handler(srv interface{}, ctx context.Contex
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userpost_service.v1.UserPostService/CreateUserPost",
+		FullMethod: "/userpost.UserPostService/CreateUserPost",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserPostServiceServer).CreateUserPost(ctx, req.(*CreateUserPostRequest))
@@ -280,7 +280,7 @@ func _UserPostService_GetUserPost_Handler(srv interface{}, ctx context.Context, 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userpost_service.v1.UserPostService/GetUserPost",
+		FullMethod: "/userpost.UserPostService/GetUserPost",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserPostServiceServer).GetUserPost(ctx, req.(*UserIdWithUserPostId))
@@ -298,7 +298,7 @@ func _UserPostService_UpdateUserPost_Handler(srv interface{}, ctx context.Contex
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userpost_service.v1.UserPostService/UpdateUserPost",
+		FullMethod: "/userpost.UserPostService/UpdateUserPost",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserPostServiceServer).UpdateUserPost(ctx, req.(*UpdateUserPostRequest))
@@ -316,7 +316,7 @@ func _UserPostService_UpdateUserPostSort_Handler(srv interface{}, ctx context.Co
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userpost_service.v1.UserPostService/UpdateUserPostSort",
+		FullMethod: "/userpost.UserPostService/UpdateUserPostSort",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserPostServiceServer).UpdateUserPostSort(ctx, req.(*UpdateUserPostSortRequest))
@@ -334,7 +334,7 @@ func _UserPostService_DeleteUserPost_Handler(srv interface{}, ctx context.Contex
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userpost_service.v1.UserPostService/DeleteUserPost",
+		FullMethod: "/userpost.UserPostService/DeleteUserPost",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserPostServiceServer).DeleteUserPost(ctx, req.(*UserIdWithUserPostId))
@@ -352,7 +352,7 @@ func _UserPostService_ListUserPost_Handler(srv interface{}, ctx context.Context,
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userpost_service.v1.UserPostService/ListUserPost",
+		FullMethod: "/userpost.UserPostService/ListUserPost",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserPostServiceServer).ListUserPost(ctx, req.(*ListUserPostRequest))
@@ -370,7 +370,7 @@ func _UserPostService_CreateUserTag_Handler(srv interface{}, ctx context.Context
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userpost_service.v1.UserPostService/CreateUserTag",
+		FullMethod: "/userpost.UserPostService/CreateUserTag",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserPostServiceServer).CreateUserTag(ctx, req.(*CreateUserTagRequest))
@@ -388,7 +388,7 @@ func _UserPostService_GetUserTag_Handler(srv interface{}, ctx context.Context, d
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userpost_service.v1.UserPostService/GetUserTag",
+		FullMethod: "/userpost.UserPostService/GetUserTag",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserPostServiceServer).GetUserTag(ctx, req.(*UserIdWithUserTagId))
@@ -406,7 +406,7 @@ func _UserPostService_UpdateUserTag_Handler(srv interface{}, ctx context.Context
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userpost_service.v1.UserPostService/UpdateUserTag",
+		FullMethod: "/userpost.UserPostService/UpdateUserTag",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserPostServiceServer).UpdateUserTag(ctx, req.(*UpdateUserTagRequest))
@@ -424,7 +424,7 @@ func _UserPostService_DeleteUserTag_Handler(srv interface{}, ctx context.Context
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userpost_service.v1.UserPostService/DeleteUserTag",
+		FullMethod: "/userpost.UserPostService/DeleteUserTag",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserPostServiceServer).DeleteUserTag(ctx, req.(*UserIdWithUserTagId))
@@ -442,7 +442,7 @@ func _UserPostService_ListUserTag_Handler(srv interface{}, ctx context.Context, 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userpost_service.v1.UserPostService/ListUserTag",
+		FullMethod: "/userpost.UserPostService/ListUserTag",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserPostServiceServer).ListUserTag(ctx, req.(*ListUserTagRequest))
@@ -460,7 +460,7 @@ func _UserPostService_CreateUserTagPost_Handler(srv interface{}, ctx context.Con
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userpost_service.v1.UserPostService/CreateUserTagPost",
+		FullMethod: "/userpost.UserPostService/CreateUserTagPost",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserPostServiceServer).CreateUserTagPost(ctx, req.(*CreateUserTagPostRequest))
@@ -478,7 +478,7 @@ func _UserPostService_DeleteUserTagPost_Handler(srv interface{}, ctx context.Con
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userpost_service.v1.UserPostService/DeleteUserTagPost",
+		FullMethod: "/userpost.UserPostService/DeleteUserTagPost",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserPostServiceServer).DeleteUserTagPost(ctx, req.(*CreateUserTagPostRequest))
@@ -496,7 +496,7 @@ func _UserPostService_PostUserTagPostList_Handler(srv interface{}, ctx context.C
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userpost_service.v1.UserPostService/PostUserTagPostList",
+		FullMethod: "/userpost.UserPostService/PostUserTagPostList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserPostServiceServer).PostUserTagPostList(ctx, req.(*PostUserTagPostListRequest))
@@ -508,7 +508,7 @@ func _UserPostService_PostUserTagPostList_Handler(srv interface{}, ctx context.C
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var UserPostService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "userpost_service.v1.UserPostService",
+	ServiceName: "userpost.UserPostService",
 	HandlerType: (*UserPostServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

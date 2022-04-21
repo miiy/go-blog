@@ -32,7 +32,7 @@ type Book struct {
 	Pages           int
 	Price           float64
 	Binding         string
-	series          string
+	Series          string
 	ISBN            string
 	BookDescription string
 	AboutTheAuthor  string
@@ -43,7 +43,7 @@ type Book struct {
 	MetaDescription string
 	CreatedTime     time.Time
 	UpdatedTime     time.Time
-	DeletedTime     sql.NullString
+	DeletedTime     sql.NullTime
 }
 
 var (

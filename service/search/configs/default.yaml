@@ -1,21 +1,14 @@
 app:
+  name: search
   env: local # local, testing, production
   debug: true
-
 database:
   driver: mysql
   host: 127.0.0.1
   port: 3306
-  database: goblog
-  username: goblog
-  password:
-  charset: utf8mb4
-  collation: utf8mb4_unicode_ci
-
-jwt:
-  secret:
-  expires-in: 7200 # second
-
+  database: up
+  username: root
+  password: 123456
 elasticsearch:
   addrs:
     - 127.0.0.1:9200

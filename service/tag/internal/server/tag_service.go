@@ -1,11 +1,11 @@
-package v1
+package server
 
 import (
 	"context"
 	"database/sql"
 	tagpb "goblog.com/api/tag/v1"
 	"goblog.com/pkg/pagination"
-	"goblog.com/service/tag/repository"
+	"goblog.com/service/tag/internal/repository"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
