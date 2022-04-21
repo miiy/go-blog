@@ -6,13 +6,14 @@ import (
 	"github.com/google/wire"
 	"go.uber.org/zap"
 	articlepb "goblog.com/api/article/v1"
+	bookpb "goblog.com/api/book/v1"
 	"goblog.com/pkg/environment"
 	"goblog.com/pkg/gin"
 	"goblog.com/pkg/logger"
-	"goblog.com/service/web/app/article"
-	"goblog.com/service/web/app/book"
-	"goblog.com/service/web/pkg/application"
-	"goblog.com/service/web/pkg/config"
+	"goblog.com/service/web/internal/app/article"
+	"goblog.com/service/web/internal/app/book"
+	"goblog.com/service/web/internal/pkg/application"
+	"goblog.com/service/web/internal/pkg/config"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -29,6 +30,7 @@ func InitApplication(conf string) (*application.Application, func(), error) {
 			article.ProviderSet,
 			providerArticleClient,
 			book.ProviderSet,
+			providerBookClient,
 		),
 	)
 }
@@ -46,16 +48,25 @@ func providerLoggerOption() []logger.Option {
 }
 
 func providerArticleClient(logger *zap.Logger) (articlepb.ArticleServiceClient, func()) {
-	// Set up a connection to the server.
-
-	conn, err := grpc.Dial("127.0.0.1:50051", grpc.WithBlock(), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial("127.0.0.1:50052", grpc.WithBlock(), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		logger.Fatal("dit not connect: %v", zap.Error(err))
 	}
-	// defer conn.Close()
 
-	ac := articlepb.NewArticleServiceClient(conn)
-	return ac, func() {
+	c := articlepb.NewArticleServiceClient(conn)
+	return c, func() {
+		defer  conn.Close()
+	}
+}
+
+func providerBookClient(logger *zap.Logger) (bookpb.BookServiceClient, func()) {
+	conn, err := grpc.Dial("127.0.0.1:50053", grpc.WithBlock(), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		logger.Fatal("dit not connect: %v", zap.Error(err))
+	}
+
+	c := bookpb.NewBookServiceClient(conn)
+	return c, func() {
 		defer  conn.Close()
 	}
 }

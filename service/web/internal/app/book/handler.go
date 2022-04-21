@@ -1,12 +1,22 @@
 package book
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"strconv"
 )
 
 func indexHandler(c *gin.Context) {
+	page, _:= strconv.Atoi(c.Query("page"))
+	pageSize, _ := strconv.Atoi(c.Query("page_size"))
+	list, err := book.service.ListBooks(page, pageSize)
+	if err != nil {
+
+	}
+	fmt.Printf("%v", list)
 	c.HTML(200, "book/list", gin.H{
 		"PageTitle": "Article list",
+		"BookList": list,
 	})
 }
 

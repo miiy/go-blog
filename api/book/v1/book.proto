@@ -34,12 +34,10 @@ message Book {
   string table_of_contents = 14;
   string content = 15;
   BookStatus status = 16;
-  string meta_title = 17;
-  string meta_description = 18;
   // Output only. Creation time of the book.
-  google.protobuf.Timestamp create_time = 19;
-  google.protobuf.Timestamp update_time = 20;
-  google.protobuf.Timestamp deleted_time = 21;
+  google.protobuf.Timestamp create_at = 17;
+  google.protobuf.Timestamp update_at = 18;
+  google.protobuf.Timestamp deleted_at = 19;
 }
 
 // Request to create a new book.

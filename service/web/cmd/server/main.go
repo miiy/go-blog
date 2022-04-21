@@ -2,11 +2,12 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"goblog.com/service/web/internal/router"
 )
 
 func main() {
-	//addr := flag.String("host", "127.0.0.1:8080", "host")
+	port := flag.Int("port", 8080, "host")
 	conf := flag.String("c", "./configs/default.yaml", "config file")
 	flag.Parse()
 
@@ -16,11 +17,10 @@ func main() {
 	}
 	defer cleanUp()
 
-
 	app.RegisterRouter(router.Router)
 
 	// health
 	// router: /health/*
 	//InitializeHealth(app).RegisterRouter()
-	app.Run(app.Config.App.Addr)
+	app.Run(fmt.Sprintf("0.0.0.0:%d", *port))
 }

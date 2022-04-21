@@ -11,7 +11,6 @@ import (
 )
 
 func main()  {
-
 	conf := flag.String("c", "./configs/default.yaml", "config file")
 	port := flag.Int("addr", 50053, "the port to serve on")
 	flag.Parse()

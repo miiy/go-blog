@@ -19,6 +19,7 @@ type BookRepository interface {
 	Update(ctx context.Context, id int64, book *Book) (*Book, error)
 	Delete(ctx context.Context, id int64) error
 	First(ctx context.Context, id int64, columns interface{}) (*Book, error)
+	FindCount(ctx context.Context) (int64, error)
 	Find(ctx context.Context, limit, offset int64) ([]*Book, error)
 }
 
@@ -39,11 +40,9 @@ type Book struct {
 	TableOfContents string
 	Content         string
 	Status          int
-	MetaTitle       string
-	MetaDescription string
-	CreatedTime     time.Time
-	UpdatedTime     time.Time
-	DeletedTime     sql.NullTime
+	CreatedAt       time.Time
+	UpdatedAt       time.Time
+	DeletedAt       sql.NullTime
 }
 
 var (

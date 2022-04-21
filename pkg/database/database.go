@@ -89,12 +89,16 @@ func NewDatabase(c Config, opts ...Option) (*Database, error){
 		gormDB, err := gorm.Open(mysql.New(mysql.Config{
 			Conn: db,
 		}), &gorm.Config{})
+		if err != nil {
+			return nil, err
+		}
 
 		return &Database{
 			DB:   db,
 			Gorm: gormDB,
 		}, nil
 	}
+
 	return nil, errors.New("database: driver not support")
 
 }

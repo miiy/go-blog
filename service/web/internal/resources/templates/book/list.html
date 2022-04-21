@@ -8,8 +8,9 @@
                     Featured
                 </div>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item list-group-item-action"><a href="/articles/1">文章1</a></li>
-                    <li class="list-group-item list-group-item-action"><a href="/articles/2">文章2</a></li>
+                    {{ range $key, $value := .BookList.Books }}
+                    <li class="list-group-item list-group-item-action"><a href="/articles/{{ $value.Id }}">{{ $value.Name }}</a></li>
+                    {{ end }}
                 </ul>
             </div>
 

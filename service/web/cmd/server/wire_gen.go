@@ -9,6 +9,7 @@ package main
 import (
 	"go.uber.org/zap"
 	article2 "goblog.com/api/article/v1"
+	book2 "goblog.com/api/book/v1"
 	"goblog.com/pkg/environment"
 	"goblog.com/pkg/gin"
 	"goblog.com/pkg/logger"
@@ -39,9 +40,11 @@ func InitApplication(conf string) (*application.Application, func(), error) {
 	}
 	articleServiceClient, cleanup2 := providerArticleClient(zapLogger)
 	articleArticle := article.NewArticle(engine, zapLogger, articleServiceClient)
-	bookBook := book.NewBook(engine, zapLogger)
+	bookServiceClient, cleanup3 := providerBookClient(zapLogger)
+	bookBook := book.NewArticle(engine, zapLogger, bookServiceClient)
 	applicationApplication := application.NewApplication(configConfig, engine, zapLogger, articleArticle, bookBook)
 	return applicationApplication, func() {
+		cleanup3()
 		cleanup2()
 		cleanup()
 	}, nil
@@ -58,15 +61,27 @@ func providerLoggerOption() []logger.Option {
 }
 
 func providerArticleClient(logger2 *zap.Logger) (article2.ArticleServiceClient, func()) {
-
-	conn, err := grpc.Dial("127.0.0.1:50051", grpc.WithBlock(), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial("127.0.0.1:50052", grpc.WithBlock(), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		logger2.
 			Fatal("dit not connect: %v", zap.Error(err))
 	}
 
-	ac := article2.NewArticleServiceClient(conn)
-	return ac, func() {
+	c := article2.NewArticleServiceClient(conn)
+	return c, func() {
+		defer conn.Close()
+	}
+}
+
+func providerBookClient(logger2 *zap.Logger) (book2.BookServiceClient, func()) {
+	conn, err := grpc.Dial("127.0.0.1:50053", grpc.WithBlock(), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		logger2.
+			Fatal("dit not connect: %v", zap.Error(err))
+	}
+
+	c := book2.NewBookServiceClient(conn)
+	return c, func() {
 		defer conn.Close()
 	}
 }
