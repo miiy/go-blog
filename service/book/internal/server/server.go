@@ -124,7 +124,7 @@ func (s *BookServer) ListBooks(ctx context.Context, request *bookpb.ListBooksReq
 	pg := pagination.NewPagination(request.Page, request.PageSize, total)
 
 	// list
-	books, err := s.Repository.Find(ctx, pg.PerPage, pg.From)
+	books, err := s.Repository.Find(ctx, int(pg.PerPage), int(pg.From))
 	if err != nil {
 		return nil, err
 	}

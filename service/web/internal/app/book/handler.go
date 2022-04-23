@@ -3,26 +3,35 @@ package book
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/unknwon/paginater"
 	"strconv"
 )
 
 func indexHandler(c *gin.Context) {
-	page, _:= strconv.Atoi(c.Query("page"))
-	pageSize, _ := strconv.Atoi(c.Query("page_size"))
+	page, _:= strconv.Atoi(c.Param("page"))
+	pageSize := 2
 	list, err := book.service.ListBooks(page, pageSize)
 	if err != nil {
 
 	}
+	p := paginater.New(int(list.Total), pageSize, page, 5)
 	fmt.Printf("%v", list)
 	c.HTML(200, "book/list", gin.H{
 		"PageTitle": "Article list",
 		"BookList": list,
+		"Page": p,
 	})
 }
 
 func showHandler(c *gin.Context) {
+	id, _:= strconv.Atoi(c.Param("id"))
+	item, err := book.service.GetBook(id)
+	if err != nil {
+
+	}
 	c.HTML(200, "book/detail", gin.H{
 		"PageTitle": "Article detail",
+		"Book": item,
 	})
 }
 

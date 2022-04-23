@@ -29,7 +29,23 @@ func (s *service) ListBooks(page, pageSize int) (*bookpb.ListBooksResponse, erro
 	}
 	resp, err := s.client.ListBooks(ctx, &req)
 	if err != nil {
-		s.logger.Error("client.GetArticle(_) = _, %v", zap.Error(err))
+		s.logger.Error("client.ListBooks(_) = _, %v", zap.Error(err))
+		return nil, err
+	}
+
+	return resp, nil
+}
+
+func (s *service) GetBook(id int) (*bookpb.Book, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	req := bookpb.GetBookRequest{
+		Id: int64(id),
+	}
+	resp, err := s.client.GetBook(ctx, &req)
+	if err != nil {
+		s.logger.Error("client.GetBook(_) = _, %v", zap.Error(err))
 		return nil, err
 	}
 

@@ -9,21 +9,24 @@
                 </div>
                 <ul class="list-group list-group-flush">
                     {{ range $key, $value := .BookList.Books }}
-                    <li class="list-group-item list-group-item-action"><a href="/articles/{{ $value.Id }}">{{ $value.Name }}</a></li>
+                    <li class="list-group-item list-group-item-action"><a href="/books/{{ $value.Id }}">{{ $value.Name }}</a></li>
                     {{ end }}
                 </ul>
             </div>
 
 
             <div class="d-flex justify-content-center">
-
                 <nav aria-label="Page navigation example">
                     <ul class="pagination">
-                        <li class="page-item"><a class="page-link" href="#">上一页</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">下一页</a></li>
+                        <li class="page-item {{if not .Page.HasPrevious}} disabled {{end}}"><a class="page-link" href="/books/list/1/{{.Page.Previous}}">上一页</a></li>
+                        {{range .Page.Pages }}
+                            {{if eq .Num -1}}
+                            ...
+                            {{else}}
+                            <li class="page-item {{if .IsCurrent }} active {{end}} "><a class="page-link" href="/books/list/1/{{.Num}}">{{.Num}}</a></li>
+                            {{end}}
+                        {{end}}
+                        <li class="page-item {{if not .Page.HasNext}} disabled {{end}}"><a class="page-link" href="/books/list/1/{{.Page.Next}}">下一页</a></li>
                     </ul>
                 </nav>
 

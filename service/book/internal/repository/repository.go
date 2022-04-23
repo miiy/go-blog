@@ -20,7 +20,7 @@ type BookRepository interface {
 	Delete(ctx context.Context, id int64) error
 	First(ctx context.Context, id int64, columns interface{}) (*Book, error)
 	FindCount(ctx context.Context) (int64, error)
-	Find(ctx context.Context, limit, offset int64) ([]*Book, error)
+	Find(ctx context.Context, limit, offset int) ([]*Book, error)
 }
 
 type Book struct {
@@ -101,9 +101,9 @@ func (r *BookRepositoryImpl) FindCount(ctx context.Context) (int64, error) {
 	return count, nil
 }
 
-func (r *BookRepositoryImpl) Find(ctx context.Context, limit, offset int64) ([]*Book, error) {
+func (r *BookRepositoryImpl) Find(ctx context.Context, limit, offset int) ([]*Book, error) {
 	var items []*Book
-	r.db.WithContext(ctx).Model(&Book{}).Find(&items).Limit(int(limit)).Offset(int(offset))
+	r.db.WithContext(ctx).Model(&Book{}).Limit(limit).Offset(offset).Find(&items)
 
 	return items, nil
 }
