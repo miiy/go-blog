@@ -1,6 +1,7 @@
 START TRANSACTION;
 
 DROP TABLE IF EXISTS `books`;
-DROP TABLE IF EXISTS `book_seo`;
+DROP TABLE IF EXISTS `book_metas`;
+DROP TABLE IF EXISTS `book_categories`
 
 COMMIT;

@@ -8,9 +8,10 @@ import (
 )
 
 func indexHandler(c *gin.Context) {
+	cid, _ := strconv.Atoi(c.Param("cid"))
 	page, _:= strconv.Atoi(c.Param("page"))
 	pageSize := 2
-	list, err := book.service.ListBooks(page, pageSize)
+	list, err := book.service.ListBooks(cid, page, pageSize)
 	if err != nil {
 
 	}

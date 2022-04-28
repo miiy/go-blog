@@ -15,6 +15,7 @@ require (
 	github.com/google/wire v0.5.0
 	github.com/spf13/viper v1.10.1
 	github.com/stretchr/testify v1.7.0
+	github.com/unknwon/paginater v0.0.0-20200328080006-042474bd0eae
 	go.uber.org/zap v1.21.0
 	goblog.com/api v0.0.0-00010101000000-000000000000
 	goblog.com/pkg v0.0.0-00010101000000-000000000000
@@ -56,7 +57,6 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.2.0 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
-	github.com/unknwon/paginater v0.0.0-20200328080006-042474bd0eae // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
 	golang.org/x/net v0.0.0-20220407224826-aac1ed45d8e3 // indirect

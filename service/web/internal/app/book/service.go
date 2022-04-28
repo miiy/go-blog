@@ -19,11 +19,12 @@ func NewService(client bookpb.BookServiceClient, logger *zap.Logger) *service {
 	}
 }
 
-func (s *service) ListBooks(page, pageSize int) (*bookpb.ListBooksResponse, error) {
+func (s *service) ListBooks(cid, page, pageSize int) (*bookpb.ListBooksResponse, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
 	req := bookpb.ListBooksRequest{
+		CategoryId: int64(cid),
 		Page: int64(page),
 		PageSize: int64(pageSize),
 	}

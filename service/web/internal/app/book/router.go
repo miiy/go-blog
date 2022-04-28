@@ -5,7 +5,7 @@ import "github.com/gin-gonic/gin"
 func Router(r *gin.Engine) {
 	r.GET("/books", indexHandler)
 	r.GET("/books/:id", showHandler)
-	r.GET("/books/list/:cid/:page", indexHandler)
+	r.GET("/books/categories/:cid/:page", indexHandler)
 	r.GET("/books/create", createHandler)
 	r.POST("/books", storeHandler)
 	r.GET("/books/:id/edit", editHandler)

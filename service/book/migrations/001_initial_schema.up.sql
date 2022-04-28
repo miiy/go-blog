@@ -18,28 +18,43 @@ CREATE TABLE IF NOT EXISTS `books`
     `table_of_contents` varchar(255)    NOT NULL DEFAULT '' comment '目录',
     `content`           varchar(255)    NOT NULL DEFAULT '' comment '内容',
     `status`            tinyint(1)      NOT NULL DEFAULT 0 COMMENT 'status:0 default, 1 active, 2 disable',
-    `created_at`        timestamp       NULL     DEFAULT NULL,
-    `updated_at`        timestamp       NULL     DEFAULT NULL,
-    `deleted_at`        timestamp       NULL     DEFAULT NULL,
+    `create_time`       timestamp       NULL     DEFAULT NULL,
+    `update_time`       timestamp       NULL     DEFAULT NULL,
+    `delete_time`       timestamp       NULL     DEFAULT NULL,
     PRIMARY KEY (`id`),
     INDEX `books_user_id_index` (`user_id`)
     ) ENGINE = InnoDB
     DEFAULT CHARSET = utf8mb4
     COLLATE = utf8mb4_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS `book_seo`
+CREATE TABLE IF NOT EXISTS `book_metas`
 (
     `id`                bigint unsigned NOT NULL AUTO_INCREMENT,
     `book_id`           bigint unsigned NOT NULL DEFAULT 0,
     `meta_title`        varchar(255)    NOT NULL DEFAULT '',
     `meta_description`  varchar(255)    NOT NULL DEFAULT '',
-    `created_at`        timestamp       NULL     DEFAULT NULL,
-    `updated_at`        timestamp       NULL     DEFAULT NULL,
-    `deleted_at`        timestamp       NULL     DEFAULT NULL,
+    `create_time`       timestamp       NULL     DEFAULT NULL,
+    `update_time`       timestamp       NULL     DEFAULT NULL,
+    `delete_time`       timestamp       NULL     DEFAULT NULL,
     PRIMARY KEY (`id`),
-    INDEX `books_book_id_index` (`book_id`)
+    INDEX `book_metas_book_id_index` (`book_id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `book_categories`
+(
+    `id`                bigint unsigned NOT NULL AUTO_INCREMENT,
+    `name`              varchar(255)    NOT NULL DEFAULT '',
+    `parent_id`         varchar(255)    NOT NULL DEFAULT '',
+    `path`              varchar(255)    NOT NULL DEFAULT '',
+    `create_time`       timestamp       NULL     DEFAULT NULL,
+    `update_time`       timestamp       NULL     DEFAULT NULL,
+    `delete_time`       timestamp       NULL     DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `book_categories_parent_id_index` (`parent_id`)
+    ) ENGINE = InnoDB
+    DEFAULT CHARSET = utf8mb4
+    COLLATE = utf8mb4_unicode_ci;
 
 COMMIT;

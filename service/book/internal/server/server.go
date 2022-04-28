@@ -3,9 +3,9 @@ package server
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"go.uber.org/zap"
 	bookpb "goblog.com/api/book/v1"
-	"goblog.com/pkg/pagination"
 	"goblog.com/service/book/internal/repository"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -41,7 +41,7 @@ func (s *BookServer) CreateBook(ctx context.Context, request *bookpb.CreateBookR
 		Publisher:       reqBook.Publisher,
 		Year:            int(reqBook.Year),
 		Pages:           int(reqBook.Pages),
-		Price:           float64(reqBook.Price),
+		Price:           reqBook.Price,
 		Binding:         reqBook.Binding,
 		ISBN:            reqBook.Isbn,
 		BookDescription: reqBook.BookDescription,
@@ -49,12 +49,12 @@ func (s *BookServer) CreateBook(ctx context.Context, request *bookpb.CreateBookR
 		TableOfContents: reqBook.TableOfContents,
 		Content:         reqBook.Content,
 		Status:          int(reqBook.Status),
-		CreatedAt:       curTime,
-		UpdatedAt:       curTime,
-		DeletedAt:       sql.NullTime{},
+		CreateTime:      curTime,
+		UpdateTime:      curTime,
+		DeleteTime:      sql.NullTime{},
 	}
 
-	_, err := s.Repository.Create(ctx, book)
+	_, err := s.Repository.CreateBook(ctx, book)
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +67,7 @@ func (s *BookServer) BatchCreateBooks(ctx context.Context, request *bookpb.Batch
 }
 
 func (s *BookServer) GetBook(ctx context.Context, request *bookpb.GetBookRequest) (*bookpb.Book, error) {
-	book, err := s.Repository.First(ctx, request.Id, "*")
+	book, err := s.Repository.GetBookById(ctx, request.Id)
 	if err != nil {
 		if err == repository.ErrRecordNotFound {
 			st := status.New(codes.NotFound, err.Error())
@@ -81,6 +81,14 @@ func (s *BookServer) GetBook(ctx context.Context, request *bookpb.GetBookRequest
 
 func (s *BookServer) UpdateBook(ctx context.Context, request *bookpb.UpdateBookRequest) (*bookpb.Book, error) {
 	book := request.GetBook()
+	if ! request.UpdateMask.IsValid(book) {
+		st := status.New(codes.InvalidArgument, "invalid field mask")
+		return nil, st.Err()
+	}
+	selects := "*"
+
+	fmt.Printf("%+v", book)
+	//fmt.Printf("%+v", request.UpdateMask.ProtoReflect())
 
 	b := &repository.Book{
 		Id:              0,
@@ -90,7 +98,7 @@ func (s *BookServer) UpdateBook(ctx context.Context, request *bookpb.UpdateBookR
 		Publisher:       book.Publisher,
 		Year:            int(book.Year),
 		Pages:           int(book.Pages),
-		Price:           float64(book.Price),
+		Price:           book.Price,
 		Binding:         book.Binding,
 		Series:          book.Series,
 		ISBN:            book.Isbn,
@@ -100,7 +108,7 @@ func (s *BookServer) UpdateBook(ctx context.Context, request *bookpb.UpdateBookR
 		Content:         book.Content,
 		Status:          int(book.Status),
 	}
-	ra, err := s.Repository.Update(ctx, request.Id, b)
+	ra, err := s.Repository.UpdateBook(ctx, request.Id, b, selects)
 	if err != nil {
 		return nil, err
 	}
@@ -109,34 +117,39 @@ func (s *BookServer) UpdateBook(ctx context.Context, request *bookpb.UpdateBookR
 }
 
 func (s *BookServer) DeleteBook(ctx context.Context, request *bookpb.DeleteBookRequest) (*emptypb.Empty, error) {
-	err := s.Repository.Delete(ctx, request.Id)
+	err := s.Repository.DeleteBookById(ctx, request.Id)
 	return nil, err
 }
 
 func (s *BookServer) ListBooks(ctx context.Context, request *bookpb.ListBooksRequest) (*bookpb.ListBooksResponse, error) {
 	// count
-	total, err := s.Repository.FindCount(ctx)
+	total, err := s.Repository.FindCount(ctx,
+		repository.ScopeBookActive(),
+		repository.ScopeOfBookCategory(request.CategoryId),
+	)
 	if err != nil {
 		return nil, err
 	}
-
-	// pagination
-	pg := pagination.NewPagination(request.Page, request.PageSize, total)
 
 	// list
-	books, err := s.Repository.Find(ctx, int(pg.PerPage), int(pg.From))
+	books, err := s.Repository.Find(ctx,
+		repository.ScopeBookActive(),
+		repository.ScopeOfBookCategory(request.CategoryId),
+		repository.Paginate(int(request.Page), int(request.PageSize)),
+	)
 	if err != nil {
 		return nil, err
 	}
+
 	var items []*bookpb.Book
 	for _, v  := range books {
 		items = append(items, bookToProto(v))
 	}
 
 	return &bookpb.ListBooksResponse{
-		Total:       pg.Total,
-		PageSize:    pg.PerPage,
-		CurrentPage: pg.CurrentPage,
+		Total:       total,
+		PageSize:    request.PageSize,
+		CurrentPage: request.Page,
 		Books:       items,
 	}, nil
 }
@@ -150,7 +163,7 @@ func bookToProto(book *repository.Book) *bookpb.Book {
 		Publisher:       book.Publisher,
 		Year:            int64(book.Year),
 		Pages:           int64(book.Pages),
-		Price:           float32(book.Price),
+		Price:           book.Price,
 		Binding:         book.Binding,
 		Series:          book.Series,
 		Isbn:            book.ISBN,
@@ -159,8 +172,8 @@ func bookToProto(book *repository.Book) *bookpb.Book {
 		TableOfContents: book.TableOfContents,
 		Content:         book.Content,
 		Status:          bookpb.Book_BookStatus(book.Status),
-		CreateAt:        timestamppb.New(book.CreatedAt),
-		UpdateAt:        timestamppb.New(book.UpdatedAt),
-		DeletedAt:       timestamppb.New(book.DeletedAt.Time),
+		CreateTime:      timestamppb.New(book.CreateTime),
+		UpdateTime:      timestamppb.New(book.UpdateTime),
+		DeleteTime:      timestamppb.New(book.DeleteTime.Time),
 	}
 }

@@ -35,9 +35,9 @@ message Book {
   string content = 15;
   BookStatus status = 16;
   // Output only. Creation time of the book.
-  google.protobuf.Timestamp create_at = 17;
-  google.protobuf.Timestamp update_at = 18;
-  google.protobuf.Timestamp deleted_at = 19;
+  google.protobuf.Timestamp create_time = 17;
+  google.protobuf.Timestamp update_time = 18;
+  google.protobuf.Timestamp delete_time = 19;
 }
 
 // Request to create a new book.
@@ -88,8 +88,9 @@ message DeleteBookRequest {
 }
 
 message ListBooksRequest {
-  int64 page = 1;
-  int64 page_size = 2;
+  int64 categoryId = 1;
+  int64 page = 2;
+  int64 page_size = 3;
 }
 
 message ListBooksResponse {
@@ -97,6 +98,19 @@ message ListBooksResponse {
   int64 page_size = 2;
   int64 current_page = 3;
   repeated Book books = 7;
+}
+
+message BookMeta {
+  int64 book_id = 1;
+  string meta_title = 2;
+  string meta_description = 3;
+  google.protobuf.Timestamp create_at = 4;
+  google.protobuf.Timestamp update_at = 5;
+  google.protobuf.Timestamp deleted_at = 6;
+}
+
+message GetBookMetaRequest {
+  int64 id = 1;
 }
 
 service BookService {
@@ -111,4 +125,6 @@ service BookService {
   rpc DeleteBook(DeleteBookRequest) returns (google.protobuf.Empty) {}
 
   rpc ListBooks(ListBooksRequest) returns (ListBooksResponse) {}
+
+  rpc GetBookMeta(GetBookMetaRequest) returns (BookMeta) {}
 }

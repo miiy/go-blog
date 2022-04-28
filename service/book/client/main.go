@@ -8,6 +8,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/fieldmaskpb"
 	"log"
 	"time"
 )
@@ -28,7 +29,7 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	callListBooks(ctx, tc)
+	callUpdateBook(ctx, tc)
 }
 
 
@@ -88,4 +89,29 @@ func callListBooks(ctx context.Context, client bookpb.BookServiceClient)  {
 		log.Fatalf("client.ListBooks(_) = _, %v", err)
 	}
 	log.Println("ListBooks:", resp)
+}
+
+func callUpdateBook(ctx context.Context,client bookpb.BookServiceClient)  {
+
+	book := &bookpb.Book{
+		Id:              0,
+		UserId:          111,
+		CategoryId:      111,
+		Name:            "111",
+		Publisher:       "111",
+	}
+	fm, err := fieldmaskpb.New(book, "category_id", "name")
+	if err != nil {
+		log.Fatal(fm)
+	}
+	req := bookpb.UpdateBookRequest{
+		Id: 1,
+		Book: book,
+		UpdateMask: fm,
+	}
+	resp, err := client.UpdateBook(ctx, &req)
+	if err != nil {
+		log.Fatalf("client.GetBook(_) = _, %v", err)
+	}
+	log.Println("GetBook:", resp)
 }
