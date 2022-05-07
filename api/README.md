@@ -1,3 +1,10 @@
+
+```bash
+cd third_party 
+git clone https://github.com/googleapis/googleapis.git
+git clone https://github.com/envoyproxy/protoc-gen-validate.git
+```
+
 protoc -I ./article/v1 \
 -I ../third_party/googleapis \
 --go_out ./article/v1 --go_opt paths=source_relative \

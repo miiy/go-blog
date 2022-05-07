@@ -39,7 +39,6 @@ func NewConfig(filename string) (*Config, error) {
 	if err := v.ReadInConfig(); err != nil {
 		return nil, fmt.Errorf("Fatal error config file: %w \n", err)
 	}
-	fmt.Println(v.AllKeys())
 	if err := v.Unmarshal(&config); err != nil {
 		return nil, fmt.Errorf("unable to decode into struct, %v \n", err)
 	}

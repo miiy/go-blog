@@ -4,7 +4,9 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 	"go.uber.org/zap"
+	"goblog.com/pkg/database/gorm/model"
 	"gorm.io/gorm"
 	"time"
 )
@@ -24,25 +26,22 @@ type BookRepository interface {
 }
 
 type Book struct {
-	Id              int64
-	UserId          int64
-	CategoryId      int64
-	Name            string
-	Publisher       string
-	Year            int
-	Pages           int
-	Price           float32
-	Binding         string
-	Series          string
-	ISBN            string
-	BookDescription string
-	AboutTheAuthor  string
-	TableOfContents string
-	Content         string
-	Status          int
-	CreateTime      time.Time
-	UpdateTime      time.Time
-	DeleteTime      sql.NullTime
+	model.Model
+	UserId          int64        `gorm:"column:user_id"`
+	CategoryId      int64        `gorm:"column:category_id"`       //分类
+	Name            string       `gorm:"column:name"`              //书名
+	Publisher       string       `gorm:"column:publisher"`         //出版社
+	Year            int          `gorm:"column:year"`              //出版年
+	Pages           int          `gorm:"column:pages"`             //页数
+	Price           float32      `gorm:"column:price"`             //定价
+	Binding         string       `gorm:"column:binding"`           //装帧
+	Series          string       `gorm:"column:series"`            //丛书
+	ISBN            string       `gorm:"column:isbn"`              //ISBN
+	BookDescription string       `gorm:"column:book_description"`  //图书简介
+	AboutTheAuthor  string       `gorm:"column:about the author"`  //作者简介
+	TableOfContents string       `gorm:"column:table_of_contents"` //目录
+	Content         string       `gorm:"column:content"`           //内容
+	Status          int          `gorm:"column:status"`
 }
 
 type BookMeta struct {
@@ -62,12 +61,34 @@ const (
 )
 
 var (
+	BookFieldNames string
+	BookFieldNamesExpectAutoSet string
+	BookFieldNamesWithPlaceHolder string
+)
+
+var(
 	ErrRecordNotFound = gorm.ErrRecordNotFound
 	ErrCreateError    = errors.New("create error")
 	ErrUpdateError    = errors.New("update error")
 )
 
 func NewBookRepository(db *gorm.DB, logger *zap.Logger) BookRepository {
+	bookFields, err := model.FieldDBNames(&Book{}, nil)
+	if err != nil {
+		logger.Error(err.Error())
+	}
+	bookFieldsExceptAutoSet, err := model.FieldDBNames(&Book{}, model.FieldNameExpectAutoSet)
+	if err != nil {
+		logger.Error(err.Error())
+	}
+
+	BookFieldNames = model.FieldNameFormat(bookFields, model.FieldNameFormatWithQuote)
+	fmt.Println(BookFieldNames)
+	BookFieldNamesExpectAutoSet = model.FieldNameFormat(bookFieldsExceptAutoSet, model.FieldNameFormatWithQuote)
+	fmt.Println(BookFieldNamesExpectAutoSet)
+	BookFieldNamesWithPlaceHolder = model.FieldNameFormat(bookFieldsExceptAutoSet, model.FieldNameFormatWithPlaceHolder)
+	fmt.Println(BookFieldNamesWithPlaceHolder)
+
 	return &BookRepositoryImpl{
 		db: db,
 		logger: logger,
@@ -104,6 +125,12 @@ func ScopeBookActive() func (db *gorm.DB) *gorm.DB {
 func ScopeBookDisable() func (db *gorm.DB) *gorm.DB {
 	return func (db *gorm.DB) *gorm.DB {
 		return db.Where("status = ?", BookStatusDisable)
+	}
+}
+
+func WithSelect(s string) func(db *gorm.DB) *gorm.DB {
+	return func (db *gorm.DB) *gorm.DB {
+		return db.Select(s)
 	}
 }
 

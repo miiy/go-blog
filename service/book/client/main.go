@@ -53,9 +53,9 @@ func callCreateBook(ctx context.Context,client bookpb.BookServiceClient) {
 			TableOfContents: "",
 			Content:         "",
 			Status:          0,
-			CreateAt:      nil,
-			UpdateAt:      nil,
-			DeletedAt:     nil,
+			CreateTime:      nil,
+			UpdateTime:      nil,
+			DeleteTime:      nil,
 		},
 		BookId: "",
 	}

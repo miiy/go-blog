@@ -2,17 +2,16 @@ package server
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 	"go.uber.org/zap"
 	bookpb "goblog.com/api/book/v1"
+	"goblog.com/pkg/database/gorm/paginate"
 	"goblog.com/service/book/internal/repository"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"gorm.io/gorm"
-	"time"
 )
 
 type BookServer struct {
@@ -32,9 +31,7 @@ func NewBookServer(db *gorm.DB, logger *zap.Logger) bookpb.BookServiceServer {
 func (s *BookServer) CreateBook(ctx context.Context, request *bookpb.CreateBookRequest) (*bookpb.Book, error) {
 	reqBook := request.GetBook()
 
-	curTime := time.Now()
 	book := &repository.Book{
-		Id:              reqBook.Id,
 		UserId:          reqBook.UserId,
 		CategoryId:      reqBook.CategoryId,
 		Name:            reqBook.Name,
@@ -49,9 +46,6 @@ func (s *BookServer) CreateBook(ctx context.Context, request *bookpb.CreateBookR
 		TableOfContents: reqBook.TableOfContents,
 		Content:         reqBook.Content,
 		Status:          int(reqBook.Status),
-		CreateTime:      curTime,
-		UpdateTime:      curTime,
-		DeleteTime:      sql.NullTime{},
 	}
 
 	_, err := s.Repository.CreateBook(ctx, book)
@@ -91,7 +85,6 @@ func (s *BookServer) UpdateBook(ctx context.Context, request *bookpb.UpdateBookR
 	//fmt.Printf("%+v", request.UpdateMask.ProtoReflect())
 
 	b := &repository.Book{
-		Id:              0,
 		UserId:          book.UserId,
 		CategoryId:      book.CategoryId,
 		Name:            book.Name,
@@ -130,12 +123,13 @@ func (s *BookServer) ListBooks(ctx context.Context, request *bookpb.ListBooksReq
 	if err != nil {
 		return nil, err
 	}
+	scopePaginate, totalPages := paginate.Paginate(int(request.Page), int(request.PageSize), int(total))
 
 	// list
 	books, err := s.Repository.Find(ctx,
 		repository.ScopeBookActive(),
 		repository.ScopeOfBookCategory(request.CategoryId),
-		repository.Paginate(int(request.Page), int(request.PageSize)),
+		scopePaginate,
 	)
 	if err != nil {
 		return nil, err
@@ -148,6 +142,7 @@ func (s *BookServer) ListBooks(ctx context.Context, request *bookpb.ListBooksReq
 
 	return &bookpb.ListBooksResponse{
 		Total:       total,
+		TotalPages:  int64(totalPages),
 		PageSize:    request.PageSize,
 		CurrentPage: request.Page,
 		Books:       items,
