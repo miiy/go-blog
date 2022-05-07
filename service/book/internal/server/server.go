@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"fmt"
 	"go.uber.org/zap"
 	bookpb "goblog.com/api/book/v1"
 	"goblog.com/pkg/database/gorm/paginate"
@@ -79,10 +78,11 @@ func (s *BookServer) UpdateBook(ctx context.Context, request *bookpb.UpdateBookR
 		st := status.New(codes.InvalidArgument, "invalid field mask")
 		return nil, st.Err()
 	}
-	selects := "*"
 
-	fmt.Printf("%+v", book)
-	//fmt.Printf("%+v", request.UpdateMask.ProtoReflect())
+	selects := []string{"*"}
+	if request.UpdateMask.GetPaths() != nil {
+		selects = request.UpdateMask.GetPaths()
+	}
 
 	b := &repository.Book{
 		UserId:          book.UserId,

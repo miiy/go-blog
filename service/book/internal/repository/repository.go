@@ -38,7 +38,7 @@ type Book struct {
 	Series          string       `gorm:"column:series"`            //丛书
 	ISBN            string       `gorm:"column:isbn"`              //ISBN
 	BookDescription string       `gorm:"column:book_description"`  //图书简介
-	AboutTheAuthor  string       `gorm:"column:about the author"`  //作者简介
+	AboutTheAuthor  string       `gorm:"column:about_the_author"`  //作者简介
 	TableOfContents string       `gorm:"column:table_of_contents"` //目录
 	Content         string       `gorm:"column:content"`           //内容
 	Status          int          `gorm:"column:status"`
@@ -134,24 +134,6 @@ func WithSelect(s string) func(db *gorm.DB) *gorm.DB {
 	}
 }
 
-func Paginate(page, pageSize int) func (db *gorm.DB) *gorm.DB {
-	return func (db *gorm.DB) *gorm.DB {
-		if page == 0 {
-			page = 1
-		}
-
-		switch {
-		case pageSize > 100:
-			pageSize = 100
-		case pageSize <= 0:
-			pageSize = 10
-		}
-
-		offset := (page - 1) * pageSize
-		return db.Offset(offset).Limit(pageSize)
-	}
-}
-
 func (r *BookRepositoryImpl) CreateBook(ctx context.Context, i *Book) (*Book, error) {
 	err := r.db.WithContext(ctx).Create(&i).Error
 	if err != nil {
@@ -160,7 +142,6 @@ func (r *BookRepositoryImpl) CreateBook(ctx context.Context, i *Book) (*Book, er
 	}
 	return i, nil
 }
-
 
 func (r *BookRepositoryImpl) UpdateBook(ctx context.Context, id int64, i *Book, selects interface{}) (*Book, error) {
 	err := r.db.WithContext(ctx).Model(&Book{}).Where("id = ?", id).Select(selects).Updates(i).Error
