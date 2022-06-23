@@ -29,4 +29,14 @@ protoc 生成器插件会安装到 $GOPATH/bin 目录
 
 ## 克隆到本地
 
+https://github.com/golang-standards/project-layout
+
+https://www.grpc.io
+
+https://google.aip.dev
+
+https://github.com/aip-dev/google.aip.dev
+
 https://github.com/googleapis/googleapis.git
+
+https://github.com/GoogleCloudPlatform/microservices-demo
